@@ -697,8 +697,8 @@ pkg_size_json = os.path.join(experiment_dir, "packages_size.json")
 
 
 def main():
-    # pkgs = get_top_n_packages(requirements_csv, 500)
-    # get_whl(pkgs)
+    pkgs = get_top_n_packages(requirements_csv, 500)
+    get_whl(pkgs)
     with open(pkg_size_json, 'r') as file:
         packages_size = json.load(file)
 

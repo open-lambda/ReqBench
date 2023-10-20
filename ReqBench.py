@@ -1,6 +1,7 @@
 import copy
 import json
 import re
+import sys
 
 import pandas as pd
 
@@ -282,15 +283,21 @@ def get_to_hit_ratio(df):
 
 
 if __name__ == "__main__":
+    pkg_json = "packages.json"
+    workload_json = "workload_with_top_mods.json"
+
+    if len(sys.argv) == 3:
+        pkg_json = sys.argv[1]
+        workload_json = sys.argv[2]
     # todo: for now, we choose to import all the top-level modules
     # however, for some packages, e.g. pyqt5, import top-level modules does nothing,
     # we need to import sub-modules to use it
     # we simply ignore this problem for now and set meta to be all indirect and direct required packages
-    Package.from_json(path=os.path.join(experiment_dir, "packages_tops_costs.json"))
+    Package.from_json(path=os.path.join(experiment_dir, pkg_json))
     costs_dict = Package.cost_dict()
     costs = costs_dict
 
-    w1 = Workload(os.path.join(experiment_dir, "workload_with_top_mods.json"))
+    w1 = Workload(os.path.join(experiment_dir, workload_json))
     w1, w2 = w1.random_split(0.5)
 
     res = benchmark(w1)
