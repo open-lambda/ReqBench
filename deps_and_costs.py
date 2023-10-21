@@ -118,7 +118,7 @@ def find_deps_and_costs(deps_dict):
     # latency and mem usage, beyond that of the deps
     print("measuring import costs")
     remove_dirs_with_pattern(os.path.join(ol_dir, "default-ol/registry"), r'^measure-*')
-    pid = start_worker({"limits.mem_mb": 600, "import_cache_tree": "./node-1.json"})
+    pid = start_worker({"limits.mem_mb": 600, "import_cache_tree": ""})
     for p in Package.packages_factory:
         pkg = Package.get_from_factory(p)
         for v in pkg.available_versions:
@@ -133,7 +133,7 @@ def find_deps_and_costs(deps_dict):
                 "ms": measure(meta, "ms"),
                 "mb": measure(meta, "mb"),
             }
-    Package.save(os.path.join(experiment_dir, "packages_tops_costs.json"))
+    Package.save(os.path.join(bench_file_dir, "packages_tops_costs.json"))
     kill_worker(pid)
 
 
@@ -171,15 +171,15 @@ def dict_to_list(input_dict):
 
 def main():
     # load deps_dict from deps.json
-    deps_dict = load_all_deps(os.path.join(experiment_dir, "deps.json"))
-    Package.from_json(os.path.join(experiment_dir, "packages.json"))
+    deps_dict = load_all_deps(os.path.join(bench_file_dir, "deps.json"))
+    Package.from_json(os.path.join(bench_file_dir, "packages.json"))
 
     if len(sys.argv) == 3:
         deps_dict = load_all_deps(sys.argv[1])
         Package.from_json(sys.argv[2])
 
     find_deps_and_costs(deps_dict)
-    json.dump(Package.cost_dict(), open(os.path.join(experiment_dir, "costs.json"), "w"), indent=2)
+    json.dump(Package.cost_dict(), open(os.path.join(bench_file_dir, "costs.json"), "w"), indent=2)
 
 
 if __name__ == '__main__':

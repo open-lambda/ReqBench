@@ -2,6 +2,7 @@ import copy
 import json
 import re
 import sys
+import traceback
 
 import pandas as pd
 
@@ -234,7 +235,7 @@ def estimate_cost(workload, tree_path):
 def benchmark(workload):
     columns = ['nodes', 'trial']
     df = pd.DataFrame(columns=columns)
-    os.chdir(experiment_dir)
+    os.chdir(bench_dir)
     for subdir in os.listdir('trials'):
         subdir_path = os.path.join('trials', subdir)
         if os.path.isdir(subdir_path):
@@ -246,7 +247,7 @@ def benchmark(workload):
                         try:
                             cost = estimate_cost(workload, tree_path)
                         except Exception as e:
-                            print(f"error in {tree_path}, {e}")
+                            print(f"error in {tree_path}, {traceback.format_exc()}")
                             continue
 
                         v_num = int(match.group(1))
@@ -283,7 +284,7 @@ def get_to_hit_ratio(df):
 
 
 if __name__ == "__main__":
-    pkg_json = "packages.json"
+    pkg_json = "packages_tops_costs.json"
     workload_json = "workload_with_top_mods.json"
 
     if len(sys.argv) == 3:
@@ -293,15 +294,15 @@ if __name__ == "__main__":
     # however, for some packages, e.g. pyqt5, import top-level modules does nothing,
     # we need to import sub-modules to use it
     # we simply ignore this problem for now and set meta to be all indirect and direct required packages
-    Package.from_json(path=os.path.join(experiment_dir, pkg_json))
+    Package.from_json(path=os.path.join(bench_file_dir, pkg_json))
     costs_dict = Package.cost_dict()
     costs = costs_dict
 
-    w1 = Workload(os.path.join(experiment_dir, workload_json))
+    w1 = Workload(os.path.join(bench_file_dir, workload_json))
     w1, w2 = w1.random_split(0.5)
 
     res = benchmark(w1)
     hit_ratio = get_to_hit_ratio(res)
 
-    res.to_csv(os.path.join(experiment_dir, "estimate_perf.csv"), index=False)
-    hit_ratio.to_csv(os.path.join(experiment_dir, "estimate_hit_ratio.csv"), index=False)
+    res.to_csv(os.path.join(bench_file_dir, "estimate_perf.csv"), index=False)
+    hit_ratio.to_csv(os.path.join(bench_file_dir, "estimate_hit_ratio.csv"), index=False)

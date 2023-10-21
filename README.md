@@ -8,7 +8,7 @@ how to use ReqBench:
 ## Generate Workload
 `requirements.csv` is a file that contains a bunch of `requirements.txt`.
 
-Make sure `requirements.csv` existed in current folder. Then run
+Make sure `requirements.csv` existed in `ReqBench/files` folder. Then run
 ```sh
 python3 workload.py
 ```
@@ -16,8 +16,8 @@ It will pick out the most commonly used 500 hundred packages in the `requirement
 and filter out the requirements.csv which only use those packages.
 In the end, it will generate a file called `workload_with_top_mods.json`, which can be used as the workload for `find_cost.py`.
 
-Also, it will generate a file called `deps.json`, which contains the dependency info of packages parsed from `requirements.csv`.
-generate a file called `package.json` is a file that contains the package name, version, top-level modules.
+There are other output files, `deps.json` contains the dependency info of packages parsed from `requirements.csv`.
+`package.json` is a file that contains the package name, version, top-level modules.
 
 ## Fetch Package weight
 After generating the workload, we need to fetch more package info, i.e. each packages' top-level modules import cost.

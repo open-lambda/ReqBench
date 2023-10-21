@@ -108,7 +108,7 @@ def get_whl(pkgs):
                 pkg_name = pkg.split("==")[0]
                 version = pkg.split("==")[1]
                 tasks.append((pkg_name, version))
-            print("need to find", len(tasks), "in total")
+            print("find the disk size on top", len(tasks), "packages")
             futures = [executor.submit(fetch_package_size, pkg_name, version) for pkg_name, version in tasks]
 
             for future in concurrent.futures.as_completed(futures):
@@ -119,7 +119,7 @@ def get_whl(pkgs):
     except Exception as e:
         print(e)
     # Save to JSON file anyway
-    with open('packages_size.json', 'w') as f:
+    with open(pkg_size_json, 'w') as f:
         json.dump(packages_size, f, indent=2)
 
 
@@ -214,7 +214,7 @@ def get_top_n_packages(csv_path, n=200):
 
 
 def generate_workloads_from_txts(txts):
-    txts = json.load(open(os.path.join(experiment_dir, txts)))
+    txts = json.load(open(os.path.join(bench_file_dir, txts)))
     wl = Workload()
     for txt in txts:
         meta_dict = {"requirements_in": txt, "requirements_txt": txt,
@@ -595,18 +595,18 @@ class Workload:
         if collect:
             cmd = ["go", "build", "-o", "collector", "collector.go", "info.go"]
             # ugly implementation, have to build collector1 first or signals cannot be caught
-            subprocess.run(cmd, cwd=os.path.join(experiment_dir, "collector"))
+            subprocess.run(cmd, cwd=os.path.join(bench_file_dir, "collector"))
             restAPI = subprocess.Popen(
                 ["./collector1", "."],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(experiment_dir, "collector"))
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_file_dir, "collector"))
             time.sleep(2)  # wait for collector to start
 
         pid = start_worker(options)
-        workload_file = os.path.join(experiment_dir, "tmp.json")
+        workload_file = os.path.join(bench_file_dir, "tmp.json")
         self.save(workload_file)
-        # although bench.go is in current directory, the code inside tells it show be run at ol_dir
+        # although bench.go is in current directory, it show be run at ol_dir
         os.chdir(ol_dir)
-        cmd = ["go", "run", experiment_dir + "bench.go", workload_file, str(tasks)]
+        cmd = ["go", "run", os.path.join(bench_dir, "bench.go"), workload_file, str(tasks)]
         if collect:
             cmd.append("true")
         else:
@@ -692,8 +692,8 @@ def load_all_deps(path):
 
 blacklist = ["warning", "netifaces", "https://", "http://", "google"]
 
-requirements_csv = os.path.join(experiment_dir, "requirements.csv")
-pkg_size_json = os.path.join(experiment_dir, "packages_size.json")
+requirements_csv = os.path.join(bench_file_dir, "requirements.csv")
+pkg_size_json = os.path.join(bench_file_dir, "packages_size.json")
 
 
 def main():
@@ -703,7 +703,7 @@ def main():
         packages_size = json.load(file)
 
     # rule out the packages that are too big, not in the top 500, in the blacklist
-    if not os.path.exists(os.path.join(experiment_dir, "valid_txt.json")):
+    if not os.path.exists(os.path.join(bench_file_dir, "valid_txt.json")):
         pkgs = packages_size
         # only txt contains the 500 packages above will be treated as valid, this is used to prevent corner case showing up
         df = pd.read_csv(requirements_csv)
@@ -723,13 +723,13 @@ def main():
             if valid:
                 valid_cols.append(col)
         print(len(valid_cols))
-        with open(os.path.join(experiment_dir, "valid_txt.json"), 'w') as f:
+        with open(os.path.join(bench_file_dir, "valid_txt.json"), 'w') as f:
             json.dump(valid_cols, f, indent=2)
 
-    wl = generate_workloads_from_txts(os.path.join(experiment_dir, "valid_txt.json"))
-    wl.save(os.path.join(experiment_dir, "workload.json"))
+    wl = generate_workloads_from_txts(os.path.join(bench_file_dir, "valid_txt.json"))
+    wl.save(os.path.join(bench_file_dir, "workload.json"))
     wl.play({
-            "import_cache_tree": os.path.join(experiment_dir, "valid_txt.json"),
+            "import_cache_tree": os.path.join(bench_file_dir, "valid_txt.json"),
             "limits.mem_mb": 500,
             "import_cache_tree":""
         },
@@ -746,9 +746,9 @@ def main():
                 Package.packages_factory[pkg].available_versions[version] = versionMeta(top_mods, None, None)
             else:
                 Package.packages_factory[pkg].available_versions[version].top_level = top_mods
-    Package.save(os.path.join(experiment_dir, "packages.json"))
+    Package.save(os.path.join(bench_file_dir, "packages.json"))
 
-    with open(os.path.join(experiment_dir, "deps.json"), 'w') as file:
+    with open(os.path.join(bench_file_dir, "deps.json"), 'w') as file:
         deps_dict, _, _ = wl.parse_deps(Package.deps_dict())
         json.dump(deps_dict, file, indent=2)
 
@@ -761,7 +761,7 @@ def main():
                 f.meta.import_mods.update(Package.packages_factory[pkg].available_versions[version].top_level)
         name = wl_with_top_mods.addFunc(None, f.meta.import_mods, f.meta)
         wl_with_top_mods.addCall(name)
-    wl_with_top_mods.save(os.path.join(experiment_dir, "workload_with_top_mods.json"))
+    wl_with_top_mods.save(os.path.join(bench_file_dir, "workload_with_top_mods.json"))
 
 
 if __name__ == '__main__':

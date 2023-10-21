@@ -18,7 +18,6 @@ direct = [
 ]
 ol_dir = "/root/open-lambda/"
 worker_out = os.path.join(ol_dir, "default-ol", "worker.out")
-experiment_dir = "/root/open-lambda/paper-tree-cache/analysis/16/"
-WORKER_OUT_DIR = "/root/open-lambda/paper-tree-cache/analysis/16/worker_out/"
-TRACE_PATH = experiment_dir + "dep-trace.json"
-COSTS_PATH = experiment_dir + "costs.json"
+bench_dir = os.path.join("/root", "ReqBench")
+bench_file_dir = os.path.join("/root", "ReqBench", "files")
+
