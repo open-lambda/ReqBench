@@ -1,0 +1,2122 @@
+{
+  "direct": [],
+  "packages": [],
+  "children": [
+    {
+      "direct": [
+        "numpy==1.25.2"
+      ],
+      "packages": [
+        "numpy==1.25.2"
+      ],
+      "children": [
+        {
+          "direct": [
+            "six==1.16.0"
+          ],
+          "packages": [
+            "six==1.16.0"
+          ],
+          "children": [
+            {
+              "direct": [
+                "packaging==23.1"
+              ],
+              "packages": [
+                "packaging==23.1"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "pyparsing==3.1.1"
+                  ],
+                  "packages": [
+                    "pyparsing==3.1.1"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "pillow==10.0.0"
+                      ],
+                      "packages": [
+                        "pillow==10.0.0"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "kiwisolver==1.4.5"
+                          ],
+                          "packages": [
+                            "kiwisolver==1.4.5"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "fonttools==4.42.1"
+                              ],
+                              "packages": [
+                                "fonttools==4.42.1"
+                              ],
+                              "children": [
+                                {
+                                  "direct": [
+                                    "cycler==0.11.0"
+                                  ],
+                                  "packages": [
+                                    "cycler==0.11.0"
+                                  ],
+                                  "children": [
+                                    {
+                                      "direct": [
+                                        "pytz==2023.3.post1"
+                                      ],
+                                      "packages": [
+                                        "pytz==2023.3.post1"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "tzdata==2023.3"
+                                          ],
+                                          "packages": [
+                                            "tzdata==2023.3"
+                                          ],
+                                          "children": [
+                                            {
+                                              "direct": [
+                                                "joblib==1.3.2"
+                                              ],
+                                              "packages": [
+                                                "joblib==1.3.2"
+                                              ],
+                                              "children": [
+                                                {
+                                                  "direct": [
+                                                    "threadpoolctl==3.2.0"
+                                                  ],
+                                                  "packages": [
+                                                    "threadpoolctl==3.2.0"
+                                                  ],
+                                                  "children": [],
+                                                  "split_generation": 98
+                                                }
+                                              ],
+                                              "split_generation": 69
+                                            },
+                                            {
+                                              "direct": [
+                                                "urllib3==2.0.4"
+                                              ],
+                                              "packages": [
+                                                "urllib3==2.0.4"
+                                              ],
+                                              "children": [
+                                                {
+                                                  "direct": [
+                                                    "idna==3.4"
+                                                  ],
+                                                  "packages": [
+                                                    "idna==3.4"
+                                                  ],
+                                                  "children": [
+                                                    {
+                                                      "direct": [
+                                                        "certifi==2023.7.22"
+                                                      ],
+                                                      "packages": [
+                                                        "certifi==2023.7.22"
+                                                      ],
+                                                      "children": [],
+                                                      "split_generation": 184
+                                                    }
+                                                  ],
+                                                  "split_generation": 167
+                                                }
+                                              ],
+                                              "split_generation": 162
+                                            },
+                                            {
+                                              "direct": [
+                                                "networkx==3.1"
+                                              ],
+                                              "packages": [
+                                                "networkx==3.1"
+                                              ],
+                                              "children": [],
+                                              "split_generation": 194
+                                            }
+                                          ],
+                                          "split_generation": 39
+                                        }
+                                      ],
+                                      "split_generation": 38
+                                    },
+                                    {
+                                      "direct": [
+                                        "markupsafe==2.1.3"
+                                      ],
+                                      "packages": [
+                                        "markupsafe==2.1.3"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "urllib3==2.0.4"
+                                          ],
+                                          "packages": [
+                                            "urllib3==2.0.4"
+                                          ],
+                                          "children": [
+                                            {
+                                              "direct": [
+                                                "idna==3.4"
+                                              ],
+                                              "packages": [
+                                                "idna==3.4"
+                                              ],
+                                              "children": [
+                                                {
+                                                  "direct": [
+                                                    "certifi==2023.7.22"
+                                                  ],
+                                                  "packages": [
+                                                    "certifi==2023.7.22"
+                                                  ],
+                                                  "children": [
+                                                    {
+                                                      "direct": [
+                                                        "charset-normalizer==3.2.0"
+                                                      ],
+                                                      "packages": [
+                                                        "charset-normalizer==3.2.0"
+                                                      ],
+                                                      "children": [
+                                                        {
+                                                          "direct": [
+                                                            "snowballstemmer==2.2.0"
+                                                          ],
+                                                          "packages": [
+                                                            "snowballstemmer==2.2.0"
+                                                          ],
+                                                          "children": [
+                                                            {
+                                                              "direct": [
+                                                                "attrs==23.1.0"
+                                                              ],
+                                                              "packages": [
+                                                                "attrs==23.1.0"
+                                                              ],
+                                                              "children": [
+                                                                {
+                                                                  "direct": [
+                                                                    "wcwidth==0.2.6"
+                                                                  ],
+                                                                  "packages": [
+                                                                    "wcwidth==0.2.6"
+                                                                  ],
+                                                                  "children": [
+                                                                    {
+                                                                      "direct": [
+                                                                        "parso==0.8.3"
+                                                                      ],
+                                                                      "packages": [
+                                                                        "parso==0.8.3"
+                                                                      ],
+                                                                      "children": [
+                                                                        {
+                                                                          "direct": [
+                                                                            "pyzmq==25.1.1"
+                                                                          ],
+                                                                          "packages": [
+                                                                            "pyzmq==25.1.1"
+                                                                          ],
+                                                                          "children": [
+                                                                            {
+                                                                              "direct": [
+                                                                                "platformdirs==3.10.0"
+                                                                              ],
+                                                                              "packages": [
+                                                                                "platformdirs==3.10.0"
+                                                                              ],
+                                                                              "children": [],
+                                                                              "split_generation": 199
+                                                                            }
+                                                                          ],
+                                                                          "split_generation": 181
+                                                                        }
+                                                                      ],
+                                                                      "split_generation": 139
+                                                                    }
+                                                                  ],
+                                                                  "split_generation": 124
+                                                                }
+                                                              ],
+                                                              "split_generation": 119
+                                                            },
+                                                            {
+                                                              "direct": [
+                                                                "nose==1.3.7"
+                                                              ],
+                                                              "packages": [
+                                                                "nose==1.3.7"
+                                                              ],
+                                                              "children": [],
+                                                              "split_generation": 153
+                                                            }
+                                                          ],
+                                                          "split_generation": 100
+                                                        }
+                                                      ],
+                                                      "split_generation": 77
+                                                    }
+                                                  ],
+                                                  "split_generation": 73
+                                                }
+                                              ],
+                                              "split_generation": 66
+                                            }
+                                          ],
+                                          "split_generation": 64
+                                        }
+                                      ],
+                                      "split_generation": 52
+                                    },
+                                    {
+                                      "direct": [
+                                        "joblib==1.3.2"
+                                      ],
+                                      "packages": [
+                                        "joblib==1.3.2"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "threadpoolctl==3.2.0"
+                                          ],
+                                          "packages": [
+                                            "threadpoolctl==3.2.0"
+                                          ],
+                                          "children": [
+                                            {
+                                              "direct": [
+                                                "networkx==3.1"
+                                              ],
+                                              "packages": [
+                                                "networkx==3.1"
+                                              ],
+                                              "children": [],
+                                              "split_generation": 190
+                                            }
+                                          ],
+                                          "split_generation": 57
+                                        }
+                                      ],
+                                      "split_generation": 54
+                                    },
+                                    {
+                                      "direct": [
+                                        "mpmath==1.3.0"
+                                      ],
+                                      "packages": [
+                                        "mpmath==1.3.0"
+                                      ],
+                                      "children": [],
+                                      "split_generation": 101
+                                    },
+                                    {
+                                      "direct": [
+                                        "wcwidth==0.2.6"
+                                      ],
+                                      "packages": [
+                                        "wcwidth==0.2.6"
+                                      ],
+                                      "children": [],
+                                      "split_generation": 158
+                                    }
+                                  ],
+                                  "split_generation": 22
+                                }
+                              ],
+                              "split_generation": 21
+                            }
+                          ],
+                          "split_generation": 20
+                        }
+                      ],
+                      "split_generation": 18
+                    }
+                  ],
+                  "split_generation": 14
+                },
+                {
+                  "direct": [
+                    "pytz==2023.3.post1"
+                  ],
+                  "packages": [
+                    "pytz==2023.3.post1"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "tzdata==2023.3"
+                      ],
+                      "packages": [
+                        "tzdata==2023.3"
+                      ],
+                      "children": [],
+                      "split_generation": 88
+                    }
+                  ],
+                  "split_generation": 80
+                }
+              ],
+              "split_generation": 11
+            },
+            {
+              "direct": [
+                "pytz==2023.3.post1"
+              ],
+              "packages": [
+                "pytz==2023.3.post1"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "tzdata==2023.3"
+                  ],
+                  "packages": [
+                    "tzdata==2023.3"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "typing-extensions==4.7.1"
+                      ],
+                      "packages": [
+                        "typing-extensions==4.7.1"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "markupsafe==2.1.3"
+                          ],
+                          "packages": [
+                            "markupsafe==2.1.3"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "urllib3==2.0.4"
+                              ],
+                              "packages": [
+                                "urllib3==2.0.4"
+                              ],
+                              "children": [
+                                {
+                                  "direct": [
+                                    "idna==3.4"
+                                  ],
+                                  "packages": [
+                                    "idna==3.4"
+                                  ],
+                                  "children": [
+                                    {
+                                      "direct": [
+                                        "certifi==2023.7.22"
+                                      ],
+                                      "packages": [
+                                        "certifi==2023.7.22"
+                                      ],
+                                      "children": [],
+                                      "split_generation": 183
+                                    }
+                                  ],
+                                  "split_generation": 166
+                                }
+                              ],
+                              "split_generation": 161
+                            }
+                          ],
+                          "split_generation": 128
+                        }
+                      ],
+                      "split_generation": 84
+                    }
+                  ],
+                  "split_generation": 43
+                }
+              ],
+              "split_generation": 42
+            },
+            {
+              "direct": [
+                "nose==1.3.7"
+              ],
+              "packages": [
+                "nose==1.3.7"
+              ],
+              "children": [],
+              "split_generation": 154
+            }
+          ],
+          "split_generation": 5
+        },
+        {
+          "direct": [
+            "packaging==23.1"
+          ],
+          "packages": [
+            "packaging==23.1"
+          ],
+          "children": [
+            {
+              "direct": [
+                "markupsafe==2.1.3"
+              ],
+              "packages": [
+                "markupsafe==2.1.3"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "urllib3==2.0.4"
+                  ],
+                  "packages": [
+                    "urllib3==2.0.4"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "idna==3.4"
+                      ],
+                      "packages": [
+                        "idna==3.4"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "certifi==2023.7.22"
+                          ],
+                          "packages": [
+                            "certifi==2023.7.22"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "charset-normalizer==3.2.0"
+                              ],
+                              "packages": [
+                                "charset-normalizer==3.2.0"
+                              ],
+                              "children": [
+                                {
+                                  "direct": [
+                                    "joblib==1.3.2"
+                                  ],
+                                  "packages": [
+                                    "joblib==1.3.2"
+                                  ],
+                                  "children": [
+                                    {
+                                      "direct": [
+                                        "nose==1.3.7"
+                                      ],
+                                      "packages": [
+                                        "nose==1.3.7"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "threadpoolctl==3.2.0"
+                                          ],
+                                          "packages": [
+                                            "threadpoolctl==3.2.0"
+                                          ],
+                                          "children": [],
+                                          "split_generation": 170
+                                        }
+                                      ],
+                                      "split_generation": 152
+                                    }
+                                  ],
+                                  "split_generation": 146
+                                }
+                              ],
+                              "split_generation": 125
+                            }
+                          ],
+                          "split_generation": 113
+                        }
+                      ],
+                      "split_generation": 95
+                    }
+                  ],
+                  "split_generation": 94
+                }
+              ],
+              "split_generation": 75
+            },
+            {
+              "direct": [
+                "tomli==2.0.1"
+              ],
+              "packages": [
+                "tomli==2.0.1"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "pluggy==1.3.0"
+                  ],
+                  "packages": [
+                    "pluggy==1.3.0"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "exceptiongroup==1.1.3"
+                      ],
+                      "packages": [
+                        "exceptiongroup==1.1.3"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "typing-extensions==4.7.1"
+                          ],
+                          "packages": [
+                            "typing-extensions==4.7.1"
+                          ],
+                          "children": [],
+                          "split_generation": 145
+                        },
+                        {
+                          "direct": [
+                            "joblib==1.3.2"
+                          ],
+                          "packages": [
+                            "joblib==1.3.2"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "threadpoolctl==3.2.0"
+                              ],
+                              "packages": [
+                                "threadpoolctl==3.2.0"
+                              ],
+                              "children": [],
+                              "split_generation": 171
+                            }
+                          ],
+                          "split_generation": 148
+                        },
+                        {
+                          "direct": [
+                            "networkx==3.1"
+                          ],
+                          "packages": [
+                            "networkx==3.1"
+                          ],
+                          "children": [],
+                          "split_generation": 188
+                        }
+                      ],
+                      "split_generation": 141
+                    }
+                  ],
+                  "split_generation": 122
+                }
+              ],
+              "split_generation": 115
+            }
+          ],
+          "split_generation": 36
+        },
+        {
+          "direct": [
+            "joblib==1.3.2"
+          ],
+          "packages": [
+            "joblib==1.3.2"
+          ],
+          "children": [
+            {
+              "direct": [
+                "threadpoolctl==3.2.0"
+              ],
+              "packages": [
+                "threadpoolctl==3.2.0"
+              ],
+              "children": [],
+              "split_generation": 56
+            },
+            {
+              "direct": [
+                "networkx==3.1"
+              ],
+              "packages": [
+                "networkx==3.1"
+              ],
+              "children": [],
+              "split_generation": 189
+            }
+          ],
+          "split_generation": 49
+        },
+        {
+          "direct": [
+            "mpmath==1.3.0"
+          ],
+          "packages": [
+            "mpmath==1.3.0"
+          ],
+          "children": [],
+          "split_generation": 61
+        },
+        {
+          "direct": [
+            "typing-extensions==4.7.1"
+          ],
+          "packages": [
+            "typing-extensions==4.7.1"
+          ],
+          "children": [],
+          "split_generation": 82
+        },
+        {
+          "direct": [
+            "pillow==10.0.0"
+          ],
+          "packages": [
+            "pillow==10.0.0"
+          ],
+          "children": [],
+          "split_generation": 114
+        },
+        {
+          "direct": [
+            "networkx==3.1"
+          ],
+          "packages": [
+            "networkx==3.1"
+          ],
+          "children": [],
+          "split_generation": 193
+        }
+      ],
+      "split_generation": 1
+    },
+    {
+      "direct": [
+        "packaging==23.1"
+      ],
+      "packages": [
+        "packaging==23.1"
+      ],
+      "children": [
+        {
+          "direct": [
+            "markupsafe==2.1.3"
+          ],
+          "packages": [
+            "markupsafe==2.1.3"
+          ],
+          "children": [
+            {
+              "direct": [
+                "urllib3==2.0.4"
+              ],
+              "packages": [
+                "urllib3==2.0.4"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "idna==3.4"
+                  ],
+                  "packages": [
+                    "idna==3.4"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "certifi==2023.7.22"
+                      ],
+                      "packages": [
+                        "certifi==2023.7.22"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "charset-normalizer==3.2.0"
+                          ],
+                          "packages": [
+                            "charset-normalizer==3.2.0"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "snowballstemmer==2.2.0"
+                              ],
+                              "packages": [
+                                "snowballstemmer==2.2.0"
+                              ],
+                              "children": [
+                                {
+                                  "direct": [
+                                    "six==1.16.0"
+                                  ],
+                                  "packages": [
+                                    "six==1.16.0"
+                                  ],
+                                  "children": [
+                                    {
+                                      "direct": [
+                                        "attrs==23.1.0"
+                                      ],
+                                      "packages": [
+                                        "attrs==23.1.0"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "pyzmq==25.1.1"
+                                          ],
+                                          "packages": [
+                                            "pyzmq==25.1.1"
+                                          ],
+                                          "children": [
+                                            {
+                                              "direct": [
+                                                "platformdirs==3.10.0"
+                                              ],
+                                              "packages": [
+                                                "platformdirs==3.10.0"
+                                              ],
+                                              "children": [
+                                                {
+                                                  "direct": [
+                                                    "wcwidth==0.2.6"
+                                                  ],
+                                                  "packages": [
+                                                    "wcwidth==0.2.6"
+                                                  ],
+                                                  "children": [
+                                                    {
+                                                      "direct": [
+                                                        "parso==0.8.3"
+                                                      ],
+                                                      "packages": [
+                                                        "parso==0.8.3"
+                                                      ],
+                                                      "children": [],
+                                                      "split_generation": 138
+                                                    }
+                                                  ],
+                                                  "split_generation": 123
+                                                }
+                                              ],
+                                              "split_generation": 118
+                                            }
+                                          ],
+                                          "split_generation": 109
+                                        }
+                                      ],
+                                      "split_generation": 70
+                                    },
+                                    {
+                                      "direct": [
+                                        "babel==2.12.1"
+                                      ],
+                                      "packages": [
+                                        "babel==2.12.1"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "tornado==6.3.3"
+                                          ],
+                                          "packages": [
+                                            "tornado==6.3.3"
+                                          ],
+                                          "children": [],
+                                          "split_generation": 164
+                                        }
+                                      ],
+                                      "split_generation": 159
+                                    }
+                                  ],
+                                  "split_generation": 17
+                                },
+                                {
+                                  "direct": [
+                                    "babel==2.12.1"
+                                  ],
+                                  "packages": [
+                                    "babel==2.12.1"
+                                  ],
+                                  "children": [
+                                    {
+                                      "direct": [
+                                        "imagesize==1.4.1"
+                                      ],
+                                      "packages": [
+                                        "imagesize==1.4.1"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "pygments==2.16.1"
+                                          ],
+                                          "packages": [
+                                            "pygments==2.16.1"
+                                          ],
+                                          "children": [
+                                            {
+                                              "direct": [
+                                                "alabaster==0.7.13"
+                                              ],
+                                              "packages": [
+                                                "alabaster==0.7.13"
+                                              ],
+                                              "children": [
+                                                {
+                                                  "direct": [
+                                                    "sphinxcontrib-jsmath==1.0.1"
+                                                  ],
+                                                  "packages": [
+                                                    "sphinxcontrib-jsmath==1.0.1"
+                                                  ],
+                                                  "children": [
+                                                    {
+                                                      "direct": [
+                                                        "pbr==5.11.1"
+                                                      ],
+                                                      "packages": [
+                                                        "pbr==5.11.1"
+                                                      ],
+                                                      "children": [
+                                                        {
+                                                          "direct": [
+                                                            "pyyaml==6.0.1"
+                                                          ],
+                                                          "packages": [
+                                                            "pyyaml==6.0.1"
+                                                          ],
+                                                          "children": [
+                                                            {
+                                                              "direct": [
+                                                                "wrapt==1.15.0"
+                                                              ],
+                                                              "packages": [
+                                                                "wrapt==1.15.0"
+                                                              ],
+                                                              "children": [],
+                                                              "split_generation": 144
+                                                            },
+                                                            {
+                                                              "direct": [
+                                                                "docutils==0.20.1"
+                                                              ],
+                                                              "packages": [
+                                                                "docutils==0.20.1"
+                                                              ],
+                                                              "children": [],
+                                                              "split_generation": 186
+                                                            }
+                                                          ],
+                                                          "split_generation": 53
+                                                        }
+                                                      ],
+                                                      "split_generation": 31
+                                                    },
+                                                    {
+                                                      "direct": [
+                                                        "docutils==0.18.1"
+                                                      ],
+                                                      "packages": [
+                                                        "docutils==0.18.1"
+                                                      ],
+                                                      "children": [
+                                                        {
+                                                          "direct": [
+                                                            "pillow==10.0.0"
+                                                          ],
+                                                          "packages": [
+                                                            "pillow==10.0.0"
+                                                          ],
+                                                          "children": [
+                                                            {
+                                                              "direct": [
+                                                                "networkx==3.1"
+                                                              ],
+                                                              "packages": [
+                                                                "networkx==3.1"
+                                                              ],
+                                                              "children": [],
+                                                              "split_generation": 192
+                                                            }
+                                                          ],
+                                                          "split_generation": 140
+                                                        },
+                                                        {
+                                                          "direct": [
+                                                            "pyparsing==3.1.1"
+                                                          ],
+                                                          "packages": [
+                                                            "pyparsing==3.1.1"
+                                                          ],
+                                                          "children": [],
+                                                          "split_generation": 179
+                                                        }
+                                                      ],
+                                                      "split_generation": 63
+                                                    },
+                                                    {
+                                                      "direct": [
+                                                        "typing-extensions==4.7.1"
+                                                      ],
+                                                      "packages": [
+                                                        "typing-extensions==4.7.1"
+                                                      ],
+                                                      "children": [
+                                                        {
+                                                          "direct": [
+                                                            "nose==1.3.7"
+                                                          ],
+                                                          "packages": [
+                                                            "nose==1.3.7"
+                                                          ],
+                                                          "children": [
+                                                            {
+                                                              "direct": [
+                                                                "wrapt==1.15.0"
+                                                              ],
+                                                              "packages": [
+                                                                "wrapt==1.15.0"
+                                                              ],
+                                                              "children": [
+                                                                {
+                                                                  "direct": [
+                                                                    "lazy-object-proxy==1.9.0"
+                                                                  ],
+                                                                  "packages": [
+                                                                    "lazy-object-proxy==1.9.0"
+                                                                  ],
+                                                                  "children": [],
+                                                                  "split_generation": 165
+                                                                }
+                                                              ],
+                                                              "split_generation": 143
+                                                            }
+                                                          ],
+                                                          "split_generation": 91
+                                                        }
+                                                      ],
+                                                      "split_generation": 67
+                                                    },
+                                                    {
+                                                      "direct": [
+                                                        "docutils==0.20.1"
+                                                      ],
+                                                      "packages": [
+                                                        "docutils==0.20.1"
+                                                      ],
+                                                      "children": [],
+                                                      "split_generation": 136
+                                                    }
+                                                  ],
+                                                  "split_generation": 30
+                                                }
+                                              ],
+                                              "split_generation": 28
+                                            }
+                                          ],
+                                          "split_generation": 26
+                                        }
+                                      ],
+                                      "split_generation": 25
+                                    }
+                                  ],
+                                  "split_generation": 23
+                                }
+                              ],
+                              "split_generation": 12
+                            },
+                            {
+                              "direct": [
+                                "six==1.16.0"
+                              ],
+                              "packages": [
+                                "six==1.16.0"
+                              ],
+                              "children": [
+                                {
+                                  "direct": [
+                                    "typing-extensions==4.7.1"
+                                  ],
+                                  "packages": [
+                                    "typing-extensions==4.7.1"
+                                  ],
+                                  "children": [
+                                    {
+                                      "direct": [
+                                        "pyparsing==3.1.1"
+                                      ],
+                                      "packages": [
+                                        "pyparsing==3.1.1"
+                                      ],
+                                      "children": [
+                                        {
+                                          "direct": [
+                                            "numpy==1.24.4"
+                                          ],
+                                          "packages": [
+                                            "numpy==1.24.4"
+                                          ],
+                                          "children": [
+                                            {
+                                              "direct": [
+                                                "llvmlite==0.40.1"
+                                              ],
+                                              "packages": [
+                                                "llvmlite==0.40.1"
+                                              ],
+                                              "children": [],
+                                              "split_generation": 196
+                                            }
+                                          ],
+                                          "split_generation": 108
+                                        }
+                                      ],
+                                      "split_generation": 104
+                                    }
+                                  ],
+                                  "split_generation": 85
+                                }
+                              ],
+                              "split_generation": 58
+                            }
+                          ],
+                          "split_generation": 9
+                        }
+                      ],
+                      "split_generation": 8
+                    }
+                  ],
+                  "split_generation": 7
+                }
+              ],
+              "split_generation": 6
+            },
+            {
+              "direct": [
+                "six==1.16.0"
+              ],
+              "packages": [
+                "six==1.16.0"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "click==8.1.7"
+                  ],
+                  "packages": [
+                    "click==8.1.7"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "platformdirs==3.10.0"
+                      ],
+                      "packages": [
+                        "platformdirs==3.10.0"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "pyyaml==6.0.1"
+                          ],
+                          "packages": [
+                            "pyyaml==6.0.1"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "markdown==3.4.4"
+                              ],
+                              "packages": [
+                                "markdown==3.4.4"
+                              ],
+                              "children": [],
+                              "split_generation": 163
+                            }
+                          ],
+                          "split_generation": 142
+                        }
+                      ],
+                      "split_generation": 117
+                    }
+                  ],
+                  "split_generation": 102
+                }
+              ],
+              "split_generation": 29
+            },
+            {
+              "direct": [
+                "click==8.1.7"
+              ],
+              "packages": [
+                "click==8.1.7"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "itsdangerous==2.1.2"
+                  ],
+                  "packages": [
+                    "itsdangerous==2.1.2"
+                  ],
+                  "children": [],
+                  "split_generation": 155
+                }
+              ],
+              "split_generation": 120
+            },
+            {
+              "direct": [
+                "pyparsing==3.1.1"
+              ],
+              "packages": [
+                "pyparsing==3.1.1"
+              ],
+              "children": [],
+              "split_generation": 174
+            }
+          ],
+          "split_generation": 4
+        },
+        {
+          "direct": [
+            "six==1.16.0"
+          ],
+          "packages": [
+            "six==1.16.0"
+          ],
+          "children": [
+            {
+              "direct": [
+                "numpy==1.24.4"
+              ],
+              "packages": [
+                "numpy==1.24.4"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "joblib==1.3.2"
+                  ],
+                  "packages": [
+                    "joblib==1.3.2"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "threadpoolctl==3.2.0"
+                      ],
+                      "packages": [
+                        "threadpoolctl==3.2.0"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "pyparsing==3.1.1"
+                          ],
+                          "packages": [
+                            "pyparsing==3.1.1"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "llvmlite==0.40.1"
+                              ],
+                              "packages": [
+                                "llvmlite==0.40.1"
+                              ],
+                              "children": [],
+                              "split_generation": 197
+                            }
+                          ],
+                          "split_generation": 177
+                        }
+                      ],
+                      "split_generation": 169
+                    }
+                  ],
+                  "split_generation": 147
+                }
+              ],
+              "split_generation": 107
+            },
+            {
+              "direct": [
+                "tomli==2.0.1"
+              ],
+              "packages": [
+                "tomli==2.0.1"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "pluggy==1.3.0"
+                  ],
+                  "packages": [
+                    "pluggy==1.3.0"
+                  ],
+                  "children": [],
+                  "split_generation": 137
+                }
+              ],
+              "split_generation": 133
+            }
+          ],
+          "split_generation": 33
+        },
+        {
+          "direct": [
+            "tomli==2.0.1"
+          ],
+          "packages": [
+            "tomli==2.0.1"
+          ],
+          "children": [
+            {
+              "direct": [
+                "pluggy==1.3.0"
+              ],
+              "packages": [
+                "pluggy==1.3.0"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "exceptiongroup==1.1.3"
+                  ],
+                  "packages": [
+                    "exceptiongroup==1.1.3"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "typing-extensions==4.7.1"
+                      ],
+                      "packages": [
+                        "typing-extensions==4.7.1"
+                      ],
+                      "children": [],
+                      "split_generation": 86
+                    },
+                    {
+                      "direct": [
+                        "iniconfig==2.0.0"
+                      ],
+                      "packages": [
+                        "iniconfig==2.0.0"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "urllib3==2.0.4"
+                          ],
+                          "packages": [
+                            "urllib3==2.0.4"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "idna==3.4"
+                              ],
+                              "packages": [
+                                "idna==3.4"
+                              ],
+                              "children": [
+                                {
+                                  "direct": [
+                                    "certifi==2023.7.22"
+                                  ],
+                                  "packages": [
+                                    "certifi==2023.7.22"
+                                  ],
+                                  "children": [],
+                                  "split_generation": 182
+                                }
+                              ],
+                              "split_generation": 168
+                            }
+                          ],
+                          "split_generation": 160
+                        }
+                      ],
+                      "split_generation": 103
+                    }
+                  ],
+                  "split_generation": 59
+                }
+              ],
+              "split_generation": 50
+            }
+          ],
+          "split_generation": 44
+        },
+        {
+          "direct": [
+            "urllib3==2.0.4"
+          ],
+          "packages": [
+            "urllib3==2.0.4"
+          ],
+          "children": [
+            {
+              "direct": [
+                "idna==3.4"
+              ],
+              "packages": [
+                "idna==3.4"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "certifi==2023.7.22"
+                  ],
+                  "packages": [
+                    "certifi==2023.7.22"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "charset-normalizer==3.2.0"
+                      ],
+                      "packages": [
+                        "charset-normalizer==3.2.0"
+                      ],
+                      "children": [],
+                      "split_generation": 126
+                    }
+                  ],
+                  "split_generation": 111
+                }
+              ],
+              "split_generation": 96
+            }
+          ],
+          "split_generation": 93
+        }
+      ],
+      "split_generation": 2
+    },
+    {
+      "direct": [
+        "six==1.16.0"
+      ],
+      "packages": [
+        "six==1.16.0"
+      ],
+      "children": [
+        {
+          "direct": [
+            "urllib3==2.0.4"
+          ],
+          "packages": [
+            "urllib3==2.0.4"
+          ],
+          "children": [
+            {
+              "direct": [
+                "certifi==2023.7.22"
+              ],
+              "packages": [
+                "certifi==2023.7.22"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "idna==3.4"
+                  ],
+                  "packages": [
+                    "idna==3.4"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "charset-normalizer==3.2.0"
+                      ],
+                      "packages": [
+                        "charset-normalizer==3.2.0"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "pytz==2023.3.post1"
+                          ],
+                          "packages": [
+                            "pytz==2023.3.post1"
+                          ],
+                          "children": [],
+                          "split_generation": 60
+                        },
+                        {
+                          "direct": [
+                            "attrs==23.1.0"
+                          ],
+                          "packages": [
+                            "attrs==23.1.0"
+                          ],
+                          "children": [],
+                          "split_generation": 149
+                        }
+                      ],
+                      "split_generation": 41
+                    }
+                  ],
+                  "split_generation": 37
+                }
+              ],
+              "split_generation": 35
+            },
+            {
+              "direct": [
+                "nose==1.3.7"
+              ],
+              "packages": [
+                "nose==1.3.7"
+              ],
+              "children": [],
+              "split_generation": 151
+            }
+          ],
+          "split_generation": 32
+        },
+        {
+          "direct": [
+            "urllib3==1.26.16"
+          ],
+          "packages": [
+            "urllib3==1.26.16"
+          ],
+          "children": [
+            {
+              "direct": [
+                "jmespath==1.0.1"
+              ],
+              "packages": [
+                "jmespath==1.0.1"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "idna==3.4"
+                  ],
+                  "packages": [
+                    "idna==3.4"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "certifi==2023.7.22"
+                      ],
+                      "packages": [
+                        "certifi==2023.7.22"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "charset-normalizer==3.2.0"
+                          ],
+                          "packages": [
+                            "charset-normalizer==3.2.0"
+                          ],
+                          "children": [],
+                          "split_generation": 127
+                        }
+                      ],
+                      "split_generation": 110
+                    }
+                  ],
+                  "split_generation": 97
+                }
+              ],
+              "split_generation": 92
+            }
+          ],
+          "split_generation": 46
+        },
+        {
+          "direct": [
+            "typing-extensions==4.7.1"
+          ],
+          "packages": [
+            "typing-extensions==4.7.1"
+          ],
+          "children": [],
+          "split_generation": 81
+        },
+        {
+          "direct": [
+            "markupsafe==2.1.3"
+          ],
+          "packages": [
+            "markupsafe==2.1.3"
+          ],
+          "children": [],
+          "split_generation": 129
+        },
+        {
+          "direct": [
+            "pyparsing==3.1.1"
+          ],
+          "packages": [
+            "pyparsing==3.1.1"
+          ],
+          "children": [],
+          "split_generation": 178
+        }
+      ],
+      "split_generation": 3
+    },
+    {
+      "direct": [
+        "markupsafe==2.1.3"
+      ],
+      "packages": [
+        "markupsafe==2.1.3"
+      ],
+      "children": [
+        {
+          "direct": [
+            "click==8.1.7"
+          ],
+          "packages": [
+            "click==8.1.7"
+          ],
+          "children": [
+            {
+              "direct": [
+                "itsdangerous==2.1.2"
+              ],
+              "packages": [
+                "itsdangerous==2.1.2"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "idna==3.4"
+                  ],
+                  "packages": [
+                    "idna==3.4"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "certifi==2023.7.22"
+                      ],
+                      "packages": [
+                        "certifi==2023.7.22"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "urllib3==2.0.4"
+                          ],
+                          "packages": [
+                            "urllib3==2.0.4"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "charset-normalizer==3.2.0"
+                              ],
+                              "packages": [
+                                "charset-normalizer==3.2.0"
+                              ],
+                              "children": [],
+                              "split_generation": 106
+                            }
+                          ],
+                          "split_generation": 79
+                        },
+                        {
+                          "direct": [
+                            "urllib3==1.26.16"
+                          ],
+                          "packages": [
+                            "urllib3==1.26.16"
+                          ],
+                          "children": [],
+                          "split_generation": 173
+                        }
+                      ],
+                      "split_generation": 72
+                    }
+                  ],
+                  "split_generation": 65
+                },
+                {
+                  "direct": [
+                    "async-timeout==4.0.3"
+                  ],
+                  "packages": [
+                    "async-timeout==4.0.3"
+                  ],
+                  "children": [],
+                  "split_generation": 90
+                },
+                {
+                  "direct": [
+                    "dnspython==2.4.2"
+                  ],
+                  "packages": [
+                    "dnspython==2.4.2"
+                  ],
+                  "children": [],
+                  "split_generation": 131
+                },
+                {
+                  "direct": [
+                    "blinker==1.6.2"
+                  ],
+                  "packages": [
+                    "blinker==1.6.2"
+                  ],
+                  "children": [],
+                  "split_generation": 156
+                }
+              ],
+              "split_generation": 34
+            }
+          ],
+          "split_generation": 27
+        },
+        {
+          "direct": [
+            "typing-extensions==4.7.1"
+          ],
+          "packages": [
+            "typing-extensions==4.7.1"
+          ],
+          "children": [],
+          "split_generation": 83
+        },
+        {
+          "direct": [
+            "et-xmlfile==1.1.0"
+          ],
+          "packages": [
+            "et-xmlfile==1.1.0"
+          ],
+          "children": [],
+          "split_generation": 130
+        }
+      ],
+      "split_generation": 10
+    },
+    {
+      "direct": [
+        "idna==3.4"
+      ],
+      "packages": [
+        "idna==3.4"
+      ],
+      "children": [
+        {
+          "direct": [
+            "certifi==2023.7.22"
+          ],
+          "packages": [
+            "certifi==2023.7.22"
+          ],
+          "children": [
+            {
+              "direct": [
+                "urllib3==2.0.4"
+              ],
+              "packages": [
+                "urllib3==2.0.4"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "charset-normalizer==3.2.0"
+                  ],
+                  "packages": [
+                    "charset-normalizer==3.2.0"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "typing-extensions==4.7.1"
+                      ],
+                      "packages": [
+                        "typing-extensions==4.7.1"
+                      ],
+                      "children": [],
+                      "split_generation": 68
+                    },
+                    {
+                      "direct": [
+                        "attrs==23.1.0"
+                      ],
+                      "packages": [
+                        "attrs==23.1.0"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "wcwidth==0.2.6"
+                          ],
+                          "packages": [
+                            "wcwidth==0.2.6"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "pbr==5.11.1"
+                              ],
+                              "packages": [
+                                "pbr==5.11.1"
+                              ],
+                              "children": [],
+                              "split_generation": 187
+                            }
+                          ],
+                          "split_generation": 157
+                        }
+                      ],
+                      "split_generation": 89
+                    },
+                    {
+                      "direct": [
+                        "dnspython==2.4.2"
+                      ],
+                      "packages": [
+                        "dnspython==2.4.2"
+                      ],
+                      "children": [],
+                      "split_generation": 132
+                    }
+                  ],
+                  "split_generation": 19
+                }
+              ],
+              "split_generation": 16
+            },
+            {
+              "direct": [
+                "urllib3==1.26.16"
+              ],
+              "packages": [
+                "urllib3==1.26.16"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "charset-normalizer==2.0.12"
+                  ],
+                  "packages": [
+                    "charset-normalizer==2.0.12"
+                  ],
+                  "children": [],
+                  "split_generation": 134
+                },
+                {
+                  "direct": [
+                    "pyparsing==3.1.1"
+                  ],
+                  "packages": [
+                    "pyparsing==3.1.1"
+                  ],
+                  "children": [],
+                  "split_generation": 176
+                }
+              ],
+              "split_generation": 45
+            }
+          ],
+          "split_generation": 15
+        },
+        {
+          "direct": [
+            "attrs==23.1.0"
+          ],
+          "packages": [
+            "attrs==23.1.0"
+          ],
+          "children": [
+            {
+              "direct": [
+                "charset-normalizer==3.2.0"
+              ],
+              "packages": [
+                "charset-normalizer==3.2.0"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "async-timeout==4.0.3"
+                  ],
+                  "packages": [
+                    "async-timeout==4.0.3"
+                  ],
+                  "children": [],
+                  "split_generation": 121
+                }
+              ],
+              "split_generation": 105
+            }
+          ],
+          "split_generation": 76
+        }
+      ],
+      "split_generation": 13
+    },
+    {
+      "direct": [
+        "typing-extensions==4.7.1"
+      ],
+      "packages": [
+        "typing-extensions==4.7.1"
+      ],
+      "children": [
+        {
+          "direct": [
+            "pyparsing==3.1.1"
+          ],
+          "packages": [
+            "pyparsing==3.1.1"
+          ],
+          "children": [],
+          "split_generation": 175
+        },
+        {
+          "direct": [
+            "sqlparse==0.4.4"
+          ],
+          "packages": [
+            "sqlparse==0.4.4"
+          ],
+          "children": [],
+          "split_generation": 198
+        }
+      ],
+      "split_generation": 24
+    },
+    {
+      "direct": [
+        "nose==1.3.7"
+      ],
+      "packages": [
+        "nose==1.3.7"
+      ],
+      "children": [
+        {
+          "direct": [
+            "networkx==3.1"
+          ],
+          "packages": [
+            "networkx==3.1"
+          ],
+          "children": [],
+          "split_generation": 191
+        }
+      ],
+      "split_generation": 40
+    },
+    {
+      "direct": [
+        "pillow==10.0.0"
+      ],
+      "packages": [
+        "pillow==10.0.0"
+      ],
+      "children": [],
+      "split_generation": 47
+    },
+    {
+      "direct": [
+        "urllib3==2.0.4"
+      ],
+      "packages": [
+        "urllib3==2.0.4"
+      ],
+      "children": [],
+      "split_generation": 48
+    },
+    {
+      "direct": [
+        "numpy==1.24.4"
+      ],
+      "packages": [
+        "numpy==1.24.4"
+      ],
+      "children": [
+        {
+          "direct": [
+            "llvmlite==0.40.1"
+          ],
+          "packages": [
+            "llvmlite==0.40.1"
+          ],
+          "children": [
+            {
+              "direct": [
+                "joblib==1.3.2"
+              ],
+              "packages": [
+                "joblib==1.3.2"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "threadpoolctl==3.2.0"
+                  ],
+                  "packages": [
+                    "threadpoolctl==3.2.0"
+                  ],
+                  "children": [],
+                  "split_generation": 99
+                }
+              ],
+              "split_generation": 87
+            }
+          ],
+          "split_generation": 78
+        }
+      ],
+      "split_generation": 51
+    },
+    {
+      "direct": [
+        "pyyaml==6.0.1"
+      ],
+      "packages": [
+        "pyyaml==6.0.1"
+      ],
+      "children": [],
+      "split_generation": 55
+    },
+    {
+      "direct": [
+        "pyparsing==3.1.1"
+      ],
+      "packages": [
+        "pyparsing==3.1.1"
+      ],
+      "children": [
+        {
+          "direct": [
+            "networkx==3.1"
+          ],
+          "packages": [
+            "networkx==3.1"
+          ],
+          "children": [],
+          "split_generation": 116
+        }
+      ],
+      "split_generation": 62
+    },
+    {
+      "direct": [
+        "pycparser==2.21"
+      ],
+      "packages": [
+        "pycparser==2.21"
+      ],
+      "children": [],
+      "split_generation": 71
+    },
+    {
+      "direct": [
+        "pbr==5.11.1"
+      ],
+      "packages": [
+        "pbr==5.11.1"
+      ],
+      "children": [],
+      "split_generation": 74
+    },
+    {
+      "direct": [
+        "certifi==2023.7.22"
+      ],
+      "packages": [
+        "certifi==2023.7.22"
+      ],
+      "children": [
+        {
+          "direct": [
+            "urllib3==1.26.16"
+          ],
+          "packages": [
+            "urllib3==1.26.16"
+          ],
+          "children": [],
+          "split_generation": 172
+        }
+      ],
+      "split_generation": 112
+    },
+    {
+      "direct": [
+        "click==8.1.7"
+      ],
+      "packages": [
+        "click==8.1.7"
+      ],
+      "children": [],
+      "split_generation": 135
+    },
+    {
+      "direct": [
+        "dnspython==2.4.2"
+      ],
+      "packages": [
+        "dnspython==2.4.2"
+      ],
+      "children": [],
+      "split_generation": 150
+    },
+    {
+      "direct": [
+        "async-timeout==4.0.3"
+      ],
+      "packages": [
+        "async-timeout==4.0.3"
+      ],
+      "children": [],
+      "split_generation": 180
+    },
+    {
+      "direct": [
+        "coverage==7.3.1"
+      ],
+      "packages": [
+        "coverage==7.3.1"
+      ],
+      "children": [],
+      "split_generation": 185
+    },
+    {
+      "direct": [
+        "urllib3==1.26.9"
+      ],
+      "packages": [
+        "urllib3==1.26.9"
+      ],
+      "children": [],
+      "split_generation": 195
+    }
+  ],
+  "split_generation": 0
+}

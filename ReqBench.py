@@ -117,7 +117,7 @@ class Tree:
             if pkg in reqs:
                 continue
             else:
-                return 100000, None  # return a large cost, so that this node will not be selected
+                return 1000000, None  # return a large cost, so that this node will not be selected
 
         for child in node.children:
             min_cost, best_node = self.lookup(reqs, child)
@@ -140,7 +140,7 @@ class Tree:
             if pkg in reqs:
                 continue
             else:
-                return 100000, None
+                return 1000000, None
 
         min_cost = node.import_cost(reqs)
         best_node = node
@@ -170,7 +170,6 @@ class Tree:
 
         # the following part is corresponding to `LambdaInstance-ServeRequests`
         serve_requests_cost = best_node.serve_requests_cost(reqs)
-        create_leaf_cost = 0
         return create_leaf_cost + serve_requests_cost
 
     # this function corresponds to the cost of importCache.Create, equal to importCache.createChildSandboxFromNode,
@@ -250,8 +249,6 @@ def estimate_cost(workload, tree_path):
 
         v1, best_node = tree.lookup(copy.deepcopy(pkg_with_version), tree.root)
         v = tree.get_task_cost(func_meta)
-        if v1 != v:
-            print(f"v1: {v1}, v: {v}")
         cost += v
     print(f"Zygote tree:{tree_name}, LambdaInstance-ServeRequests estimate time: {cost}ms")
     return cost
@@ -325,7 +322,6 @@ if __name__ == "__main__":
     costs = costs_dict
 
     w1 = Workload(os.path.join(bench_file_dir, workload_json))
-    w1, w2 = w1.random_split(0.5)
 
     res = benchmark(w1)
     hit_ratio = get_to_hit_ratio(res)

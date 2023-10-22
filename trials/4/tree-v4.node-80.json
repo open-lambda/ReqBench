@@ -1,0 +1,1051 @@
+{
+  "direct": [],
+  "packages": [],
+  "children": [
+    {
+      "direct": [
+        "matplotlib==3.8.0"
+      ],
+      "packages": [
+        "pyparsing==3.1.1",
+        "pillow==10.0.0",
+        "python-dateutil==2.8.2",
+        "kiwisolver==1.4.5",
+        "contourpy==1.1.0",
+        "six==1.16.0",
+        "numpy==1.25.2",
+        "cycler==0.11.0",
+        "matplotlib==3.8.0",
+        "fonttools==4.42.1",
+        "packaging==23.1"
+      ],
+      "children": [
+        {
+          "direct": [
+            "pandas==2.1.0"
+          ],
+          "packages": [
+            "tzdata==2023.3",
+            "pandas==2.1.0",
+            "pytz==2023.3.post1"
+          ],
+          "children": [
+            {
+              "direct": [
+                "scikit-learn==1.3.0"
+              ],
+              "packages": [
+                "joblib==1.3.2",
+                "scipy==1.11.2",
+                "threadpoolctl==3.2.0",
+                "scikit-learn==1.3.0"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "seaborn==0.12.2"
+                  ],
+                  "packages": [
+                    "seaborn==0.12.2"
+                  ],
+                  "children": [],
+                  "split_generation": 72
+                }
+              ],
+              "split_generation": 14
+            }
+          ],
+          "split_generation": 6
+        },
+        {
+          "direct": [
+            "sympy==1.12"
+          ],
+          "packages": [
+            "sympy==1.12",
+            "mpmath==1.3.0"
+          ],
+          "children": [
+            {
+              "direct": [
+                "scikit-learn==1.3.0"
+              ],
+              "packages": [
+                "joblib==1.3.2",
+                "scipy==1.11.2",
+                "threadpoolctl==3.2.0",
+                "scikit-learn==1.3.0"
+              ],
+              "children": [],
+              "split_generation": 27
+            }
+          ],
+          "split_generation": 17
+        },
+        {
+          "direct": [
+            "prompt-toolkit==3.0.39"
+          ],
+          "packages": [
+            "prompt-toolkit==3.0.39",
+            "wcwidth==0.2.6"
+          ],
+          "children": [
+            {
+              "direct": [
+                "jedi==0.19.0"
+              ],
+              "packages": [
+                "jedi==0.19.0",
+                "parso==0.8.3"
+              ],
+              "children": [],
+              "split_generation": 63
+            }
+          ],
+          "split_generation": 46
+        }
+      ],
+      "split_generation": 1
+    },
+    {
+      "direct": [
+        "pandas==2.1.0"
+      ],
+      "packages": [
+        "python-dateutil==2.8.2",
+        "pytz==2023.3.post1",
+        "pandas==2.1.0",
+        "six==1.16.0",
+        "numpy==1.25.2",
+        "tzdata==2023.3"
+      ],
+      "children": [
+        {
+          "direct": [
+            "scikit-learn==1.3.0"
+          ],
+          "packages": [
+            "joblib==1.3.2",
+            "scipy==1.11.2",
+            "threadpoolctl==3.2.0",
+            "scikit-learn==1.3.0"
+          ],
+          "children": [],
+          "split_generation": 10
+        },
+        {
+          "direct": [
+            "matplotlib==3.8.0"
+          ],
+          "packages": [
+            "pyparsing==3.1.1",
+            "pillow==10.0.1",
+            "kiwisolver==1.4.5",
+            "contourpy==1.1.0",
+            "cycler==0.11.0",
+            "matplotlib==3.8.0",
+            "fonttools==4.42.1",
+            "packaging==23.1"
+          ],
+          "children": [],
+          "split_generation": 24
+        },
+        {
+          "direct": [
+            "urllib3==2.0.4"
+          ],
+          "packages": [
+            "urllib3==2.0.4"
+          ],
+          "children": [],
+          "split_generation": 71
+        }
+      ],
+      "split_generation": 2
+    },
+    {
+      "direct": [
+        "urllib3==2.0.4"
+      ],
+      "packages": [
+        "urllib3==2.0.4"
+      ],
+      "children": [
+        {
+          "direct": [
+            "requests==2.31.0"
+          ],
+          "packages": [
+            "charset-normalizer==3.2.0",
+            "certifi==2023.7.22",
+            "idna==3.4",
+            "requests==2.31.0"
+          ],
+          "children": [
+            {
+              "direct": [
+                "jinja2==3.1.2"
+              ],
+              "packages": [
+                "markupsafe==2.1.3",
+                "jinja2==3.1.2"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "snowballstemmer==2.2.0"
+                  ],
+                  "packages": [
+                    "snowballstemmer==2.2.0"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "breathe==4.35.0"
+                      ],
+                      "packages": [
+                        "sphinxcontrib-jsmath==1.0.1",
+                        "alabaster==0.7.13",
+                        "sphinxcontrib-qthelp==1.0.6",
+                        "docutils==0.20.1",
+                        "sphinxcontrib-serializinghtml==1.1.9",
+                        "imagesize==1.4.1",
+                        "babel==2.12.1",
+                        "breathe==4.35.0",
+                        "pygments==2.16.1",
+                        "sphinx==7.2.6",
+                        "packaging==23.1",
+                        "sphinxcontrib-applehelp==1.0.7",
+                        "sphinxcontrib-devhelp==1.0.5",
+                        "sphinxcontrib-htmlhelp==2.0.4"
+                      ],
+                      "children": [],
+                      "split_generation": 11
+                    },
+                    {
+                      "direct": [
+                        "breathe==4.35.0"
+                      ],
+                      "packages": [
+                        "sphinxcontrib-jsmath==1.0.1",
+                        "alabaster==0.7.13",
+                        "docutils==0.18.1",
+                        "sphinxcontrib-serializinghtml==1.1.9",
+                        "sphinxcontrib-qthelp==1.0.6",
+                        "imagesize==1.4.1",
+                        "babel==2.12.1",
+                        "breathe==4.35.0",
+                        "pygments==2.16.1",
+                        "sphinx==7.2.6",
+                        "packaging==23.1",
+                        "sphinxcontrib-applehelp==1.0.7",
+                        "sphinxcontrib-devhelp==1.0.5",
+                        "sphinxcontrib-htmlhelp==2.0.4"
+                      ],
+                      "children": [],
+                      "split_generation": 18
+                    },
+                    {
+                      "direct": [
+                        "sphinx-rtd-theme==1.3.0"
+                      ],
+                      "packages": [
+                        "sphinxcontrib-jquery==4.1",
+                        "sphinxcontrib-jsmath==1.0.1",
+                        "alabaster==0.7.13",
+                        "docutils==0.18.1",
+                        "sphinxcontrib-serializinghtml==1.1.9",
+                        "sphinxcontrib-qthelp==1.0.6",
+                        "imagesize==1.4.1",
+                        "babel==2.12.1",
+                        "sphinx-rtd-theme==1.3.0",
+                        "pygments==2.16.1",
+                        "sphinx==7.2.6",
+                        "packaging==23.1",
+                        "sphinxcontrib-applehelp==1.0.7",
+                        "sphinxcontrib-devhelp==1.0.5",
+                        "sphinxcontrib-htmlhelp==2.0.4"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "jupyter-client==8.3.1"
+                          ],
+                          "packages": [
+                            "jupyter-core==5.3.1",
+                            "platformdirs==3.10.0",
+                            "python-dateutil==2.8.2",
+                            "six==1.16.0",
+                            "pyzmq==25.1.1",
+                            "tornado==6.3.3",
+                            "traitlets==5.10.0",
+                            "jupyter-client==8.3.1"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "nbconvert==7.8.0"
+                              ],
+                              "packages": [
+                                "nbclient==0.8.0",
+                                "nbconvert==7.8.0",
+                                "nbformat==5.9.2",
+                                "rpds-py==0.10.3",
+                                "jupyterlab-pygments==0.2.2",
+                                "webencodings==0.5.1",
+                                "fastjsonschema==2.18.0",
+                                "attrs==23.1.0",
+                                "jsonschema-specifications==2023.7.1",
+                                "beautifulsoup4==4.12.2",
+                                "tinycss2==1.2.1",
+                                "bleach==6.0.0",
+                                "referencing==0.30.2",
+                                "soupsieve==2.5",
+                                "defusedxml==0.7.1",
+                                "mistune==3.0.1",
+                                "pandocfilters==1.5.0",
+                                "jsonschema==4.19.0"
+                              ],
+                              "children": [
+                                {
+                                  "direct": [
+                                    "prompt-toolkit==3.0.39"
+                                  ],
+                                  "packages": [
+                                    "prompt-toolkit==3.0.39",
+                                    "wcwidth==0.2.6"
+                                  ],
+                                  "children": [
+                                    {
+                                      "direct": [
+                                        "jedi==0.19.0"
+                                      ],
+                                      "packages": [
+                                        "jedi==0.19.0",
+                                        "parso==0.8.3"
+                                      ],
+                                      "children": [],
+                                      "split_generation": 76
+                                    }
+                                  ],
+                                  "split_generation": 57
+                                }
+                              ],
+                              "split_generation": 54
+                            }
+                          ],
+                          "split_generation": 51
+                        }
+                      ],
+                      "split_generation": 19
+                    },
+                    {
+                      "direct": [
+                        "scikit-learn==1.3.0"
+                      ],
+                      "packages": [
+                        "scikit-learn==1.3.0",
+                        "scipy==1.11.2",
+                        "numpy==1.25.2",
+                        "threadpoolctl==3.2.0",
+                        "joblib==1.3.2"
+                      ],
+                      "children": [],
+                      "split_generation": 28
+                    },
+                    {
+                      "direct": [
+                        "pyyaml==6.0.1"
+                      ],
+                      "packages": [
+                        "pyyaml==6.0.1"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "reno==4.0.0"
+                          ],
+                          "packages": [
+                            "dulwich==0.21.6",
+                            "packaging==23.1",
+                            "reno==4.0.0",
+                            "pbr==5.11.1"
+                          ],
+                          "children": [],
+                          "split_generation": 42
+                        }
+                      ],
+                      "split_generation": 35
+                    },
+                    {
+                      "direct": [
+                        "breathe==4.35.0"
+                      ],
+                      "packages": [
+                        "sphinxcontrib-jsmath==1.0.1",
+                        "docutils==0.16",
+                        "pygments==2.16.1",
+                        "alabaster==0.7.13",
+                        "sphinxcontrib-serializinghtml==1.1.9",
+                        "sphinxcontrib-qthelp==1.0.6",
+                        "imagesize==1.4.1",
+                        "babel==2.12.1",
+                        "breathe==4.35.0",
+                        "sphinx==5.3.0",
+                        "packaging==23.1",
+                        "sphinxcontrib-applehelp==1.0.7",
+                        "sphinxcontrib-devhelp==1.0.5",
+                        "sphinxcontrib-htmlhelp==2.0.4"
+                      ],
+                      "children": [],
+                      "split_generation": 38
+                    },
+                    {
+                      "direct": [
+                        "babel==2.12.1"
+                      ],
+                      "packages": [
+                        "babel==2.12.1"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "prompt-toolkit==3.0.39"
+                          ],
+                          "packages": [
+                            "prompt-toolkit==3.0.39",
+                            "wcwidth==0.2.6"
+                          ],
+                          "children": [
+                            {
+                              "direct": [
+                                "jedi==0.19.0"
+                              ],
+                              "packages": [
+                                "jedi==0.19.0",
+                                "parso==0.8.3"
+                              ],
+                              "children": [],
+                              "split_generation": 74
+                            }
+                          ],
+                          "split_generation": 56
+                        },
+                        {
+                          "direct": [
+                            "numpy==1.25.2"
+                          ],
+                          "packages": [
+                            "numpy==1.25.2"
+                          ],
+                          "children": [],
+                          "split_generation": 61
+                        },
+                        {
+                          "direct": [
+                            "imagesize==1.4.1"
+                          ],
+                          "packages": [
+                            "imagesize==1.4.1"
+                          ],
+                          "children": [],
+                          "split_generation": 67
+                        }
+                      ],
+                      "split_generation": 50
+                    }
+                  ],
+                  "split_generation": 8
+                },
+                {
+                  "direct": [
+                    "matplotlib==3.8.0"
+                  ],
+                  "packages": [
+                    "pyparsing==3.1.1",
+                    "pillow==10.0.0",
+                    "python-dateutil==2.8.2",
+                    "kiwisolver==1.4.5",
+                    "contourpy==1.1.0",
+                    "six==1.16.0",
+                    "numpy==1.24.4",
+                    "cycler==0.11.0",
+                    "matplotlib==3.8.0",
+                    "fonttools==4.42.1",
+                    "packaging==23.1"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "pandas==2.1.0"
+                      ],
+                      "packages": [
+                        "tzdata==2023.3",
+                        "pandas==2.1.0",
+                        "pytz==2023.3.post1"
+                      ],
+                      "children": [
+                        {
+                          "direct": [
+                            "numba==0.57.1"
+                          ],
+                          "packages": [
+                            "numba==0.57.1",
+                            "llvmlite==0.40.1"
+                          ],
+                          "children": [],
+                          "split_generation": 43
+                        }
+                      ],
+                      "split_generation": 32
+                    }
+                  ],
+                  "split_generation": 25
+                },
+                {
+                  "direct": [
+                    "werkzeug==2.3.7"
+                  ],
+                  "packages": [
+                    "werkzeug==2.3.7"
+                  ],
+                  "children": [
+                    {
+                      "direct": [
+                        "flask==2.3.3"
+                      ],
+                      "packages": [
+                        "itsdangerous==2.1.2",
+                        "flask==2.3.3",
+                        "blinker==1.6.2",
+                        "click==8.1.7"
+                      ],
+                      "children": [],
+                      "split_generation": 68
+                    }
+                  ],
+                  "split_generation": 66
+                },
+                {
+                  "direct": [
+                    "openpyxl==3.1.2"
+                  ],
+                  "packages": [
+                    "et-xmlfile==1.1.0",
+                    "openpyxl==3.1.2"
+                  ],
+                  "children": [],
+                  "split_generation": 70
+                }
+              ],
+              "split_generation": 7
+            },
+            {
+              "direct": [
+                "pytest==7.4.2"
+              ],
+              "packages": [
+                "pluggy==1.3.0",
+                "pytest==7.4.2",
+                "iniconfig==2.0.0",
+                "exceptiongroup==1.1.3",
+                "tomli==2.0.1",
+                "packaging==23.1"
+              ],
+              "children": [],
+              "split_generation": 39
+            },
+            {
+              "direct": [
+                "pymongo==4.5.0"
+              ],
+              "packages": [
+                "pymongo==4.5.0",
+                "dnspython==2.4.2"
+              ],
+              "children": [],
+              "split_generation": 40
+            },
+            {
+              "direct": [
+                "cmd2==2.4.3"
+              ],
+              "packages": [
+                "cmd2==2.4.3",
+                "pyperclip==1.8.2",
+                "attrs==23.1.0",
+                "wcwidth==0.2.6"
+              ],
+              "children": [],
+              "split_generation": 59
+            },
+            {
+              "direct": [
+                "openpyxl==3.1.2"
+              ],
+              "packages": [
+                "et-xmlfile==1.1.0",
+                "openpyxl==3.1.2"
+              ],
+              "children": [],
+              "split_generation": 69
+            },
+            {
+              "direct": [
+                "pyyaml==6.0.1"
+              ],
+              "packages": [
+                "pyyaml==6.0.1"
+              ],
+              "children": [],
+              "split_generation": 78
+            }
+          ],
+          "split_generation": 4
+        }
+      ],
+      "split_generation": 3
+    },
+    {
+      "direct": [
+        "numpy==1.25.2"
+      ],
+      "packages": [
+        "numpy==1.25.2"
+      ],
+      "children": [
+        {
+          "direct": [
+            "scikit-learn==1.3.0"
+          ],
+          "packages": [
+            "joblib==1.3.2",
+            "scipy==1.11.2",
+            "threadpoolctl==3.2.0",
+            "scikit-learn==1.3.0"
+          ],
+          "children": [],
+          "split_generation": 15
+        },
+        {
+          "direct": [
+            "pytest==7.4.2"
+          ],
+          "packages": [
+            "pluggy==1.3.0",
+            "pytest==7.4.2",
+            "iniconfig==2.0.0",
+            "exceptiongroup==1.1.3",
+            "tomli==2.0.1",
+            "packaging==23.1"
+          ],
+          "children": [
+            {
+              "direct": [
+                "sympy==1.12"
+              ],
+              "packages": [
+                "sympy==1.12",
+                "mpmath==1.3.0"
+              ],
+              "children": [],
+              "split_generation": 37
+            },
+            {
+              "direct": [
+                "astroid==2.15.6"
+              ],
+              "packages": [
+                "astroid==2.15.6",
+                "typing-extensions==4.7.1",
+                "lazy-object-proxy==1.9.0",
+                "wrapt==1.15.0"
+              ],
+              "children": [],
+              "split_generation": 48
+            }
+          ],
+          "split_generation": 36
+        },
+        {
+          "direct": [
+            "scipy==1.11.2"
+          ],
+          "packages": [
+            "scipy==1.11.2"
+          ],
+          "children": [],
+          "split_generation": 52
+        },
+        {
+          "direct": [
+            "networkx==3.1"
+          ],
+          "packages": [
+            "networkx==3.1"
+          ],
+          "children": [],
+          "split_generation": 53
+        }
+      ],
+      "split_generation": 5
+    },
+    {
+      "direct": [
+        "werkzeug==2.3.7"
+      ],
+      "packages": [
+        "werkzeug==2.3.7",
+        "markupsafe==2.1.3"
+      ],
+      "children": [
+        {
+          "direct": [
+            "jinja2==3.1.2"
+          ],
+          "packages": [
+            "jinja2==3.1.2"
+          ],
+          "children": [
+            {
+              "direct": [
+                "flask==2.3.3"
+              ],
+              "packages": [
+                "itsdangerous==2.1.2",
+                "flask==2.3.3",
+                "blinker==1.6.2",
+                "click==8.1.7"
+              ],
+              "children": [
+                {
+                  "direct": [
+                    "pymongo==4.5.0"
+                  ],
+                  "packages": [
+                    "pymongo==4.5.0",
+                    "dnspython==2.4.2"
+                  ],
+                  "children": [],
+                  "split_generation": 26
+                },
+                {
+                  "direct": [
+                    "pandas==2.1.0"
+                  ],
+                  "packages": [
+                    "python-dateutil==2.8.2",
+                    "pytz==2023.3.post1",
+                    "six==1.16.0",
+                    "numpy==1.26.0",
+                    "tzdata==2023.3",
+                    "pandas==2.1.0"
+                  ],
+                  "children": [],
+                  "split_generation": 30
+                },
+                {
+                  "direct": [
+                    "redis==5.0.0"
+                  ],
+                  "packages": [
+                    "redis==5.0.0",
+                    "async-timeout==4.0.3"
+                  ],
+                  "children": [],
+                  "split_generation": 44
+                }
+              ],
+              "split_generation": 13
+            },
+            {
+              "direct": [
+                "flask==2.1.0"
+              ],
+              "packages": [
+                "flask==2.1.0",
+                "itsdangerous==2.1.2",
+                "click==8.1.7"
+              ],
+              "children": [],
+              "split_generation": 33
+            },
+            {
+              "direct": [
+                "flask==2.0.3"
+              ],
+              "packages": [
+                "flask==2.0.3",
+                "itsdangerous==2.1.2",
+                "click==8.1.7"
+              ],
+              "children": [],
+              "split_generation": 64
+            }
+          ],
+          "split_generation": 12
+        }
+      ],
+      "split_generation": 9
+    },
+    {
+      "direct": [
+        "pytest==7.4.2"
+      ],
+      "packages": [
+        "pluggy==1.3.0",
+        "pytest==7.4.2",
+        "iniconfig==2.0.0",
+        "exceptiongroup==1.1.3",
+        "tomli==2.0.1",
+        "packaging==23.1"
+      ],
+      "children": [],
+      "split_generation": 16
+    },
+    {
+      "direct": [
+        "nose==1.3.7"
+      ],
+      "packages": [
+        "nose==1.3.7"
+      ],
+      "children": [
+        {
+          "direct": [
+            "astroid==2.15.6"
+          ],
+          "packages": [
+            "astroid==2.15.6",
+            "typing-extensions==4.7.1",
+            "lazy-object-proxy==1.9.0",
+            "wrapt==1.15.0"
+          ],
+          "children": [],
+          "split_generation": 49
+        }
+      ],
+      "split_generation": 20
+    },
+    {
+      "direct": [
+        "numba==0.57.1"
+      ],
+      "packages": [
+        "numba==0.57.1",
+        "numpy==1.24.4",
+        "llvmlite==0.40.1"
+      ],
+      "children": [
+        {
+          "direct": [
+            "matplotlib==3.8.0"
+          ],
+          "packages": [
+            "pyparsing==3.1.1",
+            "pillow==10.0.0",
+            "python-dateutil==2.8.2",
+            "kiwisolver==1.4.5",
+            "contourpy==1.1.0",
+            "six==1.16.0",
+            "cycler==0.11.0",
+            "matplotlib==3.8.0",
+            "fonttools==4.42.1",
+            "packaging==23.1"
+          ],
+          "children": [
+            {
+              "direct": [
+                "pandas==2.1.0"
+              ],
+              "packages": [
+                "tzdata==2023.3",
+                "pandas==2.1.0",
+                "pytz==2023.3.post1"
+              ],
+              "children": [],
+              "split_generation": 31
+            }
+          ],
+          "split_generation": 23
+        },
+        {
+          "direct": [
+            "scikit-learn==1.3.0"
+          ],
+          "packages": [
+            "joblib==1.3.2",
+            "scipy==1.11.2",
+            "threadpoolctl==3.2.0",
+            "scikit-learn==1.3.0"
+          ],
+          "children": [],
+          "split_generation": 29
+        }
+      ],
+      "split_generation": 21
+    },
+    {
+      "direct": [
+        "urllib3==1.26.16"
+      ],
+      "packages": [
+        "urllib3==1.26.16"
+      ],
+      "children": [
+        {
+          "direct": [
+            "boto3==1.28.48"
+          ],
+          "packages": [
+            "s3transfer==0.6.2",
+            "python-dateutil==2.8.2",
+            "six==1.16.0",
+            "boto3==1.28.48",
+            "botocore==1.31.48",
+            "jmespath==1.0.1"
+          ],
+          "children": [],
+          "split_generation": 41
+        },
+        {
+          "direct": [
+            "certifi==2023.7.22"
+          ],
+          "packages": [
+            "certifi==2023.7.22"
+          ],
+          "children": [
+            {
+              "direct": [
+                "requests==2.28.1"
+              ],
+              "packages": [
+                "charset-normalizer==2.1.1",
+                "idna==3.4",
+                "requests==2.28.1"
+              ],
+              "children": [],
+              "split_generation": 73
+            }
+          ],
+          "split_generation": 58
+        }
+      ],
+      "split_generation": 22
+    },
+    {
+      "direct": [
+        "jinja2==3.1.2"
+      ],
+      "packages": [
+        "markupsafe==2.1.3",
+        "jinja2==3.1.2"
+      ],
+      "children": [
+        {
+          "direct": [
+            "pyyaml==6.0.1"
+          ],
+          "packages": [
+            "pyyaml==6.0.1"
+          ],
+          "children": [],
+          "split_generation": 77
+        }
+      ],
+      "split_generation": 34
+    },
+    {
+      "direct": [
+        "pyyaml==6.0.1"
+      ],
+      "packages": [
+        "pyyaml==6.0.1"
+      ],
+      "children": [],
+      "split_generation": 45
+    },
+    {
+      "direct": [
+        "virtualenv==20.24.5"
+      ],
+      "packages": [
+        "distlib==0.3.7",
+        "platformdirs==3.10.0",
+        "filelock==3.12.4",
+        "virtualenv==20.24.5"
+      ],
+      "children": [],
+      "split_generation": 47
+    },
+    {
+      "direct": [
+        "prompt-toolkit==3.0.39"
+      ],
+      "packages": [
+        "prompt-toolkit==3.0.39",
+        "wcwidth==0.2.6"
+      ],
+      "children": [
+        {
+          "direct": [
+            "jedi==0.19.0"
+          ],
+          "packages": [
+            "jedi==0.19.0",
+            "parso==0.8.3"
+          ],
+          "children": [],
+          "split_generation": 75
+        }
+      ],
+      "split_generation": 55
+    },
+    {
+      "direct": [
+        "pyparsing==3.1.1"
+      ],
+      "packages": [
+        "pyparsing==3.1.1"
+      ],
+      "children": [],
+      "split_generation": 60
+    },
+    {
+      "direct": [
+        "sqlalchemy==2.0.20"
+      ],
+      "packages": [
+        "typing-extensions==4.7.1",
+        "greenlet==2.0.2",
+        "sqlalchemy==2.0.20"
+      ],
+      "children": [],
+      "split_generation": 62
+    },
+    {
+      "direct": [
+        "pymongo==4.5.0"
+      ],
+      "packages": [
+        "pymongo==4.5.0",
+        "dnspython==2.4.2"
+      ],
+      "children": [],
+      "split_generation": 65
+    },
+    {
+      "direct": [
+        "click==8.1.7"
+      ],
+      "packages": [
+        "click==8.1.7"
+      ],
+      "children": [],
+      "split_generation": 79
+    }
+  ],
+  "split_generation": 0
+}
