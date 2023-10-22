@@ -6,13 +6,30 @@ import traceback
 
 import pandas as pd
 
+import workload
 from config import *
 from version import Package
 from workload import Workload
 
 costs = None
 
-# it is a simpler Meta, only used to keep consistent with ol code
+
+class Worker:
+    def __init__(self, container_limit, total_mem):
+        self.container_limit = container_limit
+        self.total_mem = total_mem
+        self.paused = []
+        self.running = []
+
+
+class Container:
+    def __init__(self, is_leaf, split_gen):
+        self.is_leaf = is_leaf
+        self.split_gen = split_gen
+        self.priority = 0  # priority is used to determine eviction order
+
+
+# Meta is used to keep consistent with struct Meta in ol
 class Meta:
     def __init__(self, mods=None, pkgs=None):
         self.mods = mods
@@ -78,10 +95,7 @@ class Node:
     def serve_requests_cost(self, reqs):
         return self.import_cost(reqs)
 
-    def bootstrap_cost(self, meta):
-        reqs = copy.deepcopy(meta.pkgs)
-        return self.import_cost(reqs)
-
+    # when container's memory is not large enough, fork cost is always a constant
     def fork_cost(self):
         return 0.7
 
@@ -91,6 +105,7 @@ class Node:
                 "split_generation": self.split_generation,
                 "children": [node.to_dict() for node in self.children]
                 }
+
 
 
 class Tree:
@@ -112,7 +127,7 @@ class Tree:
         min_cost = node.import_cost(reqs)
         return min_cost, node
 
-    # lookup2 does a traversal of the tree, and find the best node to serve the request
+    # lookup2 does a traversal of the whole tree, and find the best node to serve the request
     # req is a set of packages, we calculate the cost of importing all the top modules
     # def:
     # input: required packages reqs, a given zygote tree
@@ -139,34 +154,34 @@ class Tree:
 
     # this function corresponds to the cost of (linst *LambdaInstance) Task()
     # LambdaInstance-ServeRequests
-    def get_task_cost(self, meta=Meta(), lookup_mode=0):
+    def get_task_cost(self, func_meta=None, lookup_mode=0):
         # the following part is corresponding to `(cache *ImportCache) Create`
         best_node = self.root
-        reqs = meta.pkgs
+
+        reqs = func_meta.pkgs
+
         if lookup_mode == 0:
             cost, best_node = self.lookup(reqs, self.root)
         elif lookup_mode == 1:
             cost, best_node = self.lookup2(reqs, self.root)
-        create_leaf_cost = self.create_child_cost(best_node, meta)
+
+        # todo: move this to ol class
+        create_leaf_cost = self.create_child_cost(best_node, func_meta, True)
 
         # the following part is corresponding to `LambdaInstance-ServeRequests`
         serve_requests_cost = best_node.serve_requests_cost(reqs)
-        if cost != serve_requests_cost:
-            print("cost not equal")
-            print(best_node)
-        # create_leaf_cost = 0
+        create_leaf_cost = 0
         return create_leaf_cost + serve_requests_cost
 
-    # todo: this function corresponds to the cost of importCache.Create
-    # this function corresponds to the cost of importCache.createChildSandboxFromNode,
+    # this function corresponds to the cost of importCache.Create, equal to importCache.createChildSandboxFromNode,
     # createChildSandboxFromNode can do following things:
-    # gets zygote(because the zygote might not be created) and creates leaf sandbox(do a fork)
-    # or gets zygote(because the zygote might not be created) and creates another zygote based on parent
+    # the zygote is not created: gets zygote and fork leaf sandbox
+    # the zygote is created: gets zygote and creates another zygote based on parent
     # new zygote = get zygote + fork + import meta
-    def create_child_cost(self, node, meta):
+    def create_child_cost(self, node, meta, is_leaf=False):
         # get_zygote_cost + fork_cost = createChildSandboxFromNode = Create
         get_zygote_cost = self.get_zygote_cost(node)
-        create_cost = get_create_cost(node, meta)
+        create_cost = get_create_cost(node, meta, is_leaf)
         return get_zygote_cost + create_cost
 
     # this function corresponds to cost of importCache.getSandboxInNode
@@ -183,14 +198,12 @@ class Tree:
         # ignore the pip-install cost
         # node.meta is created in createSandboxInNode in ol, but I create that when initializing the node
         if node.parent is not None:
-            # todo: probably need to change meta
             meta = node.meta
             create_zygote_cost = self.create_child_cost(node.parent, meta)
             node.zygoteCreated = True
             return create_zygote_cost
         else:
-            # todo: measure the cost of create root (now assume negligible)
-            create_root_cost = get_create_cost(None, node.meta)
+            create_root_cost = get_create_cost(None, node.meta, False)
             node.zygoteCreated = True
             return create_root_cost
 
@@ -199,21 +212,27 @@ class Tree:
             json.dump(self.root.to_dict(), f, indent=2)
 
 
+def bootstrap_cost(node, meta, is_leaf=False):
+    if is_leaf:
+        return 0
+    reqs = copy.deepcopy(meta.pkgs)
+    return node.import_cost(reqs)
+
+
 # this function corresponds to cost of SOCKPool.Create function
 # SOCKPool.Create does 3 things: populate rootfs, generate bootstrap.py(both negligible),
 # and told its parent to fork the new process, new process will run bootstrap.py (do import)
 # it's like creating a house(rootfs), then invite people(process) to live in
 # the bootstrap.py is the most heavy part
-def get_create_cost(parent_node, meta):
+def get_create_cost(parent_node, meta, is_leaf=False):
     if parent_node is not None:
         # the following 2 lines are corresponding to the cost of sock.fork
         fork_cost = parent_node.fork_cost()
-        bootstrap_cost = parent_node.bootstrap_cost(meta)
-        return fork_cost + bootstrap_cost
+        bs_cost = bootstrap_cost(parent_node, meta, is_leaf)
+        return fork_cost + bs_cost
     else:
-        freshProc_cost = 0  # todo: measure the cost of freshProc
+        freshProc_cost = 20  # todo: measure the cost of freshProc
         return freshProc_cost
-
 
 def estimate_cost(workload, tree_path):
     tree = Tree(Node.from_json(tree_path))
@@ -221,11 +240,18 @@ def estimate_cost(workload, tree_path):
     cost = 0
     for call in workload.calls:
         call_name = call['name']
-        func_meta = workload.find_func(call_name).meta
-        pkg_with_version = [pkg_name + "==" + func_meta.pkg_with_version[pkg_name][1]
-                            for pkg_name in func_meta.pkg_with_version]
+
+        # convert workload.Meta to Meta
+        meta = workload.find_func(call_name).meta
+        pkg_with_version = [pkg_name + "==" + meta.pkg_with_version[pkg_name][1]
+                            for pkg_name in meta.pkg_with_version]
         pkg_with_version = set(pkg_with_version)
-        v, best_node = tree.lookup(pkg_with_version, tree.root)
+        func_meta = Meta(meta.import_mods, pkg_with_version)
+
+        v1, best_node = tree.lookup(copy.deepcopy(pkg_with_version), tree.root)
+        v = tree.get_task_cost(func_meta)
+        if v1 != v:
+            print(f"v1: {v1}, v: {v}")
         cost += v
     print(f"Zygote tree:{tree_name}, LambdaInstance-ServeRequests estimate time: {cost}ms")
     return cost
