@@ -10,7 +10,7 @@ import (
 
 const (
 	INPUTFILE      = "requirements.csv"
-	OUTPUTFILECOMP = "compiled.csv"
+	OUTPUTFILE     = "output.csv"
 	OUTPUTFILEFAIL = "failed.csv"
 	NUM_THREAD     = 1
 )
@@ -35,7 +35,7 @@ func main() {
 	}
 	defer inputFile.Close()
 
-	outputFileComp, err := os.OpenFile(OUTPUTFILECOMP, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	outputFile, err := os.OpenFile(OUTPUTFILE, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
 	if err != nil {
 		fmt.Println("Error creating output file 0:", err)
 		return
@@ -45,11 +45,11 @@ func main() {
 		fmt.Println("Error creating output file 1:", err)
 		return
 	}
-	defer outputFileComp.Close()
+	defer outputFile.Close()
 	defer outputFileFail.Close()
 
 	reader := csv.NewReader(inputFile)
-	writerComp := csv.NewWriter(outputFileComp)
+	writer := csv.NewWriter(outputFile)
 	writerFail := csv.NewWriter(outputFileFail)
 
 	compiler := &IOChan{
@@ -79,7 +79,7 @@ func main() {
 	}
 
 	//write header to output files
-	writerComp.Write(header)
+	writer.Write(header)
 	writerFail.Write(header)
 
 	for i := 0; i < NUM_THREAD; i++ {
@@ -123,18 +123,19 @@ func main() {
 			row = output.row
 			row[compiled_col] = output.content
 		}
-		if !output.err {
-			if err := writerComp.Write(row); err != nil {
-				fmt.Println("Error writing to output file:", err)
-				os.Exit(1)
-			}
-			writerComp.Flush()
 
-			if err := writerComp.Error(); err != nil {
-				fmt.Println("Error flushing writer:", err)
-				os.Exit(1)
-			}
-		} else {
+		if err := writer.Write(row); err != nil {
+			fmt.Println("Error writing to output file:", err)
+			os.Exit(1)
+		}
+		writer.Flush()
+
+		if err := writer.Error(); err != nil {
+			fmt.Println("Error flushing writer:", err)
+			os.Exit(1)
+		}
+
+		if !output.err {
 			if err := writerFail.Write(row); err != nil {
 				fmt.Println("Error writing to output file:", err)
 				os.Exit(1)
