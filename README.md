@@ -6,7 +6,14 @@ how to use ReqBench:
 4. run it
 
 ## About Dataset
-The `requirements.csv` file provided in this repository contains `requirements.txt` files retrieved from the BigQuery GitHub Repository public dataset. The public dataset was last modified on Nov 26, 2022 and was retrieved on Sep 12, 2023. The raw requirements have been pip-compiled with Python 3.10 on Sep 21, 2023.
+The `requirements.csv` file provided in this repository contains `requirements.txt` files retrieved from the BigQuery GitHub Repository public dataset. The public dataset was last modified on Nov 26, 2022 and was retrieved on Sep 12, 2023. 
+
+From the public dataset, we selected all repositories that were last updated after April 21, 2022 (Ubuntu 22.04 release date) and contained a requirements.txt file. This dataset comprises 9,678 unique requirements.txt files. The raw requirements have been pip-compiled using `compile.go` with Python 3.10 on Sep 21, 2023.
+
+## Run pip-compile
+To use `compile.go`, the input `requirements.csv` should have at least two columns: `id` and `raw` (representing the `requirements.in` file you want to compile). The script will sequentially run pip-compile using each row in the `raw` column. You can enable multi-threading by adjusting the `NUM_THREAD` constant. 
+
+`compile.go` generates two output files: `output.csv` and `failed.csv`. If the pip-compile process succeeds, the result will be stored in the `compiled` column and written to the `output.csv` file. In the event of a pip-compile failure, the `compiled` column in `output.csv` will remain blank, and the corresponding row will be written to the `failed.csv` file.
 
 ## Generate Workload
 `requirements.csv` is a file that contains a bunch of `requirements.txt`.
