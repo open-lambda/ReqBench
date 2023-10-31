@@ -9,14 +9,15 @@ import (
 )
 
 const (
-	INPUTFILE      = "raw.csv"
-	OUTPUTFILECOMP = "compiled0.csv"
-	OUTPUTFILEFAIL = "failed0.csv"
+	INPUTFILE      = "requirements.csv"
+	OUTPUTFILECOMP = "compiled.csv"
+	OUTPUTFILEFAIL = "failed.csv"
 	NUM_THREAD     = 1
 )
 
 type Content struct {
 	id      string
+	row     []string
 	content string
 	err     bool
 }
@@ -56,9 +57,35 @@ func main() {
 		outputChan: make(chan *Content, NUM_THREAD),
 	}
 
+	//find "raw" and "compiled" column
+	raw_col, compiled_col := -1, -1
+	header, err := reader.Read()
+	for i := 0; i < len(header); i++ {
+		if header[i] == "raw" {
+			raw_col = i
+		}
+		if header[i] == "compiled" {
+			compiled_col = i
+		}
+	}
+
+	if raw_col < 0 {
+		fmt.Println("Error raw column not found")
+		os.Exit(1)
+	}
+
+	if compiled_col < 0 {
+		header = append(header, "compiled")
+	}
+
+	//write header to output files
+	writerComp.Write(header)
+	writerFail.Write(header)
+
 	for i := 0; i < NUM_THREAD; i++ {
 		go worker(i, compiler)
 	}
+
 	//reader
 	go func() {
 		for {
@@ -75,7 +102,8 @@ func main() {
 			}
 			compiler.inputChan <- &Content{
 				id:      record[0],
-				content: record[1],
+				row:     record,
+				content: record[raw_col],
 				err:     false,
 			}
 		}
@@ -88,7 +116,13 @@ func main() {
 			break
 		}
 
-		row := []string{output.id, output.content}
+		row := []string{}
+		if compiled_col < 0 {
+			row = append(output.row, output.content)
+		} else {
+			row = output.row
+			row[compiled_col] = output.content
+		}
 		if !output.err {
 			if err := writerComp.Write(row); err != nil {
 				fmt.Println("Error writing to output file:", err)
@@ -147,6 +181,7 @@ func worker(workerid int, compiler *IOChan) {
 		} else {
 			compiler.outputChan <- &Content{
 				id:      input.id,
+				row:     input.row,
 				content: requirements,
 				err:     false,
 			}
@@ -158,4 +193,3 @@ func worker(workerid int, compiler *IOChan) {
 	}
 
 }
-
