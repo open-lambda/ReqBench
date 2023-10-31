@@ -6,7 +6,7 @@ how to use ReqBench:
 4. run it
 
 ## About Dataset
-`requirements.csv` file provided in this repository contains `requirements.txt` files retrieved from the BigQuery GitHub Repository public dataset. The public dataset was last modified on Nov 26, 2022, and retrieved on September 12, 2023. The raw requirements have been pip-compiled with Python 3.10 on Sep 21, 2023.
+The `requirements.csv` file provided in this repository contains `requirements.txt` files retrieved from the BigQuery GitHub Repository public dataset. The public dataset was last modified on Nov 26, 2022 and was retrieved on Sep 12, 2023. The raw requirements have been pip-compiled with Python 3.10 on Sep 21, 2023.
 
 ## Generate Workload
 `requirements.csv` is a file that contains a bunch of `requirements.txt`.
