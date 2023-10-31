@@ -1,0 +1,161 @@
+package main
+
+import (
+	"encoding/csv"
+	"fmt"
+	"io"
+	"os"
+	"os/exec"
+)
+
+const (
+	INPUTFILE      = "raw.csv"
+	OUTPUTFILECOMP = "compiled0.csv"
+	OUTPUTFILEFAIL = "failed0.csv"
+	NUM_THREAD     = 1
+)
+
+type Content struct {
+	id      string
+	content string
+	err     bool
+}
+
+type IOChan struct {
+	inputChan  chan *Content
+	outputChan chan *Content
+}
+
+func main() {
+	inputFile, err := os.Open(INPUTFILE)
+	if err != nil {
+		fmt.Println("Error opening input file:", err)
+		return
+	}
+	defer inputFile.Close()
+
+	outputFileComp, err := os.OpenFile(OUTPUTFILECOMP, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	if err != nil {
+		fmt.Println("Error creating output file 0:", err)
+		return
+	}
+	outputFileFail, err := os.OpenFile(OUTPUTFILEFAIL, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	if err != nil {
+		fmt.Println("Error creating output file 1:", err)
+		return
+	}
+	defer outputFileComp.Close()
+	defer outputFileFail.Close()
+
+	reader := csv.NewReader(inputFile)
+	writerComp := csv.NewWriter(outputFileComp)
+	writerFail := csv.NewWriter(outputFileFail)
+
+	compiler := &IOChan{
+		inputChan:  make(chan *Content, NUM_THREAD),
+		outputChan: make(chan *Content, NUM_THREAD),
+	}
+
+	for i := 0; i < NUM_THREAD; i++ {
+		go worker(i, compiler)
+	}
+	//reader
+	go func() {
+		for {
+			record, err := reader.Read()
+			if err == io.EOF {
+				for i := 0; i < NUM_THREAD; i++ {
+					compiler.inputChan <- nil
+				}
+				compiler.outputChan <- nil
+				break
+			} else if err != nil {
+				fmt.Println("Error reading from input file:", err)
+				os.Exit(1)
+			}
+			compiler.inputChan <- &Content{
+				id:      record[0],
+				content: record[1],
+				err:     false,
+			}
+		}
+	}()
+
+	//writer
+	for {
+		output := <-compiler.outputChan
+		if output == nil {
+			break
+		}
+
+		row := []string{output.id, output.content}
+		if !output.err {
+			if err := writerComp.Write(row); err != nil {
+				fmt.Println("Error writing to output file:", err)
+				os.Exit(1)
+			}
+			writerComp.Flush()
+
+			if err := writerComp.Error(); err != nil {
+				fmt.Println("Error flushing writer:", err)
+				os.Exit(1)
+			}
+		} else {
+			if err := writerFail.Write(row); err != nil {
+				fmt.Println("Error writing to output file:", err)
+				os.Exit(1)
+			}
+			writerFail.Flush()
+
+			if err := writerFail.Error(); err != nil {
+				fmt.Println("Error flushing writer:", err)
+				os.Exit(1)
+			}
+		}
+	}
+}
+
+func worker(workerid int, compiler *IOChan) {
+	count := 0
+	for {
+		input := <-compiler.inputChan
+		if input == nil {
+			break
+		}
+
+		tempInPath := fmt.Sprintf("temp_%d.in", workerid)
+		tempTxtPath := fmt.Sprintf("temp_%d.txt", workerid)
+
+		cmd := exec.Command("rm", tempInPath, tempTxtPath)
+		_ = cmd.Run()
+
+		cmd = exec.Command("/bin/bash", "-c", "echo \""+input.content+"\" > "+tempInPath)
+		if err := cmd.Run(); err != nil {
+			fmt.Printf("Error creating temporary requirements.in file for id %s: %v\n", input.id, err)
+			compiler.outputChan <- input
+			continue
+		}
+
+		cmd = exec.Command("pip-compile", "--rebuild", tempInPath)
+		fmt.Printf("running pip-compile for id %s\n", input.id)
+		output, err := cmd.CombinedOutput()
+		requirements := string(output)
+		if err != nil {
+			fmt.Printf("Error running pip-compile for id %s\n", input.id)
+			input.err = true
+			compiler.outputChan <- input
+		} else {
+			compiler.outputChan <- &Content{
+				id:      input.id,
+				content: requirements,
+				err:     false,
+			}
+
+			cmd = exec.Command("rm", tempInPath, tempTxtPath)
+			_ = cmd.Run()
+		}
+		count += 1
+	}
+
+}
+
