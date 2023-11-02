@@ -1,12 +1,13 @@
 ## General instruction 
 how to use ReqBench:
-1. pull repo and generate requirements.txt from google (a placeholder for KJ)
-2. generate the trees 
-3. generate the to-be-tested workload
-4. run it
+1. pull the data from google pulbic dataset
+2. pip-compile requirements.txt
+3. generate the trees 
+4. generate the to-be-tested workload
+5. run it
 
 ## About Dataset
-The `requirements.csv` file provided in this repository contains `requirements.txt` files retrieved from the BigQuery GitHub Repository public dataset. The public dataset was last modified on Nov 26, 2022 and was retrieved on Sep 12, 2023. 
+The `requirements.csv` file provided in this repository contains `requirements.txt` files retrieved from the BigQuery [GitHub Repository public dataset](https://console.cloud.google.com/marketplace/product/github/github-repos). The public dataset was last modified on Nov 26, 2022 and was retrieved on Sep 12, 2023. 
 
 From the public dataset, we selected all repositories that were last updated after April 21, 2022 (Ubuntu 22.04 release date) and contained a requirements.txt file. This dataset comprises 9,678 unique requirements.txt files. The raw requirements have been pip-compiled using `compile.go` with Python 3.10 on Sep 21, 2023.
 
