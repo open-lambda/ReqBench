@@ -24,6 +24,7 @@ type Info interface {
 	getFileName() string
 }
 
+// deprecated
 type Fork struct {
 	SplitGeneration int     `json:"splitGeneration"`
 	ForkTime        float32 `json:"forkTime"` // in ms
@@ -34,6 +35,7 @@ type Fork struct {
 	Pss       int `json:"pss"`    // in KB
 }
 
+// deprecated
 type Create struct {
 	SandboxId      string           `json:"sandbox-id"`
 	ParentId       string           `json:"parent-id"`
@@ -42,16 +44,21 @@ type Create struct {
 	CreateDuration map[string]int64 `json:"create-duration"`
 }
 
+// deprecated
 type Lookup struct {
 	SplitGen       int   `json:"split_gen"`
 	LookupDuration int64 `json:"lookup_duration"`
 }
 
+// deprecated
 type Req struct {
 	FuncName    string `json:"func-name"`
 	ReqDuration int64  `json:"duration"`
 }
 
+// StartCreate, StartPullHandler, EndPullHandler, EndCreate are platform-dependent timestamps,
+// which only used in opanlambda.
+// For other platforms, they are all 0
 type Latency struct {
 	Name string `json:"name"`
 	// SplitGen indicate hit which zygote

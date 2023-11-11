@@ -38,7 +38,8 @@ class Meta:
 
 class Node:
     # packages:
-    def __init__(self, parent, packages, split_generation, indirect_packages):
+    def __init__(self, parent, direct, packages, split_generation, indirect_packages):
+        self.direct = direct
         self.parent = parent
         # we only import one package in each node, thus packages should be a set containing only one element
         self.packages = packages
@@ -71,12 +72,13 @@ class Node:
         packages = set(child_dict["packages"])
         split_generation = child_dict["split_generation"]
         children = child_dict["children"]
+        direct = child_dict["direct"]
 
         indirect_packages = set()
         if parent is not None:
             indirect_packages.update(parent.packages)
             indirect_packages |= parent.indirect_packages
-        node = Node(parent, packages, split_generation, indirect_packages)
+        node = Node(parent, direct, packages, split_generation, indirect_packages)
         for child in children:
             node.children.append(Node.construct_node(child, node))
         return node
@@ -101,9 +103,10 @@ class Node:
 
     def to_dict(self):
         return {"packages": [p for p in self.packages],
-                "self.count": self.count,
+                "direct": self.direct,
                 "split_generation": self.split_generation,
-                "children": [node.to_dict() for node in self.children]
+                "children": [node.to_dict() for node in self.children],
+                "count": self.count,
                 }
 
 
@@ -166,6 +169,7 @@ class Tree:
             cost, best_node = self.lookup2(reqs, self.root)
 
         # todo: move this to ol class
+        best_node.count += 1
         create_leaf_cost = self.create_child_cost(best_node, func_meta, True)
 
         # the following part is corresponding to `LambdaInstance-ServeRequests`
@@ -233,7 +237,13 @@ def get_create_cost(parent_node, meta, is_leaf=False):
         freshProc_cost = 20  # todo: measure the cost of freshProc
         return freshProc_cost
 
-def estimate_cost(workload, tree_path):
+def estimate_cost(workload, tree_path, metric = "throughput OR latency"):
+    global costs
+    if costs is None:
+        pkg_json = "packages_tops_costs.json"
+        Package.from_json(path=os.path.join(bench_file_dir, pkg_json))
+        costs = Package.cost_dict()
+
     tree = Tree(Node.from_json(tree_path))
     tree_name = os.path.splitext(os.path.basename(tree_path))[0]
     cost = 0
@@ -250,8 +260,11 @@ def estimate_cost(workload, tree_path):
         v1, best_node = tree.lookup(copy.deepcopy(pkg_with_version), tree.root)
         v = tree.get_task_cost(func_meta)
         cost += v
-    print(f"Zygote tree:{tree_name}, LambdaInstance-ServeRequests estimate time: {cost}ms")
-    return cost
+    # print(f"Zygote tree:{tree_name}, LambdaInstance-ServeRequests estimate time: {cost}ms")
+    if metric == "throughput":
+        return len(workload.calls) / (cost/1000), tree  # ops/s
+    else:
+        return cost/1000, tree  # sec
 
 
 # run all trees in the trial dir
@@ -268,7 +281,7 @@ def benchmark(workload):
                     if match:
                         tree_path = os.path.join(subdir_path, tree_file)
                         try:
-                            cost = estimate_cost(workload, tree_path)
+                            cost,_ = estimate_cost(workload, tree_path)
                         except Exception as e:
                             print(f"error in {tree_path}, {traceback.format_exc()}")
                             continue
@@ -318,8 +331,7 @@ if __name__ == "__main__":
     # we need to import sub-modules to use it
     # we simply ignore this problem for now and set meta to be all indirect and direct required packages
     Package.from_json(path=os.path.join(bench_file_dir, pkg_json))
-    costs_dict = Package.cost_dict()
-    costs = costs_dict
+    costs = Package.cost_dict()
 
     w1 = Workload(os.path.join(bench_file_dir, workload_json))
 

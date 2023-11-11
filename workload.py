@@ -4,10 +4,10 @@ from subprocess import check_output
 from typing import List
 
 import requests
-
+import numpy as np
 import concurrent.futures
 import json
-
+import send_req
 from util import *
 from version import Package, versionMeta
 
@@ -153,66 +153,6 @@ def get_top_n_packages(csv_path, n=200):
     return dict(top_n_packages)
 
 
-# # csv file should be in the format of:
-# # id,repo_name,ref,path,total_commits,total_contributors,latest_commit_date,compiled,raw,file_count
-# # this function will randomly pick count of compiled columns and generate workloads
-# # also, it will estimate the size of all required packages, be aware to leave enough space for them
-# def generate_workloads_from_csv(csv, count=500):
-#     df = pd.read_csv(csv)
-#     # randomly pick count of compiled columns
-#     filtered_df = df[(df['compiled'] != "") & (df['compiled'].notnull())]
-#     compiled_cols = filtered_df.sample(n=count)["compiled"]
-#
-#     wl = Workload()
-#     packages_size = {}
-#     packages_appear_times = {}
-#
-#     # get the whl size of each pkgs in one compiled, if too big, throw away
-#     for col in compiled_cols:
-#         compiled_txt = col
-#         requirements, _ = parse_requirements(compiled_txt)
-#         whl_total_size = 0
-#         for pkg_name, op_version in requirements.items():
-#             # pkg_name like "tensorflow-gpu[horovod]" could show up
-#             pkg_name = pkg_name.split("[")[0]
-#             version = op_version[1]
-#             packages_appear_times[pkg_name+"_"+version] = packages_appear_times.get(pkg_name+"_"+version, 0) + 1
-#             if packages_size.get(pkg_name+"_"+version) is not None:
-#                 whl_total_size += packages_size[pkg_name+"_"+version]
-#                 continue
-#             size = get_whl_size(pkg_name, version)
-#             if size is None:
-#                 print(f"cannot find {pkg_name} {version} in pypi")
-#                 break
-#             if size is not None and size / 1024 / 1024 > 200:
-#                 break
-#             whl_total_size += size
-#
-#             packages_size[pkg_name+"_"+version] = size
-#         # we don't know the top mods yet, gonna install them first
-#         meta_dict = {"requirements_in": compiled_txt, "requirements_txt": compiled_txt,
-#                      "direct_import_mods": [], "import_mods": []}
-#         name = wl.addFunc(meta_dict=meta_dict)
-#         wl.addCall(name)
-#
-#     while len(wl.calls) != count:
-#         func = random.choice(wl.funcs)
-#         name = wl.addFunc(func)
-#         wl.addCall(name)
-#
-#     estimate_disk_size = 0
-#     for pkg in wl.pkg_with_version:
-#         for version in wl.pkg_with_version[pkg]:
-#             name = pkg+"_"+version
-#             if name in packages_size and packages_size[name] is not None:
-#                 estimate_disk_size += packages_size[name]
-#     print(f"estimate disk size: {estimate_disk_size / 1024 / 1024} MB")
-#
-#     # sort by appear times
-#     packages_appear_times = sorted(packages_appear_times.items(), key=lambda x: x[1], reverse=True)
-#     return wl
-
-
 def generate_workloads_from_txts(txts):
     txts = json.load(open(os.path.join(bench_file_dir, txts)))
     wl = Workload()
@@ -242,19 +182,18 @@ class Meta:
         else:
             self.requirements_in = requirements_in
 
-        # todo: direct_pkg_with_version need to change version, for now I use whatever version pip choose
-        # when you set requirements_txt, make sure you have requirements_in first
+        # when call try_gen_requirements_txt(), make sure requirements_in is not None first
         if requirements_txt is None:
             self.try_gen_requirements_txt()
         else:
             self.requirements_txt = requirements_txt
         assert self.requirements_txt is not None
 
-        # always re-parse requirements.in because it might be changed
+        # always re-parse requirements.in because it might be changed during "try_gen_requirements_txt"
         if direct_pkg_with_version is not None:
             self.direct_pkg_with_version = direct_pkg_with_version
         else:
-            self.direct_pkg_with_version, _ = parse_requirements(self.requirements_in)
+            self.direct_pkg_with_version, _ = parse_requirements(self.requirements_in) # todo: mark for change
 
         if pkg_with_version is not None:
             self.pkg_with_version = pkg_with_version
@@ -326,12 +265,12 @@ class Meta:
         requirement_txt = meta_dict['requirements_txt']
         requirement_in = meta_dict['requirements_in']
 
-        direct_pkg_with_version, _ = parse_requirements(requirement_in)
+        direct_pkg_with_version, _ = parse_requirements(requirement_txt, direct=True)
         pkg_with_version, _ = parse_requirements(requirement_txt)
         return Meta(direct_pkg_with_version, pkg_with_version,
                     requirements_in=requirement_in, requirements_txt=requirement_txt,
                     direct_import_mods=meta_dict["direct_import_mods"],
-                    import_mods=meta_dict["import_mods"])  # todo: set trace
+                    import_mods=meta_dict["import_mods"])
 
 
 class Func:
@@ -472,7 +411,7 @@ class Workload:
         return deps_dict, deps_set, dep_matrix
 
     # packages_with_version is {pkg1: (v1, v2, ...), ...}
-    # import should be a set of strings, also accept list, but will convert to set
+    # import should be a set of strings, also accept list, but will be convert to set
     def addFunc(self, packages_with_version=None, imports=None, meta=None):
         if packages_with_version is None:
             packages_with_version = {}
@@ -584,39 +523,37 @@ class Workload:
                 wl_test.addCall(name)
         return wl_train, wl_test
 
-    def save(self, path):
+    def to_dict(self):
         funcs_dict = [f.to_dict() for f in self.funcs]
+        return {'funcs': funcs_dict, 'calls': self.calls, 'pkg_with_version': handle_sets(self.pkg_with_version)}
+
+    def save(self, path, workload_dict=None):
         with open(path, 'w') as f:
-            json.dump(
-                {'funcs': funcs_dict, 'calls': self.calls, 'pkg_with_version': handle_sets(self.pkg_with_version)},
-                f, indent=2)
+            if workload_dict is not None:
+                json.dump(workload_dict, f, indent=2)
+            else:
+                json.dump(self.to_dict(), f, indent=2)
+        return
 
     def play(self, options={}, tasks=TASKS, collect=False):
         if collect:
             cmd = ["go", "build", "-o", "collector", "collector.go", "info.go"]
             # ugly implementation, have to build collector1 first or signals cannot be caught
-            subprocess.run(cmd, cwd=os.path.join(bench_file_dir, "collector"))
+            subprocess.cmd, cwd=os.path.join(bench_file_dir, "collector")
             restAPI = subprocess.Popen(
                 ["./collector1", "."],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_file_dir, "collector"))
             time.sleep(2)  # wait for collector to start
 
         pid = start_worker(options)
-        workload_file = os.path.join(bench_file_dir, "tmp.json")
-        self.save(workload_file)
-        # although bench.go is in current directory, it show be run at ol_dir
-        os.chdir(ol_dir)
-        cmd = ["go", "run", os.path.join(bench_dir, "bench.go"), workload_file, str(tasks)]
-        if collect:
-            cmd.append("true")
-        else:
-            cmd.append("false")
-        print(cmd)
-        output = check_output(cmd)
-        print(str(output, 'utf-8'))
+        wl_path = os.path.join(bench_file_dir, "tmp.json")
+        wl_dict = self.to_dict()
+        self.save(wl_path, wl_dict)
 
-        stats = json.loads(str(output, 'utf-8'))
-        print(stats)
+        # although bench.go is in current directory, it show be run at ol_dir
+        sec, ops = send_req.run(wl_dict, tasks, collect)
+        stat_dict = {"seconds": sec, "ops/s": ops}
+        print(stat_dict)
         kill_worker(pid)
 
         if collect:
@@ -626,8 +563,8 @@ class Workload:
                 if b'exit' in l:
                     break
 
-        # os.remove(workload_file)
-        return stats
+        # os.remove(wl_path)
+        return stat_dict
 
     def find_func(self, name):
         for f in self.funcs:  # todo: use a dict could be faster
@@ -671,6 +608,28 @@ class Workload:
                 self.pkg_with_version[pkg] = set()
             self.pkg_with_version[pkg] = self.pkg_with_version[pkg].union(versions_set)
 
+    # randomly select some functions, add them to the workload with new name
+    def expand(self, target):
+        if target < len(self.calls):
+            return
+        for i in range(target - len(self.calls)):
+            func = random.choice(self.funcs)
+            name = self.addFunc(None, func.meta.import_mods, func.meta)
+            self.addCall(name)
+
+
+    # repeat the calls in the workload
+    def repeat(self, target, weights=None):
+        if target < len(self.calls):
+            return
+        function_names = [f.name for f in self.funcs]
+        if weights is None:
+            random_weights = np.random.random(len(function_names))
+            weights = random_weights / sum(random_weights)
+
+        additional_calls = random.choices(function_names, weights, k=target)
+        for call_name in additional_calls:
+            self.addCall(call_name)
 
 # load the deps from deps.json, parse the deps_str to a frozenset of deps
 # now it looks like: {name: {version: {deps_set: count}}}, count is the number of times this deps_set appears
@@ -697,8 +656,8 @@ pkg_size_json = os.path.join(bench_file_dir, "packages_size.json")
 
 
 def main():
-    pkgs = get_top_n_packages(requirements_csv, 500)
-    get_whl(pkgs)
+    # pkgs = get_top_n_packages(requirements_csv, 500)
+    # get_whl(pkgs)
     with open(pkg_size_json, 'r') as file:
         packages_size = json.load(file)
 
@@ -735,6 +694,7 @@ def main():
         },
     tasks=5)
 
+    # get top mods from the openlambda-base
     for pkg, versions in wl.pkg_with_version.items():
         Package.add_version({pkg: versions})
         for version in versions:
@@ -755,12 +715,13 @@ def main():
     wl_with_top_mods = Workload()
     # add top mods to workload and save
     for f in wl.funcs:
-        for pkg in f.meta.pkg_with_version:
+        for pkg in f.meta.direct_pkg_with_version:
             version = f.meta.direct_pkg_with_version[pkg][1]
             if Package.packages_factory[pkg].available_versions[version] is not None:
                 f.meta.import_mods.update(Package.packages_factory[pkg].available_versions[version].top_level)
         name = wl_with_top_mods.addFunc(None, f.meta.import_mods, f.meta)
         wl_with_top_mods.addCall(name)
+    wl_with_top_mods.repeat(3000)
     wl_with_top_mods.save(os.path.join(bench_file_dir, "workload_with_top_mods.json"))
 
 
@@ -773,19 +734,11 @@ total_size = sum(sum(versions.values()) for versions in pkg_size.values())
 print(total_size/1024/1024)
 """
 
-# # generate_workloads_from_csv(requirements_csv, 3000)
-# df = pd.read_csv(requirements_csv)
-# # randomly pick count of compiled columns
-# filtered_df = df[(df['compiled'] != "") & (df['compiled'].notnull())]
-# cols = filtered_df["compiled"]
-# cols = filtered_df.sample(n=5)
-
-
 # after workload generated, run the empty ones to install them(pkgs are about 3 GB in total),
 #   then search through packages dir to find top_mods.
 # after top_mods are found, measure the top pkgs importing cost, generate the tree
 # then test the dataset
 
-# some questions:
-# pip-compile give a version not existed, e.g jaxlib==0.1.76, but jaxlib doesn't have 0.1.76 metadata on pypi
-# some using: parcon @ git+https://github.com/javawizard/parcon, also cannot fetch metadata, and doesn't used often
+# todo:
+# pip-compile might give a version not existed, e.g jaxlib==0.1.76, but jaxlib doesn't have 0.1.76 metadata on pypi
+# deps like parcon @ git+https://github.com/javawizard/parcon not supported

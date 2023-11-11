@@ -18,6 +18,5 @@ direct = [
 ]
 ol_dir = "/root/open-lambda/"
 worker_out = os.path.join(ol_dir, "default-ol", "worker.out")
-bench_dir = os.path.join("/root", "ReqBench")
-bench_file_dir = os.path.join("/root", "ReqBench", "files")
-
+bench_dir = "/root/ReqBench" # "/root/ReqBench"
+bench_file_dir = os.path.join(bench_dir, "files")

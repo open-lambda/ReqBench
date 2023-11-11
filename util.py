@@ -18,7 +18,8 @@ dep_pattern = re.compile(r'#\s+via\s+(.+)')
 pattern = re.compile(r'([^<>=!;]+)([<>!=]=?=?)([^<>=!;]+)?(?:\s*;\s*([^<>=!]+)([<>!=]=?)([^<>=!]+))?')
 end_string = "The following packages are considered to be unsafe in a requirements file"
 
-def parse_requirements(line_str):
+# todo: add direct option
+def parse_requirements(line_str, direct=False):
     """
     Parse the given pip-compile generated requirements string.
 
@@ -26,9 +27,9 @@ def parse_requirements(line_str):
         line_str (str): The string content of the requirements file.
 
     Returns:
-        requirements: A dictionary where the key is the package name and the value is a list containing the operator and version.
-        adjusted_dependencies: A dictionary where the key is the package name with its version, and the value is a list of its dependencies.
-
+        requirements: {'cython': ['==', '3.0.2'], 'numpy': ['==', '1.25.2'], 'packaging': ['==', '23.1'], 'scipy': ['==', '1.11.2']}
+        versioned_dependencies: {'cython==3.0.2': ['cython==3.0.2', 'direct_req'], 'numpy==1.25.2': ['numpy==1.25.2', 'direct_req', 'scipy==1.11.2'], ...}
+        (dependencies = {'cython': ['direct_req'], 'numpy': ['direct_req', 'scipy'], ...} )
     Raises:
         Exception: If the input string is None.
 
@@ -42,7 +43,6 @@ def parse_requirements(line_str):
 
     requirements = {}
     dependencies = {}
-    current_package = None
 
     i = 0
     while i < len(lines):
@@ -58,7 +58,7 @@ def parse_requirements(line_str):
 
             i += 1
             isFirstComment = True
-            # there could be a few comments following, specifying who requires this pkg
+            # there could be a few comments followed <pkg>==<ver>, specifying who requires this pkg
             while i < len(lines) and lines[i].strip().startswith("#"):
                 line = lines[i].strip()
                 if isFirstComment:
@@ -67,12 +67,11 @@ def parse_requirements(line_str):
                 else:
                     dependency = line.removeprefix("#").strip()
 
-                if '-r requirements.in' in dependency or '-r -' in dependency:  # Replace with shorthand
+                if '-r' in dependency:  # Replace with shorthand
                     dependency = "direct_req"
 
                 if dependency is None or dependency == "":
                     pass
-                    # do nothing
                 elif current_package in dependencies:
                     dependencies[current_package].append(dependency)
                 else:
@@ -81,21 +80,25 @@ def parse_requirements(line_str):
         else:
             i += 1
 
-    # Adjusting the keys and values of the dependencies dict using the requirements
-    adjusted_dependencies = {}
+    # add the keys and values of the dependencies dict with version
+    versioned_dependencies = {}
     for pkg, deps in dependencies.items():
         pkg_key = f"{pkg}=={requirements[pkg][1]}"
-        adjusted_dependencies[pkg_key] = [pkg_key]
+        versioned_dependencies[pkg_key] = [pkg_key]
         for dep in deps:
             if dep in requirements:
                 if dep is None or requirements.get(dep) is None:
                     print(dep)
                 dep_key = f"{dep}=={requirements[dep][1]}"
-                adjusted_dependencies[pkg_key].append(dep_key)
+                versioned_dependencies[pkg_key].append(dep_key)
             else:
-                adjusted_dependencies[pkg_key].append(dep)
-
-    return requirements, adjusted_dependencies
+                versioned_dependencies[pkg_key].append(dep)
+    if direct:
+        requirements = {}
+        for pkg in versioned_dependencies.keys():
+            if "direct_req" in versioned_dependencies[pkg]:
+                requirements[pkg.split("==")[0]] = ['==', pkg.split("==")[1]]
+    return requirements, versioned_dependencies
 
 
 def normalize_pkg(pkg: str) -> str:
