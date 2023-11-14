@@ -25,16 +25,16 @@ def get_id(name):
         return name + "_" + id
 
 
-def task(call, latency):
+def task(call, latency, platform):
     url = "http://localhost:5000/run/" + call['name']
     req_body = {}
 
     if latency:
         req_body["name"] = get_id(call['name'])
         req_body["req"] = get_curr_time()
-        response = requests.post(url, json=req_body)
+        response = platform.invoke_func(url, req_body=req_body)
     else:
-        response = requests.post(url, json=None)
+        response = platform.invoke_func(url, req_body=None)
 
     if response.status_code != 200:
         raise Exception(f"Request to {url} failed with status {response.status_code}")
@@ -42,7 +42,7 @@ def task(call, latency):
     body = response.json()
     if latency:
         body["received"] = get_curr_time()
-        requests.post("http://localhost:4998/latency", json=body)
+        platform.invoke_func("http://localhost:4998/latency", req_body=body)
 
     if not latency and body != call['name']:
         raise Exception(f"Response body does not match: {body} != {call['name']}")
@@ -73,13 +73,13 @@ def deploy_funcs(workload):
     return workload
 
 
-def run(workload, num_tasks, latency):
+def run(workload, num_tasks, latency, platform):
     deploy_funcs(workload)
     calls = workload['calls']
 
     start_time = time.time()
     with ThreadPoolExecutor(max_workers=num_tasks) as executor:
-        futures = [executor.submit(task, call, latency) for call in calls]
+        futures = [executor.submit(task, call, latency, platform) for call in calls]
         for future in futures:
             future.result()
 

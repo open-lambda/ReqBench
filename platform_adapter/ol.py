@@ -1,30 +1,17 @@
-from abc import ABC, abstractmethod
+from platform_adapter.interface import PlatformAdapter
 import os
 import time
 import subprocess
+import requests
+import re
 
-class Platform(ABC):
-    pid = None
-    @abstractmethod
-    def start_worker(self):
-        pass
-
-    @abstractmethod
-    def kill_worker(self):
-        pass
-
-    @abstractmethod
-    def deploy_func(self):
-        pass
-
-    @abstractmethod
-    def invoke_func(self):
-        pass
-
-class OL(Platform):
+class OL(PlatformAdapter):
+    def __init__(self, ol_dir):
+        self.ol_dir = ol_dir
+    
     def start_worker(self, options={}):
         optstr = ",".join(["%s=%s" % (k, v) for k, v in options.items()])
-        os.chdir(ol_dir)
+        os.chdir(self.ol_dir)
         cmd = ['./ol', 'worker', 'up', '-d']
         if optstr:
             cmd.extend(['-o', optstr])
@@ -35,10 +22,10 @@ class OL(Platform):
         match = re.search(r"PID: (\d+)", str(out, 'utf-8'))
         if match:
             pid = match.group(1)
-        print(f"The PID is {pid}")
-        if "features.warmup" in options and options['features.warmup'] == "true":
-            time.sleep(10)  # wait for worker to warm up
             self.pid = pid
+            print(f"The PID is {pid}")
+            if "features.warmup" in options and options['features.warmup'] == "true":
+                time.sleep(10)  # wait for worker to warm up
             return 0
         else:
             print("No PID found in the text.")
@@ -48,7 +35,7 @@ class OL(Platform):
         if not self.pid:
             print("PID has not been set")
             return -1
-        os.chdir(ol_dir)
+        os.chdir(self.ol_dir)
         try:
             cmd = ['./ol', 'worker', 'down']
             out = subprocess.check_output(cmd)
@@ -71,6 +58,7 @@ class OL(Platform):
 
     def deploy_func():
         pass
-
-    def invoke_func():
-        pass
+        
+    def invoke_func(self, url, req_body=None):
+        return requests.post(url, json=req_body)
+        
