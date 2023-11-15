@@ -10,12 +10,6 @@ TASKS = 5
 # (no one will use serverless functions for packaging)
 # but, the latest version of pip and setuptools will still be installed by default
 
-direct = [
-    'pandas', 'scipy', 'matplotlib', 'sqlalchemy',
-    'django', 'flask', 'numpy', 'simplejson', 'protobuf', 'jinja2',
-    'requests', 'mock', 'werkzeug', 'dnspython', 'six', 'pyqt5'
-    # "numpy"
-]
 ol_dir = "/root/open-lambda/"
 worker_out = os.path.join(ol_dir, "default-ol", "worker.out")
 bench_dir = "/root/ReqBench" # "/root/ReqBench"

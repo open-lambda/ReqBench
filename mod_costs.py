@@ -17,9 +17,6 @@ import time, sys, importlib, os
 # scipy will use all cores by default, which cause errors
 os.environ['OPENBLAS_NUM_THREADS'] = '2'
 
-def is_module_imported(module_name):
-    return module_name in sys.modules
-    
 def f(event):
     try:
         dep_mods = {dep_mods}
@@ -77,7 +74,11 @@ def measure(meta=None, stat='mb OR ms', include_indirect=False):
 
     if len(mods) == 0:
         return 0  # no imports means no cost
-    dep_mods = json.dumps(list(dep_mods))
+
+    if not include_indirect:
+        dep_mods = json.dumps(list(dep_mods))
+    else:
+        dep_mods = ""
     mods = json.dumps(list(mods))
 
     code = {
@@ -85,7 +86,6 @@ def measure(meta=None, stat='mb OR ms', include_indirect=False):
         'mb': measure_mb,
     }[stat]
 
-    # dep_pkgs no longer needed, still, let's keep it for debugging
     dep_pkgs.add(pkg_with_version)
     code = code.format(dep_pkgs=",".join(dep_pkgs),
                        dep_mods=dep_mods,
@@ -111,8 +111,8 @@ def measure(meta=None, stat='mb OR ms', include_indirect=False):
     return max(float(r.text), 0)
 
 
-# deps and costs are saved in packages.json
-def find_deps_and_costs(deps_dict):
+# costs are saved in packages.json
+def find_mod_costs(deps_dict):
     metas = gen_meta_each_pkg(deps_dict)
     # step 2: try importing each discovered pkg, measuring import
     # latency and mem usage, beyond that of the deps
@@ -137,8 +137,8 @@ def find_deps_and_costs(deps_dict):
     kill_worker(pid)
 
 
-# this time we create meta for each pkg from deps(a dict), those deps info are
-# collected from pip-compile file, also fill the top-level mods for each pkg
+# create meta for each pkg from its dependency info which is collected from previous step pip-compile file,
+# also fill the top-level mods for each pkg
 def gen_meta_each_pkg(deps):
     metas = {}
     for pkg in deps:
@@ -169,6 +169,7 @@ def dict_to_list(input_dict):
     return result_list
 
 
+# import time could be platform dependent, so we run it on a real serverless platform(instead of a simple docker)
 def main():
     # load deps_dict from deps.json
     deps_dict = load_all_deps(os.path.join(bench_file_dir, "deps.json"))
@@ -178,7 +179,7 @@ def main():
         deps_dict = load_all_deps(sys.argv[1])
         Package.from_json(sys.argv[2])
 
-    find_deps_and_costs(deps_dict)
+    find_mod_costs(deps_dict)
     json.dump(Package.cost_dict(), open(os.path.join(bench_file_dir, "costs.json"), "w"), indent=2)
 
 
