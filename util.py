@@ -1,3 +1,5 @@
+import glob
+import json
 import os
 import pkgutil
 import re
@@ -8,6 +10,7 @@ import time
 from collections import deque
 
 import pandas as pd
+import requests
 
 from config import *
 
@@ -158,6 +161,35 @@ def kill_worker(pid, options={}):
         subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
+# it is an implementation of interface on OL platform
+def get_memory_usage():
+    get_total_pss("/sys/fs/cgroup/default-ol-sandboxes")
+
+def get_pss(pid):
+    pss = 0
+    smaps_file = f"/proc/{pid}/smaps_rollup"
+    if os.path.exists(smaps_file):
+        with open(smaps_file, "r") as f:
+            for line in f:
+                if "Pss:" in line:
+                    pss_value = int(line.split()[1])
+                    pss += pss_value
+    return pss
+
+def get_total_pss(base):
+    total_pss = 0
+    for cg_folder in glob.glob(os.path.join(base, "cg-*")):
+        procs_file = os.path.join(cg_folder, "cgroup.procs")
+
+        if os.path.exists(procs_file):
+            with open(procs_file, "r") as f:
+                pids = f.readlines()
+            for pid in pids:
+                pid = pid.strip()
+                total_pss += get_pss(pid)
+    return total_pss
+
+
 def remove_dirs_with_pattern(path, pattern):
     for dir_name in os.listdir(path):
         if re.match(pattern, dir_name):
@@ -217,6 +249,41 @@ def get_recursive_dependencies(pkg, matrix):
                 queue.append(dep)
 
     return list(set(all_deps))  # Removing duplicates
+
+
+
+def compressed_size(pkg_name, version):
+    url = f"https://pypi.org/pypi/{pkg_name}/{version}/json"
+    response = requests.get(url)
+    if response.status_code != 200:
+        return None
+    try:
+        data = response.json()
+    except json.JSONDecodeError:
+        print("Invalid JSON received.")
+        print(url)
+        return None
+
+    whl_size = None
+    linux_whl_size = None
+    tar_gz_size = None
+    for release in data["urls"]:
+        if release["packagetype"] == "bdist_wheel":
+            if "linux" in release["filename"]:
+                linux_whl_size = release["size"]
+            else:
+                whl_size = release["size"]
+        elif release["packagetype"] == "sdist":
+            tar_gz_size = release["size"]
+
+    if linux_whl_size is not None:
+        # the extreme case is about 10 times larger than the compressed size, 7 is a reasonable estimate
+        return linux_whl_size, "whl"
+    elif whl_size is not None:
+        return whl_size, "whl"
+    elif tar_gz_size is not None:
+        # the max compressed size is about 1/2 of the uncompressed size
+        return tar_gz_size, "tar.gz"
 
 
 def get_top_modules(path):
