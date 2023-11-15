@@ -235,10 +235,9 @@ if __name__ == "__main__":
     if not os.path.exists("/tmp/packages"):
         os.mkdir("/tmp/packages")
 
-    pattern = "/files/top_100_pkgs.json"
+    pattern = "/files/top_[0-9]*_pkgs.json"
     files = glob.glob(pattern)
     for file_name in files:
         with open(file_name, "r") as f:
             pkgs_and_deps = json.load(f)
-
-    main(pkgs_and_deps)
+            main(pkgs_and_deps)
