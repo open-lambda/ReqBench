@@ -4,10 +4,12 @@ import time
 import subprocess
 import requests
 import re
+import shutil
 
 class OL(PlatformAdapter):
-    def __init__(self, ol_dir):
-        self.ol_dir = ol_dir
+    def __init__(self):
+        self.load_config("platform_adapter/openlambda/config.json")
+        self.ol_dir = self.config["ol_dir"]
     
     def start_worker(self, options={}):
         optstr = ",".join(["%s=%s" % (k, v) for k, v in options.items()])
@@ -56,8 +58,22 @@ class OL(PlatformAdapter):
             cmd = ['./ol', 'worker', 'force-cleanup']
             subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    def deploy_func():
-        pass
+    def deploy_func(self, func_config):
+        func_path = f"{self.ol_dir}default-ol/registry/{func_config['name']}"
+
+        if os.path.exists(func_path):
+            shutil.rmtree(func_path)
+        os.makedirs(func_path, exist_ok=True)
+
+        code_lines = func_config["code"]
+        code = "\n".join(code_lines)
+
+        with open(os.path.join(func_path, "f.py"), 'w') as f:
+            f.write(code)
+        with open(os.path.join(func_path, "requirements.in"), 'w') as f:
+            f.write(func_config["requirements_in"])
+        with open(os.path.join(func_path, "requirements.txt"), 'w') as f:
+            f.write(func_config["requirements_txt"])
         
     def invoke_func(self, url, req_body=None):
         return requests.post(url, json=req_body)

@@ -10,8 +10,7 @@ import json
 import send_req
 from util import *
 from version import Package, versionMeta
-
-from platform_adapter.ol import OL
+from platform_adapter.openlambda.ol import OL
 
 packages_size = {}
 packages_lock = threading.Lock()
@@ -247,7 +246,7 @@ class Func:
 
 
 class Workload:
-    def __init__(self, platform=OL(ol_dir), workload_path=None):
+    def __init__(self, platform=OL(), workload_path=None):
         self.funcs = []
         self.calls = []
         self.pkg_with_version = {}  # {pkg_name: (v1, v2, ...), ...}
@@ -588,8 +587,8 @@ def main():
         Package.add_version({pkg: versions})
         for version in versions:
             top_mods = pkgs[pkg][version]["top"]
-            time_cost = pkgs[pkg][version]["time_ms"]
-            mem_cost = pkgs[pkg][version]["mem_mb"]
+            time_cost = pkgs[pkg][version]["time_ms"] if "time_ms" in pkgs[pkg][version] else -1
+            mem_cost = pkgs[pkg][version]["mem_mb"] if "mem_mb" in pkgs[pkg][version] else -1
             cost = {
                 "i-ms": time_cost,
                 "i-mb": mem_cost

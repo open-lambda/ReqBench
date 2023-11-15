@@ -48,33 +48,25 @@ def task(call, latency, platform):
         raise Exception(f"Response body does not match: {body} != {call['name']}")
 
 
-def deploy_funcs(workload):
+def deploy_funcs(workload, platform):
     funcs = workload["funcs"]
 
     for fn in funcs:
         meta = fn["meta"]
-        func_name = fn["name"]
-        func_path = f"/root/open-lambda/default-ol/registry/{func_name}"
+        func_config = {
+            "name" : fn["name"],
+            "code"  : fn["code"],
+            "requirements_in" : meta["requirements_in"],
+            "requirements_txt" : meta["requirements_txt"]
+        }
 
-        if os.path.exists(func_path):
-            shutil.rmtree(func_path)
-        os.makedirs(func_path, exist_ok=True)
-
-        code_lines = fn["code"]
-        code = "\n".join(code_lines)
-
-        with open(os.path.join(func_path, "f.py"), 'w') as f:
-            f.write(code)
-        with open(os.path.join(func_path, "requirements.in"), 'w') as f:
-            f.write(meta["requirements_in"])
-        with open(os.path.join(func_path, "requirements.txt"), 'w') as f:
-            f.write(meta["requirements_txt"])
-
+        platform.deploy_func(func_config)
+        
     return workload
 
 
 def run(workload, num_tasks, latency, platform):
-    deploy_funcs(workload)
+    deploy_funcs(workload, platform)
     calls = workload['calls']
 
     start_time = time.time()
