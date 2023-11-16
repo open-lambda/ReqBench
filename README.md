@@ -36,7 +36,7 @@ In this step, we will collect more info about each package by installing them in
 
 run
 ```sh
-python3 collect_pkg.py <requirements.csv> -l <#packages>
+python3 collect_pkg.py <requirements.csv> -l <pkg_cnt>
 ```
 `<requirements.csv>` is the requirements.csv you want to learn about, 
 usually it should be the output of `compile.go`.
