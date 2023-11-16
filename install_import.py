@@ -112,7 +112,6 @@ def install_package(pkg, install_dir):
 
     try:
         install_dir = os.path.join(install_dir, pkg)
-
         # download, then install. by doing this, we could eliminate the time of downloading affected by network
         t0 = time.time()
         subprocess.check_output(
@@ -140,6 +139,8 @@ def install_package(pkg, install_dir):
 
         with installed_packages_lock:
             installed_packages.append(pkg)
+            if len(installed_packages) % 10 == 0:
+                print(f"installed {len(installed_packages)} packages")
     except subprocess.CalledProcessError as e:
         print(f"Error installing {pkg}: {e.output.decode()}")
 
@@ -152,6 +153,8 @@ def get_folder_size(folder):
             if not os.path.islink(fp):
                 total_size += os.path.getsize(fp)
     return total_size
+
+
 def parse_output(metric, stdout, stderr):
     if stderr:
         print("Error:", stderr.decode())
@@ -162,8 +165,11 @@ def parse_output(metric, stdout, stderr):
             return None
         else:
             return result[metric]
+
+
 def get_most_freq_deps(deps):
     return max(deps, key=deps.get)
+
 
 def measure_import(pkg, pkgs_and_deps):
     pkg_name, version = pkg.split("==")[0], pkg.split("==")[1]
@@ -173,49 +179,42 @@ def measure_import(pkg, pkgs_and_deps):
     most_freq_deps = get_most_freq_deps(pkgs_and_deps[pkg])
 
     measure_mb_script = measure_mb.format(dep_pkgs=json.dumps(most_freq_deps.split(",")),
-                                            dep_mods="[]",
-                                            pkg=json.dumps(pkg_name+"=="+version),
-                                            mods=mods)
+                                          dep_mods="[]",
+                                          pkg=json.dumps(pkg_name + "==" + version),
+                                          mods=mods)
     process = subprocess.Popen(['python3', '-c', measure_mb_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     mem = parse_output('mb', stdout, stderr)
     if mem is None:
         print("Error measuring memory for", pkg)
+        mem = 0
 
     measure_ms_script = measure_ms.format(dep_pkgs=json.dumps(most_freq_deps.split(",")),
                                           dep_mods="[]",
-                                          pkg=json.dumps(pkg_name+"=="+version),
+                                          pkg=json.dumps(pkg_name + "==" + version),
                                           mods=mods)
     process = subprocess.Popen(['python3', '-c', measure_ms_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     t = parse_output('ms', stdout, stderr)
     if t is None:
         print("Error measuring time for", pkg)
+        t = 0
 
     return t, mem
 
+
 # install first, then measure the import top-level modules time/memory
 def main(pkgs_and_deps):
-    global stop_remove
-
     install_dir = '/tmp/packages'
-    futures = []
 
     # install packages one by one
     # although concurrently install could be faster, the installing time won't be accurate
-    with ThreadPoolExecutor(max_workers=1) as executor:
-        for pkg in pkgs_and_deps:
-            future = executor.submit(install_package, pkg, install_dir)
-            futures.append(future)
-
-            # also install the most frequent dependency
-            deps = get_most_freq_deps(pkgs_and_deps[pkg])
-            for dep in deps.split(","):
-                future = executor.submit(install_package, dep, install_dir)
-                futures.append(future)
-
-    for future in futures:
-        future.result()
+    for pkg in pkgs_and_deps:
+        install_package(pkg, install_dir)
+        # also install the most frequent dependency
+        deps = get_most_freq_deps(pkgs_and_deps[pkg])
+        for dep in deps.split(","):
+            future = install_package(dep, install_dir)
 
     # import top-level modules one by one
     for pkg in pkgs_and_deps:

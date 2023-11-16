@@ -14,11 +14,15 @@ import requests
 
 from config import *
 
-
-pattern = re.compile(r'([^<>=!]+)([<>!=]=?)([^<>=!]+)?')
 dep_pattern = re.compile(r'#\s+via\s+(.+)')
 
-pattern = re.compile(r'([^<>=!;]+)([<>!=]=?=?)([^<>=!;]+)?(?:\s*;\s*([^<>=!]+)([<>!=]=?)([^<>=!]+))?')
+pattern = re.compile(
+    r'([^<>=!;]+)'              # pkg name or url
+    r'([<>!=]=?)?'              # version operator
+    r'([^<>=!;]+)?'             # version
+)
+
+
 end_string = "The following packages are considered to be unsafe in a requirements file"
 
 # todo: add direct option
@@ -52,10 +56,20 @@ def parse_requirements(line_str, direct=False):
         line = lines[i].strip()
         if end_string in line:
             break
-        match = pattern.match(line)
+        # match = pattern.match(line)
+
+        parts = line.split(';', 1)
+        package_part = parts[0]
+        condition_part = parts[1].strip() if len(parts) > 1 else None
+        match = pattern.match(package_part)
+
         if match and not lines[i].startswith('#'):
             # todo: handle condition operator and value
-            package, operator, version, _, condition_operator, condition_value = match.groups()
+            package, operator, version = match.groups()
+            if version is None:
+                version = "-1"
+            if operator is None:
+                operator = "=="
             current_package = package.strip().split("[")[0]
             requirements[current_package] = [operator.strip(), version.strip()] if version else None
 
