@@ -2,7 +2,7 @@
 how to use ReqBench:
 1. pull the data from google pulbic dataset
 2. pip-compile requirements.txt
-3. generate the trees 
+3. install and import packages in docker
 4. generate the to-be-tested workload
 5. run it
 
@@ -49,13 +49,13 @@ Make sure `install_import.json` and `requirements.csv` existed in `ReqBench/file
 ```sh
 python3 workload.py
 ```
-It will pick out the most commonly used 500 hundred packages in the `requirements.csv`,
-and filter out the requirements.csv which only use those packages.
-In the end, it will generate a file called `workloads.json`, which can be used as the workload for `find_cost.py`.
-`packages.json` is a file that contains the package name, version, top-level modules.
+and filter out the requirements.csv which only use the packages in `install_import.json` and generate a series of handlers.
+
+In the end, it will output a file called `workloads.json` which contains a series of functions and call trace.
+The call trace follows the pattern described in "3.3 Invocation Patterns", [Serverless in the Wild](https://www.usenix.org/conference/atc20/presentation/shahrad).
+`packages.json` is another output that contains the package name, version, top-level modules.
 
 ## Call handlers
-
 In a python file, run 
 ```python
 from workload import Workload
@@ -68,6 +68,3 @@ wl.play({"import_cache_tree": tree_path, "limits.mem_mb": mem},
 ```
  `tree_path` is the path to the tree, mem is the memory limit for each container,
 `TASKS` is the number of maximum parallel requests.
-
-
-### TODO: 1. compare our zygote with other FaaS platforms
