@@ -62,7 +62,7 @@ from workload import Workload
 tree_path = ""
 mem = 600
 TASKS = 5
-wl = Workload("files/workloads.json)
+wl = Workload("files/workloads.json")
 wl.play({"import_cache_tree": tree_path, "limits.mem_mb": mem}, 
         tasks=TASKS)
 ```
