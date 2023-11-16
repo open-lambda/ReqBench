@@ -10,6 +10,7 @@ import json
 import send_req
 from util import *
 from version import Package, versionMeta
+from platform_adapter.openlambda.ol import OL
 
 packages_size = {}
 packages_lock = threading.Lock()
@@ -245,13 +246,13 @@ class Func:
 
 
 class Workload:
-    def __init__(self, path=None):
+    def __init__(self, platform=OL(), workload_path=None):
         self.funcs = []
         self.calls = []
         self.pkg_with_version = {}  # {pkg_name: (v1, v2, ...), ...}
         self.name = 1
-        if path:
-            with open(path) as f:
+        if workload_path:
+            with open(workload_path) as f:
                 j = json.load(f)
                 self.funcs = [Func.from_dict(d) for d in j['funcs']]
                 self.calls = j['calls']
@@ -259,6 +260,8 @@ class Workload:
                 self.pkg_with_version = j['pkg_with_version']
                 for pkg, versions in self.pkg_with_version.items():
                     self.pkg_with_version[pkg] = set(versions)
+        
+        self.platform = platform
 
     # if deps' name exist in one txt, then they can serve a compatible deps
     # deps= {pkg_name: {v1: {dep:ver, dep:ver, ...}, v2: {dep:ver, dep:ver, ...}}, ...}
@@ -421,8 +424,8 @@ class Workload:
 
     # return 2 workloads, one for training, one for testing
     def random_split(self, ratio):
-        wl_train = Workload()
-        wl_test = Workload()
+        wl_train = Workload(self.platform)
+        wl_test = Workload(self.platform)
         for func in self.funcs:
             if random.random() < ratio:
                 name = wl_train.addFunc(None, func.meta.import_mods, func.meta)
@@ -455,16 +458,16 @@ class Workload:
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_file_dir, "collector"))
             time.sleep(2)  # wait for collector to start
 
-        pid = start_worker(options)
+        self.platform.start_worker(options)
         wl_path = os.path.join(bench_file_dir, "tmp.json")
         wl_dict = self.to_dict()
         self.save(wl_path, wl_dict)
 
         # although bench.go is in current directory, it show be run at ol_dir
-        sec, ops = send_req.run(wl_dict, tasks, collect)
+        sec, ops = send_req.run(wl_dict, tasks, collect, self.platform)
         stat_dict = {"seconds": sec, "ops/s": ops}
         print(stat_dict)
-        kill_worker(pid)
+        self.platform.kill_worker()
 
         if collect:
             restAPI.terminate()
@@ -600,12 +603,9 @@ def main():
         for version in versions:
             top_mods = pkgs[pkg][version]["top"]
 
-            if "time_ms" not in pkgs[pkg][version]:
-                pkgs[pkg][version]["time_ms"] = 0
-            if "mem_mb" not in pkgs[pkg][version]:
-                pkgs[pkg][version]["mem_mb"] = 0
-            time_cost = pkgs[pkg][version]["time_ms"]
-            mem_cost = pkgs[pkg][version]["mem_mb"]
+            time_cost = pkgs[pkg][version]["time_ms"] if "time_ms" in pkgs[pkg][version] else 0
+            mem_cost = pkgs[pkg][version]["mem_mb"] if "mem_mb" in pkgs[pkg][version] else 0
+
             cost = {
                 "i-ms": time_cost,
                 "i-mb": mem_cost
