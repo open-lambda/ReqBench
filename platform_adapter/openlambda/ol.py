@@ -57,6 +57,8 @@ class OL(PlatformAdapter):
 
             cmd = ['./ol', 'worker', 'force-cleanup']
             subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        return 0
 
     def deploy_func(self, func_config):
         func_path = f"{self.ol_dir}default-ol/registry/{func_config['name']}"
@@ -75,6 +77,12 @@ class OL(PlatformAdapter):
         with open(os.path.join(func_path, "requirements.txt"), 'w') as f:
             f.write(func_config["requirements_txt"])
         
-    def invoke_func(self, url, req_body=None):
-        return requests.post(url, json=req_body)
+    def invoke_func(self, func_name, options={}):
+        if not options:
+            url = f"http://localhost:5000/run/{func_name}"
+            return requests.post(url)
+        else:
+            url = options["url"] if options["url"] != "" else f"http://localhost:5000/run/{func_name}"
+            return request.post(url, json=options["req_body"])
+            
         

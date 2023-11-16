@@ -5,8 +5,8 @@ class PlatformAdapter(ABC):
     pid = None
     config = None
 
-    def load_config(self, filename="config.json"):
-        with open(filename, "r") as f:
+    def load_config(self, path="config.json"):
+        with open(path, "r") as f:
             self.config = json.load(f)
 
     @abstractmethod
@@ -22,5 +22,5 @@ class PlatformAdapter(ABC):
         pass
 
     @abstractmethod
-    def invoke_func(self, url, req_body=None):
+    def invoke_func(self, func_name, options={}):
         pass
