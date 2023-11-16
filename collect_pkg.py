@@ -9,25 +9,22 @@ from config import *
 from util import parse_requirements
 from workload import generate_workloads_from_txts
 
-blacklist = ["warning", "netifaces", "https://", "http://", "google"]
+# install netifaces cause error in some platforms
+# self-defined packages are not considered
+blacklist = ["netifaces", "https://", "http://", "google"]
 
 def get_top_n_packages(filtered_df, n=500):
     packages_appear_times = {}
 
-    valid_txt = 0
-
     for col in filtered_df["compiled"]:
-        valid = 1
         requirements, _ = parse_requirements(col)
+        if any([x in requirements.keys() for x in blacklist]):
+            continue
         for pkg_name, op_version in requirements.items():
             pkg_name = pkg_name.split("[")[0]
             version = op_version[1]
-            if any([x in pkg_name for x in blacklist]):
-                valid = 0
-                continue
             key = f"{pkg_name}=={version}"
             packages_appear_times[key] = packages_appear_times.get(key, 0) + 1
-        valid_txt += valid
 
     print(f"there are {len(packages_appear_times)} unique packages in total")
     if n == -1:
@@ -75,7 +72,7 @@ if __name__ == '__main__':
         os.remove(f)
     with open(os.path.join(bench_file_dir, f"top_{pkg_num}_pkgs.json"), 'w') as file:
         json.dump(pkgs, file, indent=2)
-    print(f"collected top {pkg_num} packages")
+    print(f"collected top {min(pkg_num,len(pkgs))} packages")
 
     subprocess.run("docker build -t workload .", shell=True, cwd=bench_dir)
     subprocess.run(f"docker run -v {bench_file_dir}:/files workload", shell=True)

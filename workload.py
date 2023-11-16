@@ -283,7 +283,13 @@ class Workload:
                 if pkg_name == 'direct_req':
                     continue
                 if '==' in pkg_name:
-                    name, version = pkg_name.split('==')
+                    try:
+                        name, version = pkg_name.split('==')
+                    except:
+                        print("Error: %s" % pkg_name)
+                        print("Error: %s" % func.meta.requirements_txt)
+                        exit(1)
+
                     dependencies_str = ",".join(sorted(dependencies))
                     deps_key = dependencies_str
 
@@ -529,12 +535,21 @@ class Workload:
     def repeat(self, target, weights=None):
         if target < len(self.calls):
             return
+
         function_names = [f.name for f in self.funcs]
+
         if weights is None:
             random_weights = np.random.random(len(function_names))
             weights = random_weights / sum(random_weights)
 
-        additional_calls = random.choices(function_names, weights, k=target)
+        sorted_funcs = sorted(zip(function_names, weights), key=lambda x: x[1], reverse=True)
+        top_funcs = sorted_funcs[:int(len(sorted_funcs) * 0.186)]
+
+        top_weights_total = sum(weight for _, weight in top_funcs)
+        adjusted_weights = [(name, weight / top_weights_total * 0.996) for name, weight in top_funcs]
+
+        additional_calls = random.choices([name for name, _ in adjusted_weights],
+                                          [weight for _, weight in adjusted_weights], k=target - len(self.calls))
         for call_name in additional_calls:
             self.addCall(call_name)
 
@@ -557,7 +572,7 @@ def load_all_deps(path):
 
 
 def main():
-    pkgs = json.load(open("files/install_import.json", 'r'))
+    pkgs = json.load(open(os.path.join(bench_file_dir,"install_import.json"), 'r'))
     requirements_csv = os.path.join(bench_file_dir, "requirements.csv")
 
     # filter the valid requirements
@@ -587,8 +602,10 @@ def main():
         Package.add_version({pkg: versions})
         for version in versions:
             top_mods = pkgs[pkg][version]["top"]
-            time_cost = pkgs[pkg][version]["time_ms"] if "time_ms" in pkgs[pkg][version] else -1
-            mem_cost = pkgs[pkg][version]["mem_mb"] if "mem_mb" in pkgs[pkg][version] else -1
+
+            time_cost = pkgs[pkg][version]["time_ms"] if "time_ms" in pkgs[pkg][version] else 0
+            mem_cost = pkgs[pkg][version]["mem_mb"] if "mem_mb" in pkgs[pkg][version] else 0
+
             cost = {
                 "i-ms": time_cost,
                 "i-mb": mem_cost
@@ -610,7 +627,7 @@ def main():
                 f.meta.import_mods.update(Package.packages_factory[pkg].available_versions[version].top_level)
         name = wl_with_top_mods.addFunc(None, f.meta.import_mods, f.meta)
         wl_with_top_mods.addCall(name)
-    wl_with_top_mods.repeat(3000)
+    wl_with_top_mods.repeat(1500)
     wl_with_top_mods.save(os.path.join(bench_file_dir, "workloads.json"))
 
 

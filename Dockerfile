@@ -10,4 +10,4 @@ WORKDIR /app
 
 COPY ./*.py ./
 
-CMD ["python3", "install_import.py"]
+CMD ["python3", "-u", "install_import.py"]
