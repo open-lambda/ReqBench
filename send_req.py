@@ -26,15 +26,19 @@ def get_id(name):
 
 
 def task(call, latency, platform):
-    url = "http://localhost:5000/run/" + call['name']
-    req_body = {}
-
     if latency:
-        req_body["name"] = get_id(call['name'])
-        req_body["req"] = get_curr_time()
-        response = platform.invoke_func(url, req_body=req_body)
+        req_body = {
+            "name" : get_id(call['name']),
+            "req" : get_curr_time()
+        }
+
+        options = {
+            "url" : "",
+            "req_body" : req_body
+        }
+        response = platform.invoke_func(call['name'], options=options)
     else:
-        response = platform.invoke_func(url, req_body=None)
+        response = platform.invoke_func(call['name'])
 
     if response.status_code != 200:
         raise Exception(f"Request to {url} failed with status {response.status_code}")
@@ -42,7 +46,11 @@ def task(call, latency, platform):
     body = response.json()
     if latency:
         body["received"] = get_curr_time()
-        platform.invoke_func("http://localhost:4998/latency", req_body=body)
+        options = {
+            "url" : "http://localhost:4998/latency",
+            "req_body" : body
+        }
+        platform.invoke_func("", options=options)
 
     if not latency and body != call['name']:
         raise Exception(f"Response body does not match: {body} != {call['name']}")
@@ -53,10 +61,10 @@ def deploy_funcs(workload, platform):
 
     for fn in funcs:
         meta = fn["meta"]
+        code = "\n".join(fn["code"])
         func_config = {
             "name" : fn["name"],
-            "code"  : fn["code"],
-            "requirements_in" : meta["requirements_in"],
+            "code"  : code,
             "requirements_txt" : meta["requirements_txt"]
         }
 

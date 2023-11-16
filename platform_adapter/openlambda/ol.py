@@ -67,11 +67,9 @@ class OL(PlatformAdapter):
             shutil.rmtree(func_path)
         os.makedirs(func_path, exist_ok=True)
 
-        code_lines = func_config["code"]
-        code = "\n".join(code_lines)
 
         with open(os.path.join(func_path, "f.py"), 'w') as f:
-            f.write(code)
+            f.write(func_config["code"])
         with open(os.path.join(func_path, "requirements.in"), 'w') as f:
             f.write(func_config["requirements_in"])
         with open(os.path.join(func_path, "requirements.txt"), 'w') as f:
