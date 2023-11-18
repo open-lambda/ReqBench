@@ -10,7 +10,9 @@ import time
 import requests
 import glob
 
-from util import compressed_size
+from util import compressed_size, normalize_pkg, find_compressed_files
+
+install_dir = "/packages"
 
 measure_ms = """
 import time, sys, importlib, os
@@ -18,7 +20,7 @@ import json
 
 dep_pkg = {dep_pkgs}
 for pkg in dep_pkg:
-    sys.path.insert(0, os.path.join("/tmp/packages", pkg))
+    sys.path.insert(0, os.path.join("/packages", pkg))
 
 os.environ['OPENBLAS_NUM_THREADS'] = '2'
 
@@ -45,7 +47,7 @@ import json
 
 dep_pkg = {dep_pkgs}
 for pkg in dep_pkg:
-    sys.path.insert(0, os.path.join("/tmp/packages", pkg))
+    sys.path.insert(0, os.path.join("/packages", pkg))
 
 os.environ['OPENBLAS_NUM_THREADS'] = '2'
 
@@ -98,9 +100,22 @@ def fetch_package_size(pkg_name, version):
     return uncomp_size, size
 
 
+def get_suffix(name, version):
+    files = find_compressed_files("/tmp/.cache/", f"{normalize_pkg(name)}-{version}*")
+    if files:
+        return os.path.splitext(files[0])[1]
+    else:
+        return None  # should not happen
+
 def get_top_modules(path):
     return [name for _, name, _ in pkgutil.iter_modules([path])]
 
+# it can match most of the compressed file, but not all.
+# e.g. zope-event==5.0's compressed file is zope.event-5.0...('-' is replaced by '.')
+# simply ignore this case, as this func is used to save time, not for accuracy
+def downloaded_packages(name, version):
+    files = find_compressed_files("/tmp/.cache/", f"{normalize_pkg(name)}-{version}*")
+    return len(files) > 0
 
 def install_package(pkg, install_dir):
     with installed_packages_lock:
@@ -108,16 +123,19 @@ def install_package(pkg, install_dir):
             return
     name = pkg.split("==")[0]
     version = pkg.split("==")[1]
-    uncomp_size, comp_size = fetch_package_size(name, version)
 
     try:
         install_dir = os.path.join(install_dir, pkg)
         # download, then install. by doing this, we could eliminate the time of downloading affected by network
         t0 = time.time()
-        subprocess.check_output(
-            ['pip3', 'download', '--no-deps', pkg, '--dest', '/tmp/.cache'],
-            stderr=subprocess.STDOUT
-        )
+        if not downloaded_packages(name, version):
+            print(f"downloading {pkg}")
+            subprocess.check_output(
+                ['pip3', 'download', '--no-deps', pkg, '--dest', '/tmp/.cache'],
+                stderr=subprocess.STDOUT
+            )
+        comp_file = find_compressed_files("/tmp/.cache/", f"{normalize_pkg(name)}-{version}*")[0]
+        comp_size = os.path.getsize(comp_file)
         t1 = time.time()
         subprocess.check_output(
             ['pip3', 'install', '--no-deps', pkg, '--cache-dir', '/tmp/.cache', '-t', install_dir],
@@ -132,10 +150,11 @@ def install_package(pkg, install_dir):
             if version not in top_mods[name]:
                 top_mods[name][version] = {}
 
-            top_mods[name][version]["install_time"] = t2 - t1
+            top_mods[name][version]["install_time"] = (t2 - t1)*1000
             top_mods[name][version]["compressed_size"] = comp_size
             top_mods[name][version]["disk_size"] = pkg_disk_size
             top_mods[name][version]["top"] = get_top_modules(install_dir)
+            top_mods[name][version]["suffix"] = get_suffix(name, version)
 
         with installed_packages_lock:
             installed_packages.append(pkg)
@@ -205,7 +224,7 @@ def measure_import(pkg, pkgs_and_deps):
 
 # install first, then measure the import top-level modules time/memory
 def main(pkgs_and_deps):
-    install_dir = '/tmp/packages'
+    install_dir = '/packages'
 
     # install packages one by one
     # although concurrently install could be faster, the installing time won't be accurate
@@ -222,7 +241,7 @@ def main(pkgs_and_deps):
         t, mem = measure_import(pkg, pkgs_and_deps)
         with top_mods_lock:
             top_mods[name][version]["time_ms"] = t
-            top_mods[name][version]["mem_mb"] = mem
+            top_mods[name][version]["mem_mb"] = max(mem, 0)
 
     with open("/files/install_import.json", "w") as f:
         json.dump(top_mods, f, indent=2)
@@ -231,8 +250,8 @@ def main(pkgs_and_deps):
 
 
 if __name__ == "__main__":
-    if not os.path.exists("/tmp/packages"):
-        os.mkdir("/tmp/packages")
+    if not os.path.exists("/packages"):
+        os.mkdir("/packages")
 
     pattern = "/files/top_[0-9]*_pkgs.json"
     files = glob.glob(pattern)

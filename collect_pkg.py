@@ -74,6 +74,8 @@ if __name__ == '__main__':
         json.dump(pkgs, file, indent=2)
     print(f"collected top {min(pkg_num,len(pkgs))} packages")
 
-    subprocess.run("docker build -t workload .", shell=True, cwd=bench_dir)
-    subprocess.run(f"docker run -v {bench_file_dir}:/files workload", shell=True)
+    subprocess.run("docker build -t install_import .", shell=True, cwd=bench_dir)
+    subprocess.run(f"docker run "
+                   f"-v {bench_dir}/tmp/.cache:/tmp/.cache "
+                   f"-v {bench_file_dir}:/files install_import", shell=True)
 

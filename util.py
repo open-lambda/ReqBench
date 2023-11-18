@@ -1,3 +1,4 @@
+import fnmatch
 import glob
 import json
 import os
@@ -25,7 +26,9 @@ pattern = re.compile(
 
 end_string = "The following packages are considered to be unsafe in a requirements file"
 
-# todo: add direct option
+def normalize_pkg(pkg: str) -> str:
+    return pkg.lower().replace("_", "-")
+
 def parse_requirements(line_str, direct=False):
     """
     Parse the given pip-compile generated requirements string.
@@ -117,9 +120,25 @@ def parse_requirements(line_str, direct=False):
                 requirements[pkg.split("==")[0]] = ['==', pkg.split("==")[1]]
     return requirements, versioned_dependencies
 
+def find_compressed_files(dir_path, pattern):
+    case_insensitive_pattern = pattern.lower()
+    matched_files = []
+
+    for root, dirs, files in os.walk(dir_path):
+        for file in files:
+            parts = file.split('-', 1)
+            if len(parts) > 1:
+                normalized_file = parts[0].lower().replace('.', '_') + '-' + parts[1].lower()
+            else:
+                normalized_file = file.lower()
+
+            if fnmatch.fnmatch(normalized_file, case_insensitive_pattern):
+                matched_files.append(os.path.join(root, file))
+
+    return matched_files
 
 def normalize_pkg(pkg: str) -> str:
-    return pkg.lower().replace("_", "-")
+    return pkg.lower().replace("-", "_")
 
 
 def handle_sets(obj):
