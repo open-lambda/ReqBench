@@ -8,9 +8,9 @@ import numpy as np
 import concurrent.futures
 import json
 import send_req
+from platform_adapter.interface import PlatformAdapter
 from util import *
 from version import Package, versionMeta
-from platform_adapter.openlambda.ol import OL
 
 packages_size = {}
 packages_lock = threading.Lock()
@@ -46,36 +46,6 @@ def generate_measure_code_lines(modules):
         "    event['end_execute'] = t_EndExecute\n",
         "    return event\n"
     ]
-
-
-def get_top_n_packages(csv_path, n=500):
-    df = pd.read_csv(csv_path)
-    filtered_df = df[(df['compiled'] != "") & (df['compiled'].notnull())]
-    packages_appear_times = {}
-
-    valid_txt = 0
-
-    for col in filtered_df["compiled"]:
-        valid = 1
-        requirements, _ = parse_requirements(col)
-        for pkg_name, op_version in requirements.items():
-            pkg_name = pkg_name.split("[")[0]
-            version = op_version[1]
-            if any([x in pkg_name for x in blacklist]):
-                valid = 0
-                continue
-            key = f"{pkg_name}=={version}"
-            packages_appear_times[key] = packages_appear_times.get(key, 0) + 1
-        valid_txt += valid
-
-    print(f"there are {len(packages_appear_times)} unique packages")
-    if n == -1:
-        return packages_appear_times
-
-    sorted_packages = sorted(packages_appear_times.items(), key=lambda x: x[1], reverse=True)
-    # if n=-1, return all pkgs
-    top_n_packages = sorted_packages[:n]
-    return dict(top_n_packages)
 
 
 def generate_workloads_from_txts(txts):
@@ -246,7 +216,7 @@ class Func:
 
 
 class Workload:
-    def __init__(self, platform=OL(), workload_path=None):
+    def __init__(self, platform: PlatformAdapter = None, workload_path=None):
         self.funcs = []
         self.calls = []
         self.pkg_with_version = {}  # {pkg_name: (v1, v2, ...), ...}

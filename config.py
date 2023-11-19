@@ -13,4 +13,6 @@ TASKS = 5
 ol_dir = "/root/open-lambda/"
 worker_out = os.path.join(ol_dir, "default-ol", "worker.out")
 bench_dir = "/root/ReqBench" # "/root/ReqBench"
+tmp_dir = os.path.join(bench_dir, "tmp")
+cache_pkgs_dir = os.path.join(bench_dir, "tmp", ".cache")
 bench_file_dir = os.path.join(bench_dir, "files")

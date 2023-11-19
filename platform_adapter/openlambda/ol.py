@@ -70,8 +70,6 @@ class OL(PlatformAdapter):
 
         with open(os.path.join(func_path, "f.py"), 'w') as f:
             f.write(func_config["code"])
-        with open(os.path.join(func_path, "requirements.in"), 'w') as f:
-            f.write(func_config["requirements_in"])
         with open(os.path.join(func_path, "requirements.txt"), 'w') as f:
             f.write(func_config["requirements_txt"])
         
@@ -81,6 +79,6 @@ class OL(PlatformAdapter):
             return requests.post(url)
         else:
             url = options["url"] if options["url"] != "" else f"http://localhost:5000/run/{func_name}"
-            return request.post(url, json=options["req_body"])
+            return requests.post(url, json=options["req_body"])
             
         

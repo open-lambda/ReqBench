@@ -28,13 +28,13 @@ def get_id(name):
 def task(call, latency, platform):
     if latency:
         req_body = {
-            "name" : get_id(call['name']),
-            "req" : get_curr_time()
+            "name": get_id(call['name']),
+            "req": get_curr_time()
         }
 
         options = {
-            "url" : "",
-            "req_body" : req_body
+            "url": "",
+            "req_body": req_body
         }
         response = platform.invoke_func(call['name'], options=options)
     else:
@@ -47,29 +47,33 @@ def task(call, latency, platform):
     if latency:
         body["received"] = get_curr_time()
         options = {
-            "url" : "http://localhost:4998/latency",
-            "req_body" : body
+            "url": "http://localhost:4998/latency",
+            "req_body": body
         }
-        platform.invoke_func("", options=options)
+        requests.post(options["url"], json=options["req_body"])
 
     if not latency and body != call['name']:
         raise Exception(f"Response body does not match: {body} != {call['name']}")
 
 
+# deploy concurrently
 def deploy_funcs(workload, platform):
     funcs = workload["funcs"]
 
-    for fn in funcs:
-        meta = fn["meta"]
-        code = "\n".join(fn["code"])
-        func_config = {
-            "name" : fn["name"],
-            "code"  : code,
-            "requirements_txt" : meta["requirements_txt"]
-        }
-
-        platform.deploy_func(func_config)
-        
+    with ThreadPoolExecutor() as executor:
+        futures = []
+        for fn in funcs:
+            meta = fn["meta"]
+            code = "\n".join(fn["code"])
+            func_config = {
+                "name": fn["name"],
+                "code": code,
+                "requirements_txt": meta["requirements_txt"]
+            }
+            future = executor.submit(deploy_func, platform, func_config)
+            futures.append(future)
+        for future in futures:
+            future.result()
     return workload
 
 
