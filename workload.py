@@ -514,7 +514,7 @@ class Workload:
                 self.calls = [{"name": name} for name in names]
             else:
                 self.calls = [{"name": name} for name in function_names]
-
+            return
 
         if weights is None:
             random_weights = np.random.random(len(function_names))

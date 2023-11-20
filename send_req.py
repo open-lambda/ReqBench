@@ -6,6 +6,7 @@ import json
 import threading
 import time
 import sys
+import concurrent.futures
 from concurrent.futures import ThreadPoolExecutor
 
 seen = {}
@@ -59,12 +60,12 @@ def task(call, latency, platform):
 # deploy concurrently
 def deploy_funcs(workload, platform):
     funcs = workload["funcs"]
-
+    call_set = {call["name"] for call in workload["calls"]}
     with ThreadPoolExecutor(max_workers=8) as executor:
         futures = []
         for fn in funcs:
             # only deploy functions that are called to save time
-            if fn["name"] not in workload["calls"]:
+            if fn["name"] not in call_set:
                 continue
             meta = fn["meta"]
             code = "\n".join(fn["code"])
@@ -89,7 +90,12 @@ def run(workload, num_tasks, latency, platform):
     with ThreadPoolExecutor(max_workers=num_tasks) as executor:
         futures = [executor.submit(task, call, latency, platform) for call in calls]
         for future in futures:
-            future.result()
+            try:
+                future.result(timeout=30)
+            except concurrent.futures.TimeoutError:
+                print("Task timed out")
+            except Exception as e:
+                print(f"Task resulted in an exception: {e}")
             finished += 1
             if finished % 50 == 0:
                 print(f"Finished {finished}/{total} tasks")

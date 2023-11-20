@@ -6,7 +6,6 @@ import shutil
 from concurrent.futures import ThreadPoolExecutor
 import threading
 import time
-
 import requests
 import glob
 
@@ -233,7 +232,7 @@ def main(pkgs_and_deps):
         # also install the most frequent dependency
         deps = get_most_freq_deps(pkgs_and_deps[pkg])
         for dep in deps.split(","):
-            future = install_package(dep, install_dir)
+            install_package(dep, install_dir)
 
     # import top-level modules one by one
     for pkg in pkgs_and_deps:
