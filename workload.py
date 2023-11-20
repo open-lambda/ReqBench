@@ -437,7 +437,7 @@ class Workload:
         sec, ops = send_req.run(wl_dict, tasks, collect, self.platform)
         stat_dict = {"seconds": sec, "ops/s": ops}
         print(stat_dict)
-        self.platform.kill_worker()
+        self.platform.kill_worker(options)
 
         if collect:
             restAPI.terminate()
@@ -502,11 +502,19 @@ class Workload:
 
 
     # repeat the calls in the workload
-    def repeat(self, target, weights=None):
-        if target < len(self.calls):
-            return
+    def gen_trace(self, target, skew=True, weights=None):
+        self.calls = []
 
         function_names = [f.name for f in self.funcs]
+
+        if not skew: # ingore weights, call each function once
+            if target < len(function_names):
+                # randomly select some functions to call trace once
+                names = random.sample(function_names, target)
+                self.calls = [{"name": name} for name in names]
+            else:
+                self.calls = [{"name": name} for name in function_names]
+
 
         if weights is None:
             random_weights = np.random.random(len(function_names))
@@ -597,7 +605,7 @@ def main():
                 f.meta.import_mods.update(Package.packages_factory[pkg].available_versions[version].top_level)
         name = wl_with_top_mods.addFunc(None, f.meta.import_mods, f.meta)
         wl_with_top_mods.addCall(name)
-    wl_with_top_mods.repeat(1500)
+    wl_with_top_mods.gen_trace(skew=False, target=len(self.funcs))
     wl_with_top_mods.save(os.path.join(bench_file_dir, "workloads.json"))
 
 

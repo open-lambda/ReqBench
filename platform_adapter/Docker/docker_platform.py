@@ -53,12 +53,15 @@ class Dockerplatform(PlatformAdapter):
         os.remove(os.path.join(tmp_dir, ".dockerignore"))
 
     def kill_worker(self, options={}):
-        with self.docker_thread_lock:
-            # kill Docker containers and remove Docker images, be patient, it takes minutes
+        # kill Docker containers takes minutes, defaultly not kill
+        t1 = time.time()
+        if options.get("kill_containers", False):
             for container in self.client.containers.list():
                 container.remove(force=True)
-            self.client.containers.prune()
-            self.client.images.prune()
+        self.client.containers.prune()
+        self.client.images.prune()
+        t2 = time.time()
+        print(f"kill docker worker time: {t2 - t1}")
 
     def deploy_func(self, func_config):
         func_path = os.path.join(self.handlers_dir, func_config["name"])
@@ -111,7 +114,7 @@ class Dockerplatform(PlatformAdapter):
         # print(f"container start time: {t1-t0}, container exec time: {t2-t1}")
         return json.loads(res.output), res.exit_code
 
-""" get_memory_usage is too slow to run, sometimes took seconds
+""" #get_memory_usage is too slow to run, sometimes took seconds
     def evict_containers(self):
         t0 = time.time()
         _, mem_sum = self.get_memory_usage()

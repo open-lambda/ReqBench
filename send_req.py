@@ -63,6 +63,9 @@ def deploy_funcs(workload, platform):
     with ThreadPoolExecutor(max_workers=8) as executor:
         futures = []
         for fn in funcs:
+            # only deploy functions that are called to save time
+            if fn["name"] not in workload["calls"]:
+                continue
             meta = fn["meta"]
             code = "\n".join(fn["code"])
             func_config = {
