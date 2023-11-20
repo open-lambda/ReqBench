@@ -76,9 +76,14 @@ class OL(PlatformAdapter):
     def invoke_func(self, func_name, options={}):
         if not options:
             url = f"http://localhost:5000/run/{func_name}"
-            return requests.post(url)
+            resp = requests.post(url)
         else:
             url = options["url"] if options["url"] != "" else f"http://localhost:5000/run/{func_name}"
-            return requests.post(url, json=options["req_body"])
+            resp = requests.post(url, json=options["req_body"])
+
+        if resp.status_code != 200:
+            raise None, Exception(f"Request to {url} failed with status {resp.status_code}")
+        return resp.json(), None
+
             
         

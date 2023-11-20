@@ -29,6 +29,7 @@ FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y python3 python3-pip
 COPY .cache/ /tmp/.cache/
+CMD ["tail", "-f", "/dev/null"]
 '''
 
 class Dockerplatform(PlatformAdapter):
@@ -38,7 +39,7 @@ class Dockerplatform(PlatformAdapter):
         self.client = docker.DockerClient(base_url=self.config["base_url"])
         self.handlers_dir = self.config["handlers_dir"]
         self.images = {}
-        self.containers = {}  # {func_name: container}
+        self.containers = {}  # {func_name: containerObj}
         self.cache = OrderedDict()  # lru cache {func_name: timestamp}
         self.docker_thread_lock = threading.Lock()
 
@@ -52,14 +53,12 @@ class Dockerplatform(PlatformAdapter):
         os.remove(os.path.join(tmp_dir, ".dockerignore"))
 
     def kill_worker(self, options={}):
-        self.client.prune_system()
         with self.docker_thread_lock:
-            # kill Docker containers and remove Docker images
+            # kill Docker containers and remove Docker images, be patient, it takes minutes
             for container in self.client.containers.list():
-                container.stop()
                 container.remove(force=True)
-            for image in self.images:
-                self.client.images.remove(image, force=True)
+            self.client.containers.prune()
+            self.client.images.prune()
 
     def deploy_func(self, func_config):
         func_path = os.path.join(self.handlers_dir, func_config["name"])
@@ -88,46 +87,52 @@ class Dockerplatform(PlatformAdapter):
     def invoke_func(self, func_name, options={}):
         # before invoking a function, check if memory usage is too high
         # if so, evict the least recently used container
-        with self.docker_thread_lock:
-            self.evict_containers()
-
-            # start container if current func does not have a container
-            if func_name not in self.containers:
-                self.containers[func_name] = self.client.containers.run(
-                        self.images[func_name],
-                        detach=True,
-                )
-
-            # invoke function
-            self.cache[func_name] = time.time()
-            container = self.containers[func_name]
-
+        # with self.docker_thread_lock:
+        #     self.evict_containers()
+        # start container if current func does not have a container
+        if func_name not in self.containers:
+            self.containers[func_name] = self.client.containers.run(
+                    func_name,
+                    detach=True,
+            )
+        self.cache[func_name] = time.time()
+        container = self.containers[func_name]
+        t1 = time.time()
         try:
-            req_str = json.dumps(options["req_body"])
+            if container.status != 'running':
+                container.start()
+            req_str = json.dumps(options["req_body"]) if "req_body" in options else "{}"
             res = container.exec_run(f"python3 /app/run_handler.py '{req_str}'")
-        except Exception as e: # container has been force killed
+            #print("res: ",res.output)
+        except Exception as e:  # container has been force killed
             print(e)
             res = "{}"
-        return res
+        t2 = time.time()
+        # print(f"container start time: {t1-t0}, container exec time: {t2-t1}")
+        return json.loads(res.output), res.exit_code
 
+""" get_memory_usage is too slow to run, sometimes took seconds
     def evict_containers(self):
+        t0 = time.time()
         _, mem_sum = self.get_memory_usage()
-        while mem_sum > self.config["memory_limit"]:
+        t1 = time.time()
+
+        mem_sum_in_mb = mem_sum / 1024 / 1024
+        while mem_sum_in_mb > self.config["memory_limit"]:
             least_used_func = self.cache.popitem(last=False)[0]
-            container = self.containers.pop(least_used_func, None)
             if container:
                 container.stop()
-                container.remove(force=True)
+        t2= time.time()
+        print(f"get memory usage time: {t1 - t0}, evict time: {t2 - t1}")
 
     def get_memory_usage(self):
-        client = docker.from_env()
         memory_usage_info = {}
         sum = 0
-        for func_name, container_id in self.containers.items():
-            container = client.containers.get(container_id)
+        for func_name, container in self.containers.items():
             stats = container.stats(stream=False)
             memory_usage = stats['memory_stats']['usage']
             memory_usage_info[func_name] = memory_usage
             sum += memory_usage
 
         return memory_usage_info, sum
+"""

@@ -39,7 +39,7 @@ def get_top_n_packages(filtered_df, n=500):
 # rule out the packages that are too big, not in the top 500, in the blacklist
 if __name__ == '__main__':
     if len(sys.argv) != 4 or sys.argv[2] != "-l":
-        print("Usage: python3 collect_pkg.py <requirements.csv> -l <#packages>")
+        print("Usage: python3 collect_pkg.py <requirements.csv> -l <packages>")
         sys.exit()
     requirements_csv = sys.argv[1]
     pkg_num = int(sys.argv[3])

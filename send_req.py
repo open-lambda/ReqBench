@@ -36,14 +36,14 @@ def task(call, latency, platform):
             "url": "",
             "req_body": req_body
         }
-        response = platform.invoke_func(call['name'], options=options)
+        resp_body,err = platform.invoke_func(call['name'], options=options)
     else:
-        response = platform.invoke_func(call['name'])
+        resp_body,err = platform.invoke_func(call['name'])
 
-    if response.status_code != 200:
-        raise Exception(f"Request to {url} failed with status {response.status_code}")
+    if resp_body is None or resp_body == "":
+        raise Exception(f"Error: {err}")
 
-    body = response.json()
+    body = resp_body
     if latency:
         body["received"] = get_curr_time()
         options = {
@@ -60,7 +60,7 @@ def task(call, latency, platform):
 def deploy_funcs(workload, platform):
     funcs = workload["funcs"]
 
-    with ThreadPoolExecutor() as executor:
+    with ThreadPoolExecutor(max_workers=8) as executor:
         futures = []
         for fn in funcs:
             meta = fn["meta"]
@@ -70,7 +70,7 @@ def deploy_funcs(workload, platform):
                 "code": code,
                 "requirements_txt": meta["requirements_txt"]
             }
-            future = executor.submit(deploy_func, platform, func_config)
+            future = executor.submit(platform.deploy_func, func_config)
             futures.append(future)
         for future in futures:
             future.result()
@@ -80,12 +80,16 @@ def deploy_funcs(workload, platform):
 def run(workload, num_tasks, latency, platform):
     deploy_funcs(workload, platform)
     calls = workload['calls']
-
+    finished = 0
+    total = len(calls)
     start_time = time.time()
     with ThreadPoolExecutor(max_workers=num_tasks) as executor:
         futures = [executor.submit(task, call, latency, platform) for call in calls]
         for future in futures:
             future.result()
+            finished += 1
+            if finished % 50 == 0:
+                print(f"Finished {finished}/{total} tasks")
 
     end_time = time.time()
     seconds = end_time - start_time
