@@ -26,8 +26,8 @@ def get_id(name):
         return name + "_" + id
 
 
-def task(call, latency, platform):
-    if latency:
+def task(call, metrics, platform):
+    if metrics != None and "latency" in metrics:
         req_body = {
             "name": get_id(call['name']),
             "req": get_curr_time()
@@ -45,7 +45,7 @@ def task(call, latency, platform):
         raise Exception(f"Error: {err}")
 
     body = resp_body
-    if latency:
+    if metrics != None and "latency" in metrics:
         body["received"] = get_curr_time()
         options = {
             "url": "http://localhost:4998/latency",
@@ -53,7 +53,7 @@ def task(call, latency, platform):
         }
         requests.post(options["url"], json=options["req_body"])
 
-    if not latency and body != call['name']:
+    if (metrics == None or len(metrics)==0) and body != call['name']:
         raise Exception(f"Response body does not match: {body} != {call['name']}")
 
 
@@ -81,14 +81,14 @@ def deploy_funcs(workload, platform):
     return workload
 
 
-def run(workload, num_tasks, latency, platform):
+def run(workload, num_tasks, metrics, platform):
     deploy_funcs(workload, platform)
     calls = workload['calls']
     finished = 0
     total = len(calls)
     start_time = time.time()
     with ThreadPoolExecutor(max_workers=num_tasks) as executor:
-        futures = [executor.submit(task, call, latency, platform) for call in calls]
+        futures = [executor.submit(task, call, metrics, platform) for call in calls]
         for future in futures:
             try:
                 future.result(timeout=30)

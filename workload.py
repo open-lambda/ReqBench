@@ -28,24 +28,41 @@ def generate_non_measure_code_lines(modules, return_val):
         f"    return \"{return_val}\"\n"
     ]
 
-def generate_measure_code_lines(modules):
-    return [
+def gen_measure_code(modules, measure_latency=False, measure_mem=False):
+    code_lines = [
         "import time, importlib, os\n",
-        "os.environ['OPENBLAS_NUM_THREADS'] = '2'\n",
-        "t_StartImport = time.time()*1000\n",
+        "os.environ['OPENBLAS_NUM_THREADS'] = '2'\n"
+    ]
+    if measure_mem:
+        code_lines += ["import tracemalloc, gc, sys, json\n",
+                       "gc.collect()\n",
+                       "tracemalloc.start()\n"]
+    if measure_latency:
+        code_lines += ["t_StartImport = time.time()*1000\n"]
+    code_lines += [
         f"for mod in {modules}:\n",
         "    try:\n",
         "        importlib.import_module(mod)\n",
         "    except Exception as e:\n",
-        "        pass\n",
-        "t_EndImport = time.time()*1000\n",
-        "def f(event):\n",
-        "    t_EndExecute = time.time()*1000\n",
-        "    event['start_import'] = t_StartImport\n",
-        "    event['end_import'] = t_EndImport\n",
-        "    event['end_execute'] = t_EndExecute\n",
-        "    return event\n"
+        "        pass\n"
     ]
+    if measure_latency:
+        code_lines += [ "t_EndImport = time.time()*1000\n"]
+
+    code_lines.append("def f(event):\n")
+    if measure_latency:
+        code_lines += [
+            "    t_EndExecute = time.time()*1000\n",
+            "    event['start_import'] = t_StartImport\n",
+            "    event['end_import'] = t_EndImport\n",
+            "    event['end_execute'] = t_EndExecute\n"
+        ]
+    if measure_mem:
+        code_lines += ["    mb = (tracemalloc.get_traced_memory()[0] - tracemalloc.get_tracemalloc_memory()) / 1024 / 1024\n"]
+        code_lines += ["    event['memory_usage_mb'] = mb\n"]
+    code_lines.append("    return event\n")
+    return code_lines
+
 
 
 def generate_workloads_from_txts(txts):
@@ -330,7 +347,6 @@ class Workload:
         self.calls.append({"name": name})
 
     # actually return a df
-    # todo: test if the matrix is generated correctly
     def call_matrix(self):
         df_rows = []
         for call in self.calls:
@@ -382,12 +398,14 @@ class Workload:
 
         return df
 
-    def add_metrics(self, metrics):
-        if "latency" in metrics:
-            for func in self.funcs:
-                mods_arr = json.dumps(list(func.meta.import_mods))
-                new_code = generate_measure_code_lines(mods_arr)
-                func.code = new_code
+    def add_metrics(self, metrics=[]):
+        for func in self.funcs:
+            mods_arr = json.dumps(list(func.meta.import_mods))
+            new_code = gen_measure_code(mods_arr,
+                                        measure_latency = 'latency' in metrics,
+                                        measure_mem = 'memory' in metrics
+                                        )
+            func.code = new_code
 
     def shuffleCalls(self):
         random.shuffle(self.calls)
@@ -417,16 +435,16 @@ class Workload:
                 json.dump(self.to_dict(), f, indent=2)
         return
 
-    def play(self, options={}, tasks=TASKS, collect=False):
+    def play(self, options={}, tasks=TASKS, collected_metrics=[]):
+        collect = collected_metrics != None and len(collected_metrics) > 0
         if collect:
-            cmd = ["go", "build", "-o", "collector", "collector.go", "info.go"]
-            subprocess.run(cmd, cwd=os.path.join(bench_file_dir, "collector"))
-            # ugly implementation, have to build collector1 first or signals cannot be caught
-            subprocess.cmd, cwd=os.path.join(bench_file_dir, "collector")
+            # had to use a diff name (collector1) to distinguish from the collector dir
+            cmd = ["go", "build", "-o", "collector1", "collector.go", "info.go"]
+            subprocess.run(cmd, cwd=os.path.join(bench_dir, "collector"))
             restAPI = subprocess.Popen(
                 ["./collector1", "."],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_file_dir, "collector"))
-            time.sleep(2)  # wait for collector to start
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_dir, "collector"))
+            time.sleep(1)  # wait for collector to start
 
         self.platform.start_worker(options)
         wl_path = os.path.join(bench_file_dir, "tmp.json")
@@ -434,7 +452,7 @@ class Workload:
         self.save(wl_path, wl_dict)
 
         # although bench.go is in current directory, it show be run at ol_dir
-        sec, ops = send_req.run(wl_dict, tasks, collect, self.platform)
+        sec, ops = send_req.run(wl_dict, tasks, collected_metrics, self.platform)
         stat_dict = {"seconds": sec, "ops/s": ops}
         print(stat_dict)
         self.platform.kill_worker(options)

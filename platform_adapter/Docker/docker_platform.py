@@ -15,7 +15,6 @@ from collections import OrderedDict
 
 run_handler_code = """
 import sys
-import f
 import json
 
 if __name__ == "__main__":
@@ -27,6 +26,7 @@ if __name__ == "__main__":
             if req != "" and not req.strip().startswith("#"):
                 sys.path.insert(0, f"/packages/{req}")
     req = json.loads(sys.argv[1])
+    import f
     res = f.f(req)
     print(json.dumps(res))
 """
@@ -38,11 +38,10 @@ RUN apt-get update && apt-get install -y python3 python3-pip
 COPY .cache/ /tmp/.cache/
 
 COPY pkg_list.txt /pkg_list.txt
-COPY run_handler.py /app/run_handler.py
-
 COPY install_all.py /install_all.py
 RUN python3 /install_all.py /pkg_list.txt
-CMD ["tail", "-f", "/dev/null"]
+
+CMD ["sleep", "5"]
 '''
 
 def write_if_different(file_path, new_content):
@@ -66,12 +65,14 @@ class Dockerplatform(PlatformAdapter):
         # due to the limitation of network bridge docker0, we cannot run more than 1024 containers
         # in the same network, and this number is hardcore in the kernel
         # thus create multiple networks
-        self.network = {"docker0": 0} # {network_name: #containers}
+        self.network = {} # {network_name: #containers}
         self.evict_thread = threading.Thread(target=self.evict_containers)
         self.quit_evict_thread = False
 
     def start_worker(self, options={}):
         # build a shared package base image (to save some time downloading packages)
+        with open(os.path.join(tmp_dir, ".dockerignore"), "w") as f:
+            f.write("\n")
         write_if_different(os.path.join(tmp_dir, "pkg_list.txt"), "\n".join(options["packages"]))
         write_if_different(os.path.join(tmp_dir, "run_handler.py"), run_handler_code)
         write_if_different(os.path.join(tmp_dir, "pkg_base.Dockerfile"), package_base_dockerfile)
@@ -83,22 +84,30 @@ class Dockerplatform(PlatformAdapter):
 
         self.client.images.build(path=tmp_dir, tag="package-base", dockerfile="pkg_base.Dockerfile")
         self.evict_thread.start()
-        # network_bridges = math.ceil(options['unique_containers']/1000)
-        # for i in range(network_bridges):
-        #     self.network[f"reqbench_docker_network{i}"] = 0
-        #     self.client.networks.create(f"reqbench_docker_network{i}", driver="bridge")
-        # os.remove(os.path.join(tmp_dir, ".dockerignore"))
-        # os.remove(os.path.join(tmp_dir, "Dockerfile"))
-        # os.remove(os.path.join(tmp_dir, "pkg_list.txt"))
-        # os.remove(os.path.join(tmp_dir, "run_handler.py"))
+
+        if options.get("network", None) is not None:
+            network_bridges = math.ceil(options['unique_containers']/1000)
+            for i in range(network_bridges):
+                self.network[f"reqbench_docker_network{i}"] = 0
+                self.client.networks.create(f"reqbench_docker_network{i}", driver="bridge")
+        os.remove(os.path.join(tmp_dir, ".dockerignore"))
+        os.remove(os.path.join(tmp_dir, "pkg_base.Dockerfile"))
+        os.remove(os.path.join(tmp_dir, "pkg_list.txt"))
+        os.remove(os.path.join(tmp_dir, "run_handler.py"))
+
+    def get_network(self):
+        for network_name in self.network:
+            with self.docker_thread_lock:
+                if self.network[network_name] < 1024*9:
+                    return network_name
 
     def kill_worker(self, options={}):
-        # kill Docker containers takes minutes, defaultly not kill
+        # kill Docker containers takes minutes
         t1 = time.time()
         self.quit_evict_thread = True
         self.evict_thread.join()
         if options.get("kill_containers", True):
-            for container in self.client.containers.list():
+            for container in self.containers.values():
                 container.remove(force=True)
         self.client.containers.prune()
         self.client.images.prune()
@@ -123,19 +132,13 @@ class Dockerplatform(PlatformAdapter):
 
 
     def invoke_func(self, func_name, options={}):
-        # evict containers if the number of containers exceeds 1024
-        # with self.docker_thread_lock:
-        #     self.evict_containers()
-
-        with self.docker_thread_lock:
-            cnt = self.network["docker0"]
-        while cnt > 1024 * 0.9:
+        if len(self.network) > 0:
+            network_name = self.get_network()
             with self.docker_thread_lock:
-                cnt = self.network["docker0"]
-        with self.docker_thread_lock:
-            self.network["docker0"] += 1
+                self.network[network_name] += 1
 
         # start container if current func does not have a container
+        # start it manually by: docker run -v /root/ReqBench/docker_handlers/fn1:/app/ -it package-base /bin/bash
         if func_name not in self.containers:
             # mount requirements.txt and f.py to the container
             self.containers[func_name] = self.client.containers.run(
@@ -144,7 +147,6 @@ class Dockerplatform(PlatformAdapter):
                         type="bind",
                         source=os.path.join(self.handlers_dir, func_name),
                         target="/app/",
-                        read_only=True,
                         )
                     ],
                     detach=True,
@@ -153,41 +155,49 @@ class Dockerplatform(PlatformAdapter):
         container = self.containers[func_name]
         t1 = time.time()
         try:
-            if container.status != 'running':
-                container.start()
             req_str = json.dumps(options["req_body"]) if "req_body" in options else "{}"
+            # docker exec -it <container> python3 /app/run_handler.py '{}'
             res = container.exec_run(f"python3 /app/run_handler.py '{req_str}'")
-            #print("res: ",res.output)
-        except Exception as e:  # container has been force killed
-            print("container forcibly killed:", e)
-            res = "{}"
+        except Exception as e:  # restart container if it is dead
+            container.start()
+            res = container.exec_run(f"python3 /app/run_handler.py '{req_str}'")
         t2 = time.time()
         # print(f"container start time: {t1-t0}, container exec time: {t2-t1}")
-        return json.loads(res.output), res.exit_code
+
+        try:
+            output_dict = json.loads(res.output.decode("utf-8"))
+        except Exception as e:
+            print("err: ", e)
+            print("res: ", res)
+            res = {}
+        return output_dict, res.exit_code
 
 
-    # due to the limitation of network bridge docker0, we cannot run more than 1024 containers
+    # due to the limitation of network bridge, we cannot run more than 1024 containers
     # in the same network, and this number is hardcore in the kernel
-    # I also tried to create multiple networks, but the network IO was dragging down the performance
+    # Also, it seems multiple networks would drag down the performance
     def evict_containers(self):
+        if self.network is None or len(self.network) == 0:
+            return
         while self.quit_evict_thread is False:
-            with self.docker_thread_lock:
-                cnt = self.network["docker0"]
-            if cnt < 1024*0.7:
-                continue
-            while cnt > 1024*0.4:
-                try:
-                    with self.docker_thread_lock:
-                        container_name = self.cache.popitem(last=False)[0]
-                        container = self.containers[container_name]
-                        del self.containers[container_name]
+            for network_name in self.network:
+                with self.docker_thread_lock:
+                    cnt = self.network[network_name]
+                if cnt < 1024*0.7:
+                    continue
+                while cnt > 1024*0.4:
+                    try:
+                        with self.docker_thread_lock:
+                            container_name = self.cache.popitem(last=False)[0]
+                            container = self.containers[container_name]
+                            del self.containers[container_name]
 
-                    container.remove(force=True)
-                    with self.docker_thread_lock:
-                        self.network["docker0"] -= 1
-                        cnt = self.network["docker0"]
-                except Exception as e:
-                    print("err: ", e)
+                        container.remove(force=True)
+                        with self.docker_thread_lock:
+                            self.network["docker0"] -= 1
+                            cnt = self.network["docker0"]
+                    except Exception as e:
+                        print("err: ", e)
 
 """ 
 # get_memory_usage is too slow to run, sometimes took seconds, which dramatically enlarge latency
