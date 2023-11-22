@@ -44,6 +44,7 @@ class PlatformAdapter(ABC):
             - func_config["code"]: code of the function as a string.
             - func_config["requirements_in"]: requirements.in file as a string.
             - func_config["requirements_txt"]: requirements.txt file as a string.
+        :return: An exception providing details if an error occurred, or None if successful.
         """
         pass
 
@@ -54,6 +55,8 @@ class PlatformAdapter(ABC):
 
         :param func_name: Name of the function to invoke. 
         :param options: Optional arguments, if needed.
-        :return: Returned output of the function invocation.
+        :return: A tuple containing the following values:
+            - Returned output of the function invocation.
+            - An exception providing details if an error occurred, or None if successful.
         """
         pass
