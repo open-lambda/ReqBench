@@ -599,12 +599,11 @@ def main():
         for version in versions:
             top_mods = pkgs[pkg][version]["top"]
 
-            time_cost = pkgs[pkg][version]["time_ms"] if "time_ms" in pkgs[pkg][version] else 0
-            mem_cost = pkgs[pkg][version]["mem_mb"] if "mem_mb" in pkgs[pkg][version] else 0
-
             cost = {
-                "i-ms": time_cost,
-                "i-mb": mem_cost
+                "i-ms": pkgs[pkg][version]["i-ms"] if "i-ms" in pkgs[pkg][version] else 0,
+                "ms": pkgs[pkg][version]["ms"] if "ms" in pkgs[pkg][version] else 0,
+                "i-mb": pkgs[pkg][version]["i-mb"] if "i-mb" in pkgs[pkg][version] else 0,
+                "mb": pkgs[pkg][version]["mb"] if "mb" in pkgs[pkg][version] else 0,
             }
 
             if Package.packages_factory[pkg].available_versions[version] is None:
@@ -623,7 +622,7 @@ def main():
                 f.meta.import_mods.update(Package.packages_factory[pkg].available_versions[version].top_level)
         name = wl_with_top_mods.addFunc(None, f.meta.import_mods, f.meta)
         wl_with_top_mods.addCall(name)
-    wl_with_top_mods.gen_trace(skew=False, target=len(self.funcs))
+    wl_with_top_mods.gen_trace(skew=False, target=len(wl.funcs))
     wl_with_top_mods.save(os.path.join(bench_file_dir, "workloads.json"))
 
 

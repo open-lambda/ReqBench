@@ -167,9 +167,9 @@ class Dockerplatform(PlatformAdapter):
         try:
             output_dict = json.loads(res.output.decode("utf-8"))
         except Exception as e:
-            print("err: ", e)
-            print("res: ", res)
-            res = {}
+            # if exit code is 137, it means OOM killed the container, just ignore it
+            print("err: ", e, "res: ", res, "container id: ", container.id)
+            output_dict = {}
         return output_dict, res.exit_code
 
 

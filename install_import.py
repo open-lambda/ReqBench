@@ -65,6 +65,9 @@ except Exception as e:
     print(json.dumps({{'error': str(e)}}))
 """
 
+install_failed = []
+import_failed = []
+
 installed_packages = []
 installed_packages_lock = threading.Lock()
 MAX_DISK_SPACE = 5120 * 1024 * 1024  # 5GB
@@ -122,7 +125,6 @@ def install_package(pkg, install_dir):
             return
     name = pkg.split("==")[0]
     version = pkg.split("==")[1]
-
     try:
         install_dir = os.path.join(install_dir, pkg)
         # download, then install. by doing this, we could eliminate the time of downloading affected by network
@@ -154,12 +156,12 @@ def install_package(pkg, install_dir):
             top_mods[name][version]["disk_size"] = pkg_disk_size
             top_mods[name][version]["top"] = get_top_modules(install_dir)
             top_mods[name][version]["suffix"] = get_suffix(name, version)
-
         with installed_packages_lock:
             installed_packages.append(pkg)
             if len(installed_packages) % 10 == 0:
                 print(f"installed {len(installed_packages)} packages")
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
+        install_failed.append(pkg)
         print(f"Error installing {pkg}: {e.output.decode()}")
 
 
@@ -192,12 +194,41 @@ def get_most_freq_deps(deps):
 def measure_import(pkg, pkgs_and_deps):
     pkg_name, version = pkg.split("==")[0], pkg.split("==")[1]
     mods = top_mods[pkg_name][version]["top"]
-    dep_mods = []
 
     most_freq_deps = get_most_freq_deps(pkgs_and_deps[pkg])
-
-    measure_mb_script = measure_mb.format(dep_pkgs=json.dumps(most_freq_deps.split(",")),
+    most_freq_deps = most_freq_deps.split(",")
+    deps_mods = []
+    for dep in most_freq_deps:
+        if dep == pkg:
+            continue
+        deps_mods += top_mods[dep.split("==")[0]][dep.split("==")[1]]["top"]
+    # i-mb
+    measure_imb_script = measure_mb.format(dep_pkgs=json.dumps(most_freq_deps),
                                           dep_mods="[]",
+                                          pkg=json.dumps(pkg_name + "==" + version),
+                                          mods=mods)
+    process = subprocess.Popen(['python3', '-c', measure_imb_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    i_mem = parse_output('mb', stdout, stderr)
+    if i_mem is None:
+        print("Error measuring memory for", pkg)
+        i_mem = 0
+    # i-ms
+    measure_ms_script = measure_ms.format(dep_pkgs=json.dumps(most_freq_deps),
+                                          dep_mods="[]",
+                                          pkg=json.dumps(pkg_name + "==" + version),
+                                          mods=mods)
+    process = subprocess.Popen(['python3', '-c', measure_ms_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stdout, stderr = process.communicate()
+    i_t = parse_output('ms', stdout, stderr)
+    if i_t is None:
+        print("Error measuring time for", pkg)
+        i_t = 0
+
+    # mb
+    measure_mb_script = measure_mb.format(dep_pkgs=json.dumps(most_freq_deps),
+                                          dep_mods=json.dumps(deps_mods),
                                           pkg=json.dumps(pkg_name + "==" + version),
                                           mods=mods)
     process = subprocess.Popen(['python3', '-c', measure_mb_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -206,9 +237,9 @@ def measure_import(pkg, pkgs_and_deps):
     if mem is None:
         print("Error measuring memory for", pkg)
         mem = 0
-
-    measure_ms_script = measure_ms.format(dep_pkgs=json.dumps(most_freq_deps.split(",")),
-                                          dep_mods="[]",
+    # ms
+    measure_ms_script = measure_ms.format(dep_pkgs=json.dumps(most_freq_deps),
+                                          dep_mods=json.dumps(deps_mods),
                                           pkg=json.dumps(pkg_name + "==" + version),
                                           mods=mods)
     process = subprocess.Popen(['python3', '-c', measure_ms_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -216,9 +247,10 @@ def measure_import(pkg, pkgs_and_deps):
     t = parse_output('ms', stdout, stderr)
     if t is None:
         print("Error measuring time for", pkg)
+        import_failed.append(pkg)
         t = 0
 
-    return t, mem
+    return [i_t, t], [i_mem, mem]
 
 
 # install first, then measure the import top-level modules time/memory
@@ -231,17 +263,35 @@ def main(pkgs_and_deps):
         install_package(pkg, install_dir)
         # also install the most frequent dependency
         deps = get_most_freq_deps(pkgs_and_deps[pkg])
+        # for their deps, only install, don't measure
         for dep in deps.split(","):
             install_package(dep, install_dir)
-
     # import top-level modules one by one
     for pkg in pkgs_and_deps:
         name, version = pkg.split("==")[0], pkg.split("==")[1]
-        t, mem = measure_import(pkg, pkgs_and_deps)
+        ts, mems = measure_import(pkg, pkgs_and_deps)
         with top_mods_lock:
-            top_mods[name][version]["time_ms"] = t
-            top_mods[name][version]["mem_mb"] = max(mem, 0)
+            top_mods[name][version]["i-ms"] = ts[0]
+            top_mods[name][version]["i-mb"] = max(mems[0], 0)
+            top_mods[name][version]["ms"] = max(ts[1], 0)
+            top_mods[name][version]["mb"] = max(mems[1], 0)
 
+    # if a pkg==ver is not measured, delete them as they only serve as dependencies
+    keys_to_delete = set()
+    for name in top_mods:
+        versions_to_delete = set()
+        for version in top_mods[name]:
+            if "ms" not in top_mods[name][version]:
+                versions_to_delete.add(version)
+        for version in versions_to_delete:
+            del top_mods[name][version]
+        if len(top_mods[name]) == 0:
+            keys_to_delete.add(name)
+    for name in keys_to_delete:
+        del top_mods[name]
+
+    print(f"failed to install {len(install_failed)} packages",
+          "failed to import", len(import_failed), "packages' top-level modules")
     with open("/files/install_import.json", "w") as f:
         json.dump(top_mods, f, indent=2)
 

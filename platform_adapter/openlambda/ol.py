@@ -82,7 +82,7 @@ class OL(PlatformAdapter):
             resp = requests.post(url, json=options["req_body"])
 
         if resp.status_code != 200:
-            raise None, Exception(f"Request to {url} failed with status {resp.status_code}")
+            raise Exception(f"Request to {url} failed with status {resp.status_code}")
         return resp.json(), None
 
             

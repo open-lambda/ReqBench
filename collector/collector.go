@@ -24,10 +24,6 @@ func flush() {
 			if len(batch) > 0 {
 				writeAvailableLogs()
 			}
-		default:
-			if len(batch) > batchSize {
-				writeAvailableLogs()
-			}
 		}
 	}
 }
@@ -103,5 +99,5 @@ func main() {
 		fmt.Printf("Error shutting down server: %s\n", err)
 	}
 	writeAvailableLogs()
-	time.Sleep(10 * time.Second) // if quit too fast, the last output cannot be captured
+	time.Sleep(5 * time.Second) // if quit too fast, the last output cannot be captured
 }
