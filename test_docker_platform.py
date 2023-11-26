@@ -22,6 +22,5 @@ wl.play(
         "network": None,
         "packages": sorted_pkg_list,
         "unique_containers":len(call_set)
-    },
-    collected_metrics=["latency"],
+    }
 )

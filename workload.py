@@ -435,36 +435,19 @@ class Workload:
                 json.dump(self.to_dict(), f, indent=2)
         return
 
-    def play(self, options={}, tasks=TASKS, collected_metrics=[]):
-        collect = collected_metrics != None and len(collected_metrics) > 0
-        if collect:
-            # had to use a diff name (collector1) to distinguish from the collector dir
-            cmd = ["go", "build", "-o", "collector1", "collector.go", "info.go"]
-            subprocess.run(cmd, cwd=os.path.join(bench_dir, "collector"))
-            restAPI = subprocess.Popen(
-                ["./collector1", "."],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_dir, "collector"))
-            time.sleep(1)  # wait for collector to start
-
+    def play(self, options={}, tasks=TASKS):
         self.platform.start_worker(options)
         wl_path = os.path.join(bench_file_dir, "tmp.json")
         wl_dict = self.to_dict()
         self.save(wl_path, wl_dict)
 
         # although bench.go is in current directory, it show be run at ol_dir
-        sec, ops = send_req.run(wl_dict, tasks, collected_metrics, self.platform)
+        sec, ops = send_req.run(wl_dict, tasks, self.platform)
         stat_dict = {"seconds": sec, "ops/s": ops}
         print(stat_dict)
         self.platform.kill_worker(options)
 
-        if collect:
-            restAPI.terminate()
-            for l in restAPI.stdout:
-                print(f"{str(l.strip())}")
-                if b'exit' in l:
-                    break
-
-        # os.remove(wl_path)
+        os.remove(wl_path)
         return stat_dict
 
     def find_func(self, name):

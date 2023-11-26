@@ -12,6 +12,15 @@ class OL(PlatformAdapter):
         self.ol_dir = self.config["ol_dir"]
     
     def start_worker(self, options={}):
+        # if self.config["measure"]:
+        #     # had to use a diff name (collector1) to distinguish from the collector dir
+        #     cmd = ["go", "build", "-o", "collector1", "collector.go", "info.go"]
+        #     subprocess.run(cmd, cwd=os.path.join(bench_dir, "collector"))
+        #     restAPI = subprocess.Popen(
+        #         ["./collector1", "."],
+        #         stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_dir, "collector"))
+        #     time.sleep(1)  # wait for collector to start
+
         optstr = ",".join(["%s=%s" % (k, v) for k, v in options.items()])
         os.chdir(self.ol_dir)
         cmd = ['./ol', 'worker', 'up', '-d']
@@ -57,7 +66,13 @@ class OL(PlatformAdapter):
 
             cmd = ['./ol', 'worker', 'force-cleanup']
             subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        
+
+        # if self.config["measure"]:
+        #     restAPI.terminate()
+        #     for l in restAPI.stdout:
+        #         print(f"{str(l.strip())}")
+        #         if b'exit' in l:
+        #             break
         return 0
 
     def deploy_func(self, func_config):
@@ -83,7 +98,18 @@ class OL(PlatformAdapter):
 
         if resp.status_code != 200:
             raise Exception(f"Request to {url} failed with status {resp.status_code}")
-        return resp.json(), None
+
+        resp_body = resp.json()
+        body = resp_body
+        if self.config["measure"] == "true":
+            body["received"] = time.time() * 1000
+            options = {
+                "url": "http://localhost:4998/latency",
+                "req_body": body
+            }
+            requests.post(options["url"], json=options["req_body"])
+
+        return resp_body, None
 
             
         

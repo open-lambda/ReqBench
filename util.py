@@ -124,16 +124,18 @@ def find_compressed_files(dir_path, pattern):
     case_insensitive_pattern = pattern.lower()
     matched_files = []
 
-    for root, dirs, files in os.walk(dir_path):
-        for file in files:
-            parts = file.split('-', 1)
-            if len(parts) > 1:
-                normalized_file = parts[0].lower().replace('.', '_') + '-' + parts[1].lower()
-            else:
-                normalized_file = file.lower()
+    with os.scandir(dir_path) as it:
+        for entry in it:
+            if entry.is_file():
+                file = entry.name
+                parts = file.split('-', 1)
+                if len(parts) > 1:
+                    normalized_file = parts[0].lower().replace('.', '_') + '-' + parts[1].lower()
+                else:
+                    normalized_file = file.lower()
 
-            if fnmatch.fnmatch(normalized_file, case_insensitive_pattern):
-                matched_files.append(os.path.join(root, file))
+                if fnmatch.fnmatch(normalized_file, case_insensitive_pattern):
+                    matched_files.append(os.path.join(dir_path, file))
 
     return matched_files
 

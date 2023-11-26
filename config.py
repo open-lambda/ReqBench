@@ -1,8 +1,6 @@
 import os
 
 REQ_COUNT = 500
-TREE_SIZES = [1, 20, 40, 80, 200, 300]
-# TREE_SIZES = [1,10,20,30,40,80,120]
 TRIALS = 5
 TASKS = 5
 
