@@ -53,7 +53,7 @@ and filter out the requirements.csv which only use the packages in `install_impo
 
 In the end, it will output a file called `workloads.json` which contains a series of functions and call trace.
 The call trace follows the pattern described in "3.3 Invocation Patterns", [Serverless in the Wild](https://www.usenix.org/conference/atc20/presentation/shahrad).
-`packages.json` is another output that contains the package name, version, top-level modules.
+`packages.json` is another output that contains the package name, version, top-level modules info (name, and the time/memory cost of importing it).
 
 ## Call handlers
 In a python file, run 
