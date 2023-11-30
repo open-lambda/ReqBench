@@ -2,6 +2,8 @@ import json
 import math
 import threading
 
+import pandas as pd
+
 from platform_adapter.interface import PlatformAdapter
 import os
 import docker
@@ -41,8 +43,31 @@ COPY pkg_list.txt /pkg_list.txt
 COPY install_all.py /install_all.py
 RUN python3 /install_all.py /pkg_list.txt
 
-CMD ["sleep", "5"]
+CMD ["sleep", "3"]
 '''
+
+
+def get_mem(container_long_id):
+    path = (f"/sys/fs/cgroup/system.slice/docker-{container_long_id}.scope/memory.current")
+    with open(path, 'r') as file:
+        memory_current = file.read().strip()
+    return int(memory_current)
+
+# start as a thread, record the max memory usage of a container in a period of time
+def max_mem_usage(container_long_id, stop_event, return_dict, interval=0.01):
+    max_mem = 0
+    while not stop_event.is_set():
+        # oom could happen, so we need to catch the exception
+        try:
+            mem = get_mem(container_long_id)
+            if mem > max_mem:
+                max_mem = mem
+            time.sleep(interval)
+        except Exception as e:
+            return_dict[container_long_id] = 0
+            return
+    return_dict[container_long_id] = max_mem
+
 
 def write_if_different(file_path, new_content):
     if os.path.exists(file_path):
@@ -68,6 +93,9 @@ class Dockerplatform(PlatformAdapter):
         self.network = {} # {network_name: #containers}
         self.evict_thread = threading.Thread(target=self.evict_containers)
         self.quit_evict_thread = False
+
+        self.metrics_lock = threading.Lock()
+        self.metrics = pd.DataFrame(columns=["invoke_id", "mem", "req", "received"])
 
     def start_worker(self, options={}):
         # build a shared package base image (to save some time downloading packages)
@@ -102,7 +130,8 @@ class Dockerplatform(PlatformAdapter):
                     return network_name
 
     def kill_worker(self, options={}):
-        # kill Docker containers takes minutes
+        self.metrics.to_csv(os.path.join(os.path.dirname(os.path.abspath(__file__)),'docker_metrics.csv'), index=True)
+        # killing Docker containers takes seconds
         t1 = time.time()
         self.quit_evict_thread = True
         self.evict_thread.join()
@@ -153,7 +182,12 @@ class Dockerplatform(PlatformAdapter):
             )
         self.cache[func_name] = time.time()
         container = self.containers[func_name]
-        t1 = time.time()
+
+        stop_event = threading.Event()
+        return_dict = {}
+        thread = threading.Thread(target=max_mem_usage,
+                                  args=(container.id,stop_event,return_dict,))
+        thread.start()
         try:
             req_str = json.dumps(options["req_body"]) if "req_body" in options else "{}"
             # docker exec -it <container> python3 /app/run_handler.py '{}'
@@ -161,15 +195,23 @@ class Dockerplatform(PlatformAdapter):
         except Exception as e:  # restart container if it is dead
             container.start()
             res = container.exec_run(f"python3 /app/run_handler.py '{req_str}'")
-        t2 = time.time()
-        # print(f"container start time: {t1-t0}, container exec time: {t2-t1}")
 
+        stop_event.set()
+        thread.join()
+
+        received_time = time.time() * 1000
         try:
             output_dict = json.loads(res.output.decode("utf-8"))
         except Exception as e:
-            print("err: ", e)
-            print("res: ", res)
-            res = {}
+            # if exit code is 137, it means OOM killed the container, just ignore it
+            print("err: ", e, " happens in container id: ", container.id,  ", the result is: ", res)
+            output_dict = {}
+        output_dict["received"] = received_time
+        max_memory_usage = return_dict[container.id]
+        metric = {"invoke_id":options["req_body"]["name"], "mem": max_memory_usage,
+                  "req": options["req_body"]["req"], "received": received_time}
+        with self.metrics_lock:
+            self.metrics = self.metrics._append(metric, ignore_index=True)
         return output_dict, res.exit_code
 
 

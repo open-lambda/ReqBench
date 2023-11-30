@@ -435,36 +435,19 @@ class Workload:
                 json.dump(self.to_dict(), f, indent=2)
         return
 
-    def play(self, options={}, tasks=TASKS, collected_metrics=[]):
-        collect = collected_metrics != None and len(collected_metrics) > 0
-        if collect:
-            # had to use a diff name (collector1) to distinguish from the collector dir
-            cmd = ["go", "build", "-o", "collector1", "collector.go", "info.go"]
-            subprocess.run(cmd, cwd=os.path.join(bench_dir, "collector"))
-            restAPI = subprocess.Popen(
-                ["./collector1", "."],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.path.join(bench_dir, "collector"))
-            time.sleep(1)  # wait for collector to start
-
+    def play(self, options={}, tasks=TASKS):
         self.platform.start_worker(options)
         wl_path = os.path.join(bench_file_dir, "tmp.json")
         wl_dict = self.to_dict()
         self.save(wl_path, wl_dict)
 
         # although bench.go is in current directory, it show be run at ol_dir
-        sec, ops = send_req.run(wl_dict, tasks, collected_metrics, self.platform)
+        sec, ops = send_req.run(wl_dict, tasks, self.platform)
         stat_dict = {"seconds": sec, "ops/s": ops}
         print(stat_dict)
         self.platform.kill_worker(options)
 
-        if collect:
-            restAPI.terminate()
-            for l in restAPI.stdout:
-                print(f"{str(l.strip())}")
-                if b'exit' in l:
-                    break
-
-        # os.remove(wl_path)
+        os.remove(wl_path)
         return stat_dict
 
     def find_func(self, name):
@@ -599,12 +582,11 @@ def main():
         for version in versions:
             top_mods = pkgs[pkg][version]["top"]
 
-            time_cost = pkgs[pkg][version]["time_ms"] if "time_ms" in pkgs[pkg][version] else 0
-            mem_cost = pkgs[pkg][version]["mem_mb"] if "mem_mb" in pkgs[pkg][version] else 0
-
             cost = {
-                "i-ms": time_cost,
-                "i-mb": mem_cost
+                "i-ms": pkgs[pkg][version]["i-ms"] if "i-ms" in pkgs[pkg][version] else 0,
+                "ms": pkgs[pkg][version]["ms"] if "ms" in pkgs[pkg][version] else 0,
+                "i-mb": pkgs[pkg][version]["i-mb"] if "i-mb" in pkgs[pkg][version] else 0,
+                "mb": pkgs[pkg][version]["mb"] if "mb" in pkgs[pkg][version] else 0,
             }
 
             if Package.packages_factory[pkg].available_versions[version] is None:
@@ -623,7 +605,7 @@ def main():
                 f.meta.import_mods.update(Package.packages_factory[pkg].available_versions[version].top_level)
         name = wl_with_top_mods.addFunc(None, f.meta.import_mods, f.meta)
         wl_with_top_mods.addCall(name)
-    wl_with_top_mods.gen_trace(skew=False, target=len(self.funcs))
+    wl_with_top_mods.gen_trace(skew=False, target=len(wl.funcs))
     wl_with_top_mods.save(os.path.join(bench_file_dir, "workloads.json"))
 
 

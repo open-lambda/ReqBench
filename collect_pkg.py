@@ -11,8 +11,8 @@ from workload import generate_workloads_from_txts
 
 # install netifaces cause error in some platforms
 # self-defined packages are not considered
-blacklist = ["netifaces", "https://", "http://", "google"]
-
+# blacklist = ["netifaces", "https://", "http://", "google"]
+blacklist = ["https://", "http://"]
 def get_top_n_packages(filtered_df, n=500):
     packages_appear_times = {}
 
@@ -28,10 +28,9 @@ def get_top_n_packages(filtered_df, n=500):
 
     print(f"there are {len(packages_appear_times)} unique packages in total")
     if n == -1:
-        return packages_appear_times
+        return _, packages_appear_times
 
     sorted_packages = sorted(packages_appear_times.items(), key=lambda x: x[1], reverse=True)
-    # if n=-1, return all pkgs
     top_n_packages = sorted_packages[:n]
     return dict(top_n_packages), packages_appear_times
 
@@ -58,8 +57,6 @@ if __name__ == '__main__':
 
     pkgs, _ = get_top_n_packages(filtered_df, pkg_num)
 
-    # the top-n packages might have dependencies that are not in them,
-    # so we need to expand the top-n packages list
     for pkg in pkgs:
         name = pkg.split("==")[0]
         version = pkg.split("==")[1]
