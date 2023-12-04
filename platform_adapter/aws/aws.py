@@ -2,6 +2,7 @@ from platform_adapter.interface import PlatformAdapter
 import os
 import re
 import json
+import time
 import boto3
 import base64
 import docker
@@ -9,7 +10,8 @@ import shutil
 import botocore
 import threading
 import subprocess
-from config import tmp_dir
+import pandas as pd
+from config import tmp_dir, bench_dir
 
 aws_handler="""import time, importlib, os, sys
 
@@ -63,8 +65,13 @@ class AWS(PlatformAdapter):
             with open(f"{self.home_dir}/.aws/credentials", "w") as f:
                 f.write(["[default]\n", 
                          f"aws_access_key_id = {self.config['aws_access_key_id']}\n",
-                         f"aws_secret_access_key = {self.config['aws_secret_access_key']}\n"])        
-        self.client = boto3.client('lambda', region_name=self.region_name)
+                         f"aws_secret_access_key = {self.config['aws_secret_access_key']}\n"])
+                
+        self.metrics_lock = threading.Lock()
+        self.metrics = pd.DataFrame(columns=["request_id", "duration (ms)", "max_memory_used (MB)"])
+               
+        self.lambda_client = boto3.client('lambda', region_name=self.region_name)
+        self.log_client = boto3.client('logs', region_name=self.region_name)
     
     def start_worker(self, options={}):
         print("building shared ecr base image")
@@ -129,31 +136,62 @@ class AWS(PlatformAdapter):
         print("pushing docker image to ECR... (this may take few minuites)")
         out = docker_client.images.push(self.image_name)
         print("ECR ready")
-        pass
+        return
 
     def kill_worker(self, options={}):
-        pass
+        self.metrics.to_csv(f'{bench_dir}/aws_metrics.csv', index=True)
 
     def deploy_func(self, func_config):
         try:
-            self.client.create_function(
+            self.lambda_client.create_function(
                 FunctionName=func_config['name'],
                 Role=self.iam_arn,
                 PackageType='Image',
                 Code={'ImageUri': self.image_name},
-                ImageConfig={'Command': [f"{func_config['name']}.handler"]}
+                ImageConfig={'Command': [f"{func_config['name']}.handler"]},
+                MemorySize=1024
             )
-        except self.client.exceptions.ResourceConflictException:
-             return
-        except Exception as e:
-            return Exception(f"Couldn't create function {func_config['name']}: {e}")
-    
+        except self.lambda_client.exceptions.ResourceConflictException:
+            pass
+        
+        return
         
     def invoke_func(self, func_name, options={}):
         try:
-            response = self.client.invoke(
+            lambda_response = self.lambda_client.invoke(
                 FunctionName=func_name
             )
         except Exception as e:
-            return "", Exception(f"Couldn't invoke function {func_name}.")
-        return json.loads(response['Payload'].read()), None
+            return "", Exception(f"Couldn't invoke function {func_name}: {e}")
+        
+        time.sleep(10)
+        
+        # Get log stream names for the given log group
+        log_group_name=f'/aws/lambda/{func_name}'
+        response = self.log_client.describe_log_streams(
+            logGroupName=log_group_name,
+            orderBy='LastEventTime',
+            limit=1,
+            descending=True
+        )
+
+        if 'logStreams' in response and response['logStreams']:
+            log_stream_name = response['logStreams'][0]['logStreamName']
+
+            # Filter log events based on request ID
+            response = self.log_client.get_log_events(
+                logGroupName=log_group_name,
+                logStreamName=log_stream_name,
+                limit=1,  # Adjust the limit as needed
+                startFromHead=False
+            )
+            
+            # Print the log events
+            pattern = r"RequestId: (.+?)\s*Duration: (\d+\.\d+?)\s*ms.*Max Memory Used: (\d+)\s*MB"
+            result = re.findall(pattern, response['events'][0]['message'])[0]
+            metric = {"request_id":result[0], "duration (ms)":result[1], "max_memory_used (MB)":result[2]}
+                    
+            with self.metrics_lock:
+                self.metrics = self.metrics._append(metric, ignore_index=True)
+        
+        return json.loads(lambda_response['Payload'].read()), None
