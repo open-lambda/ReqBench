@@ -72,6 +72,15 @@ class AWS(PlatformAdapter):
                
         self.lambda_client = boto3.client('lambda', region_name=self.region_name)
         self.log_client = boto3.client('logs', region_name=self.region_name)
+        
+        function_names = []
+        paginator = self.lambda_client.get_paginator('list_functions')
+        for page in paginator.paginate():
+            functions = page['Functions']
+            names = [function['FunctionName'] for function in functions]
+            function_names.extend(names)
+            
+        self.function_names = set(function_names)
     
     def start_worker(self, options={}):
         print("building shared ecr base image")
@@ -142,6 +151,8 @@ class AWS(PlatformAdapter):
         self.metrics.to_csv(f'{bench_dir}/aws_metrics.csv', index=True)
 
     def deploy_func(self, func_config):
+        if func_config['name'] in self.function_names:
+            return
         try:
             self.lambda_client.create_function(
                 FunctionName=func_config['name'],
@@ -164,30 +175,37 @@ class AWS(PlatformAdapter):
         except Exception as e:
             return "", Exception(f"Couldn't invoke function {func_name}: {e}")
         
-        time.sleep(10)
+        time.sleep(3)
         
-        # fetch duration and max memory used from cloud watch
-        log_group_name=f'/aws/lambda/{func_name}'
-        response = self.log_client.describe_log_streams(
-            logGroupName=log_group_name,
-            orderBy='LastEventTime',
-            limit=1,
-            descending=True
-        )
-        
-        log_stream_name = response['logStreams'][0]['logStreamName']
-        response = self.log_client.get_log_events(
-            logGroupName=log_group_name,
-            logStreamName=log_stream_name,
-            limit=1,
-            startFromHead=False
-        )
-        
-        pattern = r"RequestId: (.+?)\s*Duration: (\d+\.\d+?)\s*ms.*Max Memory Used: (\d+)\s*MB"
-        result = re.findall(pattern, response['events'][0]['message'])[0]
-        metric = {"request_id":result[0], "function name":func_name, "duration (ms)":result[1], "max_memory_used (MB)":result[2]}
+        for _ in range(10):
+            try:
+                log_group_name=f'/aws/lambda/{func_name}'
+                response = self.log_client.describe_log_streams(
+                    logGroupName=log_group_name,
+                    orderBy='LastEventTime',
+                    limit=1,
+                    descending=True
+                )
                 
-        with self.metrics_lock:
-            self.metrics = self.metrics._append(metric, ignore_index=True)
-    
-        return json.loads(lambda_response['Payload'].read()), None
+                log_stream_name = response['logStreams'][0]['logStreamName']
+                response = self.log_client.get_log_events(
+                    logGroupName=log_group_name,
+                    logStreamName=log_stream_name,
+                    limit=1,
+                    startFromHead=False
+                )
+                
+                pattern = r"RequestId: (.+?)\s*Duration: (\d+\.\d+?)\s*ms.*Max Memory Used: (\d+)\s*MB"
+                result = re.findall(pattern, response['events'][0]['message'])[0]
+                metric = {"request_id":result[0], "function name":func_name, "duration (ms)":result[1], "max_memory_used (MB)":result[2]}
+                        
+                with self.metrics_lock:
+                    self.metrics = self.metrics._append(metric, ignore_index=True)
+            
+                return json.loads(lambda_response['Payload'].read()), None
+            except Exception as e:
+                time.sleep(1)
+                print("retry fetching log")
+        print("failed to fetch log")
+        return "", False
+            
