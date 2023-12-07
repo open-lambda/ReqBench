@@ -68,7 +68,7 @@ class AWS(PlatformAdapter):
                          f"aws_secret_access_key = {self.config['aws_secret_access_key']}\n"])
                 
         self.metrics_lock = threading.Lock()
-        self.metrics = pd.DataFrame(columns=["request_id", "function name", "duration (ms)", "max_memory_used (MB)"])
+        self.metrics = pd.DataFrame(columns=["request_id", "function name", "duration (ms)", "billed duration (ms)", "memory size (mb)", "max_memory_used (mb)", "init duration (ms)"])
                
         self.lambda_client = boto3.client('lambda', region_name=self.region_name)
         self.log_client = boto3.client('logs', region_name=self.region_name)
@@ -151,19 +151,21 @@ class AWS(PlatformAdapter):
         self.metrics.to_csv(f'{bench_dir}/aws_metrics.csv', index=True)
 
     def deploy_func(self, func_config):
-        if func_config['name'] in self.function_names:
-            return
-        try:
-            self.lambda_client.create_function(
-                FunctionName=func_config['name'],
-                Role=self.iam_arn,
-                PackageType='Image',
-                Code={'ImageUri': self.image_name},
-                ImageConfig={'Command': [f"{func_config['name']}.handler"]},
-                MemorySize=1024
-            )
-        except self.lambda_client.exceptions.ResourceConflictException:
-            pass
+        if func_config['name'] not in self.function_names:
+            try:
+                self.lambda_client.create_function(
+                    FunctionName=func_config['name'],
+                    Role=self.iam_arn,
+                    PackageType='Image',
+                    Code={'ImageUri': self.image_name},
+                    ImageConfig={'Command': [f"{func_config['name']}.handler"]},
+                    MemorySize=1024
+                )
+                return
+            except self.lambda_client.exceptions.ResourceConflictException:
+                pass        
+            
+        #TODO trigger cold start by setting new version number of the lambda
         
         return
         
@@ -191,21 +193,24 @@ class AWS(PlatformAdapter):
                 response = self.log_client.get_log_events(
                     logGroupName=log_group_name,
                     logStreamName=log_stream_name,
-                    limit=1,
+                    limit=10,
                     startFromHead=False
                 )
                 
-                pattern = r"RequestId: (.+?)\s*Duration: (\d+\.\d+?)\s*ms.*Max Memory Used: (\d+)\s*MB"
-                result = re.findall(pattern, response['events'][0]['message'])[0]
-                metric = {"request_id":result[0], "function name":func_name, "duration (ms)":result[1], "max_memory_used (MB)":result[2]}
-                        
-                with self.metrics_lock:
-                    self.metrics = self.metrics._append(metric, ignore_index=True)
+                pattern = r"RequestId: (.+?)\s*Duration: (\d+\.\d+?)\s*ms\s*Billed Duration: (\d+)\s*ms\s*Memory Size: (\d+)\s*MB\s*Max Memory Used: (\d+)\s*MB\s*Init Duration: (\d+\.\d+?)\s*ms"
+                for event in response['events']:
+                    if "Init Duration" in event["message"]:
+                        result = re.findall(pattern, event['message'])[0]
+                        metric = {"request_id":result[0], "function name":func_name, "duration (ms)":result[1], 
+                                  "billed duration (ms)": result[2], "memory size (mb)": result[3], 
+                                  "max_memory_used (mb)":result[4], "init duration (ms)": result[5]}
+                        with self.metrics_lock:
+                            self.metrics = self.metrics._append(metric, ignore_index=True)
             
-                return json.loads(lambda_response['Payload'].read()), None
+                return func_name, None
             except Exception as e:
                 time.sleep(1)
-                print("retry fetching log")
+                print("retry fetching log:", e)
         print("failed to fetch log")
         return "", False
             
