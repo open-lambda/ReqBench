@@ -222,6 +222,25 @@ class Dockerplatform(PlatformAdapter):
         if self.network is None or len(self.network) == 0:
             return
         while self.quit_evict_thread is False:
+            # evict container in case of OOM
+            with self.docker_thread_lock:
+                len_container = len(self.containers)
+            while len_container > 50:
+                try:
+                    with self.docker_thread_lock:
+                        container_name = self.cache.popitem(last=False)[0]
+                        container = self.containers[container_name]
+                        del self.containers[container_name]
+                    container.remove(force=True)
+
+                    network_name = container.attrs['NetworkSettings']['Networks'].keys()[0]
+                    if network_name in self.network:
+                        with self.docker_thread_lock:
+                            self.network[network_name] -= 1
+                except Exception as e:
+                    print("err: ", e)
+
+            # evict container based on network usage
             for network_name in self.network:
                 with self.docker_thread_lock:
                     cnt = self.network[network_name]

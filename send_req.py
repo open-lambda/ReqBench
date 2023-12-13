@@ -64,7 +64,7 @@ def deploy_funcs(workload, platform):
     return workload
 
 
-def run(workload, num_tasks, platform):
+def run(workload, num_tasks, platform, timeout=None):
     deploy_funcs(workload, platform)
     calls = workload['calls']
     finished = 0
@@ -74,28 +74,21 @@ def run(workload, num_tasks, platform):
         futures = [executor.submit(task, call, platform) for call in calls]
         for future in futures:
             try:
-                future.result(timeout=30)
+                if timeout is None:
+                    future.result()
+                else:
+                    future.result(timeout=timeout)
             except concurrent.futures.TimeoutError:
                 print("Task timed out")
             except Exception as e:
                 print(f"Task resulted in an exception: {e}")
             finished += 1
-            if finished % 50 == 0:
+            if finished % 100 == 0:
                 print(f"Finished {finished}/{total} tasks")
 
+    # clean up
+    with seen_lock:
+        seen={}
     end_time = time.time()
     seconds = end_time - start_time
     return seconds, len(calls) / seconds
-
-if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python bench.py <workload-path.json> <tasks> <latency bool>")
-        sys.exit()
-
-    path = sys.argv[1]
-    tasks = int(sys.argv[2])
-    measure_latency = sys.argv[3].lower() == 'true'
-    workload = json.load(open(path, 'r'))
-
-    sec, ops = run(workload, tasks, measure_latency)
-    print(json.dumps({"seconds": sec, "ops/s": ops}))
