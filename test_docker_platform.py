@@ -2,8 +2,8 @@ from workload import Workload
 from platform_adapter.Docker.docker_platform import Dockerplatform
 
 TASKS = 5
-dcker = Dockerplatform("platform_adapter/Docker/config.json")
-wl = Workload(dcker, "files/workloads.json")
+docker = Dockerplatform("platform_adapter/Docker/config.json")
+wl = Workload(docker, "files/workloads.json")
 pkg_dict = wl.pkg_with_version
 pkg_list = [f"{pkg}=={ver}" for pkg, vers in pkg_dict.items() for ver in vers]
 sorted_pkg_list = sorted(pkg_list)
@@ -16,11 +16,12 @@ call_set = {call["name"] for call in wl.calls}
 
 wl.add_metrics(["latency", "memory"])
 wl.play(
-    tasks=TASKS,
     options={
-        "kill_containers": True,
-        "network": None,
-        "packages": sorted_pkg_list,
-        "unique_containers":len(call_set)
+        "start_options": {
+            "kill_containers": True,
+            "network": None,
+            "packages": sorted_pkg_list,
+            "unique_containers": len(call_set)
+        },
     }
 )

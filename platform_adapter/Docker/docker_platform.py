@@ -43,7 +43,7 @@ COPY pkg_list.txt /pkg_list.txt
 COPY install_all.py /install_all.py
 RUN python3 /install_all.py /pkg_list.txt
 
-CMD ["sleep", "3"]
+CMD ["python3", "/app/run_handler.py"]
 '''
 
 
@@ -95,7 +95,7 @@ class Dockerplatform(PlatformAdapter):
         self.quit_evict_thread = False
 
         self.metrics_lock = threading.Lock()
-        self.metrics = pd.DataFrame(columns=["invoke_id", "mem", "req", "received"])
+        self.metrics = pd.DataFrame(columns=["invoke_id", "mem", "req", "init_done", "received"])
 
     def start_worker(self, options={}):
         # build a shared package base image (to save some time downloading packages)
@@ -166,20 +166,24 @@ class Dockerplatform(PlatformAdapter):
             with self.docker_thread_lock:
                 self.network[network_name] += 1
 
+        req_str = json.dumps(options["req_body"]) if "req_body" in options else "{}"
+
         # start container if current func does not have a container
         # start it manually by: docker run -v /root/ReqBench/docker_handlers/fn1:/app/ -it package-base /bin/bash
+        create_done_time = 0
         if func_name not in self.containers:
             # mount requirements.txt and f.py to the container
-            self.containers[func_name] = self.client.containers.run(
-                    "package-base",
-                    mounts=[docker.types.Mount(
-                        type="bind",
-                        source=os.path.join(self.handlers_dir, func_name),
-                        target="/app/",
-                        )
-                    ],
-                    detach=True,
+            self.containers[func_name] = self.client.containers.create(
+                "package-base",
+                command=f"python3 /app/run_handler.py '{req_str}'",
+                mounts=[docker.types.Mount(
+                    type="bind",
+                    source=os.path.join(self.handlers_dir, func_name),
+                    target="/app/"
+                )]
             )
+            create_done_time = time.time() * 1000
+
         self.cache[func_name] = time.time()
         container = self.containers[func_name]
 
@@ -188,20 +192,21 @@ class Dockerplatform(PlatformAdapter):
         thread = threading.Thread(target=max_mem_usage,
                                   args=(container.id,stop_event,return_dict,))
         thread.start()
-        try:
-            req_str = json.dumps(options["req_body"]) if "req_body" in options else "{}"
-            # docker exec -it <container> python3 /app/run_handler.py '{}'
-            res = container.exec_run(f"python3 /app/run_handler.py '{req_str}'")
-        except Exception as e:  # restart container if it is dead
-            container.start()
-            res = container.exec_run(f"python3 /app/run_handler.py '{req_str}'")
 
+        # docker exec -it <container> python3 /app/run_handler.py '{}'
+        container.start()
+        result = container.wait()
+        exit_code = result['StatusCode']
+        if exit_code != 0:
+            print("err: ", exit_code, " happens in container id: ", container.id)
+
+        res = container.logs()
         stop_event.set()
         thread.join()
 
         received_time = time.time() * 1000
         try:
-            output_dict = json.loads(res.output.decode("utf-8"))
+            output_dict = json.loads(res.decode("utf-8"))
         except Exception as e:
             # if exit code is 137, it means OOM killed the container, just ignore it
             print("err: ", e, " happens in container id: ", container.id,  ", the result is: ", res)
@@ -209,10 +214,10 @@ class Dockerplatform(PlatformAdapter):
         output_dict["received"] = received_time
         max_memory_usage = return_dict[container.id]
         metric = {"invoke_id":options["req_body"]["name"], "mem": max_memory_usage,
-                  "req": options["req_body"]["req"], "received": received_time}
+                  "req": options["req_body"]["req"], "received": received_time, "create_done": create_done_time}
         with self.metrics_lock:
             self.metrics = self.metrics._append(metric, ignore_index=True)
-        return output_dict, res.exit_code
+        return output_dict, exit_code
 
 
     # due to the limitation of network bridge, we cannot run more than 1024 containers

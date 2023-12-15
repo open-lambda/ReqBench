@@ -145,7 +145,7 @@ def get_whl(pkgs):
     except Exception as e:
         print(e)
     # Save to JSON file anyway
-    with open('packages_size.json', 'w') as f:
+    with open('packages_disk_size.json', 'w') as f:
         json.dump(packages_size, f, indent=2)
 
 
@@ -686,11 +686,8 @@ def load_all_deps(path):
 
 blacklist = ["https://", "http://"]
 
-requirements_csv = os.path.join(experiment_dir, "requirements.csv")
-pkg_size_json = os.path.join(experiment_dir, "packages_size.json")
-
-
 def main():
+    requirements_csv = os.path.join(bench_dir, "requirements.csv")
     df = pd.read_csv(requirements_csv)
     filtered_df = df[(df['compiled'] != "") & (df['compiled'].notnull())]
     pkgs,_ = get_top_n_packages(filtered_df, 500)
@@ -705,8 +702,6 @@ def main():
     #     pkgs[pkg] = deps
 
     get_whl(pkgs)
-    with open(pkg_size_json, 'r') as file:
-        packages_size = json.load(file)
 
     valid_cols = []
     # rule out the packages that are too big, not in the top 500, in the blacklist
