@@ -16,10 +16,11 @@ from util import cache_pkgs_dir, tmp_dir
 from collections import OrderedDict
 
 run_handler_code = """
-import sys
+import sys, time
 import json
 
 if __name__ == "__main__":
+    start_time = time.time()
     # change sys.path to import packages
     with open("/app/requirements.txt", "r") as file:
         reqs = file.read().splitlines()
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     req = json.loads(sys.argv[1])
     import f
     res = f.f(req)
+    res["start_time"] = start_time*1000
     print(json.dumps(res))
 """
 
@@ -65,7 +67,6 @@ def max_mem_usage(container_long_id, stop_event, return_dict, interval=0.01):
             time.sleep(interval)
         except Exception as e:
             return_dict[container_long_id] = 0
-            return
     return_dict[container_long_id] = max_mem
 
 
@@ -95,7 +96,7 @@ class Dockerplatform(PlatformAdapter):
         self.quit_evict_thread = False
 
         self.metrics_lock = threading.Lock()
-        self.metrics = pd.DataFrame(columns=["invoke_id", "mem", "req", "init_done", "received"])
+        self.metrics = pd.DataFrame(columns=["invoke_id", "mem", "req", "create_done", "received"])
 
     def start_worker(self, options={}):
         # build a shared package base image (to save some time downloading packages)
@@ -131,6 +132,7 @@ class Dockerplatform(PlatformAdapter):
 
     def kill_worker(self, options={}):
         self.metrics.to_csv(os.path.join(os.path.dirname(os.path.abspath(__file__)),'docker_metrics.csv'), index=True)
+        self.metrics = pd.DataFrame()
         # killing Docker containers takes seconds
         t1 = time.time()
         self.quit_evict_thread = True
@@ -196,6 +198,7 @@ class Dockerplatform(PlatformAdapter):
         # docker exec -it <container> python3 /app/run_handler.py '{}'
         container.start()
         result = container.wait()
+        received_time = time.time() * 1000
         exit_code = result['StatusCode']
         if exit_code != 0:
             print("err: ", exit_code, " happens in container id: ", container.id)
@@ -203,8 +206,6 @@ class Dockerplatform(PlatformAdapter):
         res = container.logs()
         stop_event.set()
         thread.join()
-
-        received_time = time.time() * 1000
         try:
             output_dict = json.loads(res.decode("utf-8"))
         except Exception as e:
@@ -213,8 +214,17 @@ class Dockerplatform(PlatformAdapter):
             output_dict = {}
         output_dict["received"] = received_time
         max_memory_usage = return_dict[container.id]
-        metric = {"invoke_id":options["req_body"]["name"], "mem": max_memory_usage,
-                  "req": options["req_body"]["req"], "received": received_time, "create_done": create_done_time}
+        metric = {"invoke_id": options["req_body"]["name"],
+                  "mem": max_memory_usage,
+                  "req": options["req_body"]["req"],
+                  "create_done": create_done_time,
+                  "start": output_dict["start_time"],
+                  "start_import": output_dict["start_import"],
+                  "end_import": output_dict["end_import"],
+                  "end_execute": output_dict["end_execute"],
+                  "failed": output_dict["failed"],
+                  "received": received_time,
+                  }
         with self.metrics_lock:
             self.metrics = self.metrics._append(metric, ignore_index=True)
         return output_dict, exit_code

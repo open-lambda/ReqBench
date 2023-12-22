@@ -717,13 +717,13 @@ def main():
         if valid:
             valid_cols.append(col)
     print(len(valid_cols))
-    with open(os.path.join(experiment_dir, "valid_txt.json"), 'w') as f:
+    with open(os.path.join(bench_file_dir, "valid_txt.json"), 'w') as f:
         json.dump(valid_cols, f, indent=2)
 
     wl = generate_workloads_from_txts(valid_cols)
-    wl.save(os.path.join(experiment_dir, "workload.json"))
+    wl.save(os.path.join(bench_file_dir, "workload.json"))
     wl.play({
-            "import_cache_tree": os.path.join(experiment_dir, "valid_txt.json"),
+            "import_cache_tree": os.path.join(bench_file_dir, "valid_txt.json"),
             "limits.mem_mb": 900,
             "import_cache_tree":""
         },
@@ -740,9 +740,9 @@ def main():
                 Package.packages_factory[pkg].available_versions[version] = versionMeta(top_mods, None, None)
             else:
                 Package.packages_factory[pkg].available_versions[version].top_level = top_mods
-    Package.save(os.path.join(experiment_dir, "packages.json"))
+    Package.save(os.path.join(bench_file_dir, "packages.json"))
 
-    with open(os.path.join(experiment_dir, "deps.json"), 'w') as file:
+    with open(os.path.join(bench_file_dir, "deps.json"), 'w') as file:
         deps_dict, _, _ = wl.parse_deps(Package.deps_dict())
         json.dump(deps_dict, file, indent=2)
 
@@ -755,7 +755,7 @@ def main():
                 f.meta.import_mods.update(Package.packages_factory[pkg].available_versions[version].top_level)
         name = wl_with_top_mods.addFunc(None, f.meta.import_mods, f.meta)
         wl_with_top_mods.addCall(name)
-    wl_with_top_mods.save(os.path.join(experiment_dir, "workloads.json"))
+    wl_with_top_mods.save(os.path.join(bench_file_dir, "workloads.json"))
 
 
 if __name__ == '__main__':
