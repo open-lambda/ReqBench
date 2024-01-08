@@ -12,7 +12,7 @@ call_set = {call["name"] for call in wl.calls}
 
 # add_metrics will modify the workload functions code to collect data
 # also, you could add_metrics to workload, but not collect it in 'wl.play'
-# because there might be multiple appraches, e.g. CloudWatch in AWS, to collect data
+# because there might be multiple approaches, e.g. CloudWatch in AWS, to collect data
 
 wl.add_metrics(["latency", "memory"])
 wl.play(

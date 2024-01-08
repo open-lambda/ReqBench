@@ -51,20 +51,12 @@ python3 workload.py
 ```
 and filter out the requirements.csv which only use the packages in `install_import.json` and generate a series of handlers.
 
-In the end, it will output a file called `workloads.json` which contains a series of functions and call trace.
-The call trace follows the pattern described in "3.3 Invocation Patterns", [Serverless in the Wild](https://www.usenix.org/conference/atc20/presentation/shahrad).
+It will output a file called `workloads.json` which contains a series of functions and call trace. 
+The frequency of each function is determined by a zipf distribution ($s=1.5$ by default).
 `packages.json` is another output that contains the package name, version, top-level modules info (name, and the time/memory cost of importing it).
 
 ## Call handlers
-In a python file, run 
-```python
-from workload import Workload
-tree_path = ""
-mem = 600
-TASKS = 5
-wl = Workload("files/workloads.json")
-wl.play({"import_cache_tree": tree_path, "limits.mem_mb": mem}, 
-        tasks=TASKS)
-```
- `tree_path` is the path to the tree, mem is the memory limit for each container,
-`TASKS` is the number of maximum parallel requests.
+Implement the interface defined in '/ReqBench/platform_adapter/interface.py', we have provide 3 sample implementations 
+in '/ReqBench/platform_adapter/aws', '/ReqBench/platform_adapter/Docker', and '/ReqBench/platform_adapter/openlambda'.
+
+We have also provided sample testers, they are '/ReqBench/test_docker_platform.py', and '/ReqBench/test_aws.py'.
