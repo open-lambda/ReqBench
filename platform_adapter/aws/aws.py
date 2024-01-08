@@ -20,14 +20,16 @@ os.environ['OPENBLAS_NUM_THREADS'] = '2'
 for req in %s:
     sys.path.insert(0, f"/packages/{req}")
 
+start = time.time()
 for mod in %s:
     try:
         importlib.import_module(mod)
     except Exception as e:
         pass
+end = time.time()
         
 def handler(event, context):
-    return '%s'
+    return (end-start)*1000
 """
 
 dockerfile = '''
@@ -68,7 +70,7 @@ class AWS(PlatformAdapter):
                          f"aws_secret_access_key = {self.config['aws_secret_access_key']}\n"])
                 
         self.metrics_lock = threading.Lock()
-        self.metrics = pd.DataFrame(columns=["request_id", "function name", "duration (ms)", "billed duration (ms)", "memory size (mb)", "max_memory_used (mb)", "init duration (ms)"])
+        self.metrics = pd.DataFrame(columns=["request_id", "function name", "duration (ms)", "billed duration (ms)", "memory size (mb)", "max memory used (mb)", "init duration (ms)", "import duration (ms)"])
                
         self.lambda_client = boto3.client('lambda', region_name=self.region_name)
         self.log_client = boto3.client('logs', region_name=self.region_name)
@@ -99,7 +101,7 @@ class AWS(PlatformAdapter):
         #write test lambda handler function
         for func in workload["funcs"]:
             dependencies = re.findall(r'([a-zA-Z0-9_-]+\s*==\s*[0-9.]+)', func["meta"]["requirements_txt"])
-            handler_code = aws_handler % (dependencies, func["meta"]["import_mods"], func["name"])   
+            handler_code = aws_handler % (dependencies, func["meta"]["import_mods"])   
                      
             write_if_different(os.path.join(tmp_dir, f"{func['name']}.py"), handler_code)
         
@@ -174,12 +176,15 @@ class AWS(PlatformAdapter):
             lambda_response = self.lambda_client.invoke(
                 FunctionName=func_name
             )
+            
+            import_duration = json.loads(lambda_response['Payload'].read())
+            request_id = lambda_response['ResponseMetadata']['RequestId']
         except Exception as e:
             return "", Exception(f"Couldn't invoke function {func_name}: {e}")
         
-        time.sleep(3)
+        time.sleep(5)
         
-        for _ in range(10):
+        for _ in range(5):
             try:
                 log_group_name=f'/aws/lambda/{func_name}'
                 response = self.log_client.describe_log_streams(
@@ -190,20 +195,24 @@ class AWS(PlatformAdapter):
                 )
                 
                 log_stream_name = response['logStreams'][0]['logStreamName']
-                response = self.log_client.get_log_events(
+                print(log_stream_name)
+                filter_pattern = ' '.join([f'"{request_id}"'])
+                response = self.log_client.filter_log_events(
                     logGroupName=log_group_name,
-                    logStreamName=log_stream_name,
-                    limit=10,
-                    startFromHead=False
+                    logStreamNames=[log_stream_name],
+                    filterPattern=filter_pattern
                 )
                 
+                #print(response)
                 pattern = r"RequestId: (.+?)\s*Duration: (\d+\.\d+?)\s*ms\s*Billed Duration: (\d+)\s*ms\s*Memory Size: (\d+)\s*MB\s*Max Memory Used: (\d+)\s*MB\s*Init Duration: (\d+\.\d+?)\s*ms"
                 for event in response['events']:
-                    if "Init Duration" in event["message"]:
+                    if "Init Duration" in event['message']:
+                        #print(event['message'])
                         result = re.findall(pattern, event['message'])[0]
                         metric = {"request_id":result[0], "function name":func_name, "duration (ms)":result[1], 
-                                  "billed duration (ms)": result[2], "memory size (mb)": result[3], 
-                                  "max_memory_used (mb)":result[4], "init duration (ms)": result[5]}
+                                    "billed duration (ms)": result[2], "memory size (mb)": result[3], 
+                                    "max memory used (mb)":result[4], "init duration (ms)": result[5],
+                                    "import duration (ms)": import_duration}
                         with self.metrics_lock:
                             self.metrics = self.metrics._append(metric, ignore_index=True)
             
@@ -213,4 +222,18 @@ class AWS(PlatformAdapter):
                 print("retry fetching log:", e)
         print("failed to fetch log")
         return "", False
-            
+    
+    def delete_all_func(self):
+        response = self.lambda_client.list_functions()
+        functions = response['Functions']
+        while(len(functions) > 0):
+            for func in functions:
+                function_name = func['FunctionName']
+                print(f"Deleting Lambda function: {function_name}")
+                self.lambda_client.delete_function(FunctionName=function_name)
+                print(f"Deleted: {function_name}")
+                
+            response = self.lambda_client.list_functions()
+            functions = response['Functions']
+
+        print("All Lambda functions have been deleted.")   
