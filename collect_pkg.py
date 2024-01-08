@@ -9,10 +9,11 @@ from config import *
 from util import parse_requirements
 from workload import generate_workloads_from_txts
 
-# install netifaces cause error in some platforms
-# self-defined packages are not considered
-# blacklist = ["netifaces", "https://", "http://", "google"]
+# 1. install netifaces could cause error in openlambda
+# 2. self-defined packages are not considered
 blacklist = ["https://", "http://"]
+
+
 def get_top_n_packages(filtered_df, n=500):
     packages_appear_times = {}
 
@@ -21,6 +22,8 @@ def get_top_n_packages(filtered_df, n=500):
         if any([x in requirements.keys() for x in blacklist]):
             continue
         for pkg_name, op_version in requirements.items():
+            # ignore the extra options, it does nothing except installing some extra packages
+            # those extra packages will be eventually specified in the requirements.txt
             pkg_name = pkg_name.split("[")[0]
             version = op_version[1]
             key = f"{pkg_name}=={version}"
@@ -34,8 +37,11 @@ def get_top_n_packages(filtered_df, n=500):
     top_n_packages = sorted_packages[:n]
     return dict(top_n_packages), packages_appear_times
 
-# python3 collect_pkg.py <requirements.csv> -l <#packages>
-# rule out the packages that are too big, not in the top 500, in the blacklist
+
+# Usage: python3 collect_pkg.py <requirements.csv> -l <#packages>
+#
+# Step 1. pick the packages that are not in the top 500 (except those in the blacklist)
+# Step 2. install and import them in a docker container, measure on-disk size, import time, memory
 if __name__ == '__main__':
     if len(sys.argv) != 4 or sys.argv[2] != "-l":
         print("Usage: python3 collect_pkg.py <requirements.csv> -l <packages>")
@@ -69,10 +75,9 @@ if __name__ == '__main__':
         os.remove(f)
     with open(os.path.join(bench_file_dir, f"top_{pkg_num}_pkgs.json"), 'w') as file:
         json.dump(pkgs, file, indent=2)
-    print(f"collected top {min(pkg_num,len(pkgs))} packages")
+    print(f"collected top {min(pkg_num, len(pkgs))} packages")
 
     subprocess.run("docker build -t install_import .", shell=True, cwd=bench_dir)
     subprocess.run(f"docker run "
                    f"-v {bench_dir}/tmp/.cache:/tmp/.cache "
                    f"-v {bench_file_dir}:/files install_import", shell=True)
-

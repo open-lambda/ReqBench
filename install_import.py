@@ -146,7 +146,7 @@ def install_package(pkg, install_dir):
             )
         comp_file = find_compressed_files("/tmp/.cache/", f"{normalize_pkg(name)}-{version}*")[0]
         comp_size = os.path.getsize(comp_file)
-        comp_size = 0
+        # comp_size = 0
         t1 = time.time()
         subprocess.check_output(
             ['pip3', 'install', '--no-deps', pkg, '--cache-dir', '/tmp/.cache', '-t', install_dir],
@@ -165,7 +165,7 @@ def install_package(pkg, install_dir):
             top_mods[name][version]["compressed_size"] = comp_size
             top_mods[name][version]["disk_size"] = pkg_disk_size
             top_mods[name][version]["top"] = get_top_modules(install_dir)
-            top_mods[name][version]["suffix"] = ".tar"#get_suffix(name, version)
+            top_mods[name][version]["suffix"] = get_suffix(name, version)
         with installed_packages_lock:
             installed_packages.append(pkg)
             if len(installed_packages) % 10 == 0:
@@ -311,12 +311,14 @@ def main(pkgs_and_deps):
     if len(import_failed) > 0:
         with open("/files/import_failed.json", "w") as f:
             json.dump(import_failed, f, indent=2)
-    shutil.rmtree(install_dir, ignore_errors=True)
+    # shutil.rmtree(install_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":
     if not os.path.exists("/packages"):
         os.mkdir("/packages")
+    if not os.path.exists("/tmp/.cache"):
+        os.mkdir("/tmp/.cache")
 
     pattern = "/files/top_[0-9]*_pkgs.json"
     files = glob.glob(pattern)
