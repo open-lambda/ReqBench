@@ -687,7 +687,7 @@ def load_all_deps(path):
 blacklist = ["https://", "http://"]
 
 def main():
-    requirements_csv = os.path.join(bench_dir, "requirements.csv")
+    requirements_csv = os.path.join(bench_dir, "files/requirements.csv")
     df = pd.read_csv(requirements_csv)
     filtered_df = df[(df['compiled'] != "") & (df['compiled'].notnull())]
     pkgs,_ = get_top_n_packages(filtered_df, 500)
