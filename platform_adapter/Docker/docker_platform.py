@@ -36,9 +36,9 @@ if __name__ == "__main__":
 """
 
 package_base_dockerfile = '''
-FROM ubuntu:22.04
+FROM nogil/python
 
-RUN apt-get update && apt-get install -y python3 python3-pip
+#RUN apt-get update && apt-get install -y python3 python3-pip
 COPY .cache/ /tmp/.cache/
 
 COPY pkg_list.txt /pkg_list.txt
@@ -50,7 +50,7 @@ CMD ["python3", "/app/run_handler.py"]
 
 
 def get_mem(container_long_id):
-    path = (f"/sys/fs/cgroup/system.slice/docker-{container_long_id}.scope/memory.current")
+    path = (f"/sys/fs/cgroup/memory/docker/{container_long_id}/memory.max_usage_in_bytes")
     with open(path, 'r') as file:
         memory_current = file.read().strip()
     return int(memory_current)
