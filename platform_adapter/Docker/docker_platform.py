@@ -50,7 +50,7 @@ CMD ["python3", "/app/run_handler.py"]
 
 
 def get_mem(container_long_id):
-    path = (f"/sys/fs/cgroup/memory/docker/{container_long_id}/memory.max_usage_in_bytes")
+    path = (f"/sys/fs/cgroup/system.slice/docker-{container_long_id}.scope/memory.current")
     with open(path, 'r') as file:
         memory_current = file.read().strip()
     return int(memory_current)
