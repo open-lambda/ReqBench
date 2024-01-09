@@ -33,11 +33,12 @@ def handler(event, context):
 """
 
 dockerfile = '''
-FROM python:3.10 as build-image
+FROM nogil/python
 
 COPY . .
 RUN mkdir -p /tmp/.cache
 RUN python3 /install_all.py /pkg_list.txt
+RUN pip install cmake 
 RUN pip install awslambdaric
 
 ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric" ]
