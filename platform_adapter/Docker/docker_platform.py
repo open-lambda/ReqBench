@@ -36,9 +36,9 @@ if __name__ == "__main__":
 """
 
 package_base_dockerfile = '''
-FROM ubuntu:22.04
+FROM nogil/python
 
-RUN apt-get update && apt-get install -y python3 python3-pip
+#RUN apt-get update && apt-get install -y python3 python3-pip
 COPY .cache/ /tmp/.cache/
 
 COPY pkg_list.txt /pkg_list.txt
