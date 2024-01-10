@@ -1,0 +1,7110 @@
+{
+  "cython": {
+    "name": "cython",
+    "versions": {
+      "3.0.2": {
+        "top": [
+          "Cython",
+          "cython",
+          "pyximport"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.416393280029297,
+          "ms": 5.3920745849609375,
+          "i-mb": 0.7841625213623047,
+          "mb": 0.7841625213623047
+        }
+      }
+    },
+    "popularity": []
+  },
+  "numpy": {
+    "name": "numpy",
+    "versions": {
+      "1.26.0": {
+        "top": [
+          "numpy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.0207576751709,
+          "ms": 59.117794036865234,
+          "i-mb": 5.830541610717773,
+          "mb": 5.8313703536987305
+        }
+      },
+      "1.25.2": {
+        "top": [
+          "numpy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.51237678527832,
+          "ms": 59.56840515136719,
+          "i-mb": 5.8543548583984375,
+          "mb": 5.853676795959473
+        }
+      },
+      "1.24.4": {
+        "top": [
+          "numpy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 50.22096633911133,
+          "ms": 49.254417419433594,
+          "i-mb": 5.200854301452637,
+          "mb": 5.200379371643066
+        }
+      }
+    },
+    "popularity": []
+  },
+  "packaging": {
+    "name": "packaging",
+    "versions": {
+      "21.3": {
+        "top": [
+          "packaging"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.2732276916503906,
+          "ms": 0.2803802490234375,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "23.1": {
+        "top": [
+          "packaging"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.13709068298339844,
+          "ms": 0.13756752014160156,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "scipy": {
+    "name": "scipy",
+    "versions": {
+      "1.11.2": {
+        "top": [
+          "scipy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 65.37413597106934,
+          "ms": 5.731105804443359,
+          "i-mb": 5.374566078186035,
+          "mb": 0.382568359375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "certifi": {
+    "name": "certifi",
+    "versions": {
+      "2023.7.22": {
+        "top": [
+          "certifi"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.543968200683594,
+          "ms": 8.482933044433594,
+          "i-mb": 0.8670129776000977,
+          "mb": 0.866969108581543
+        }
+      },
+      "2022.6.15": {
+        "top": [
+          "certifi"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.450746536254883,
+          "ms": 8.430957794189453,
+          "i-mb": 0.861785888671875,
+          "mb": 0.8618383407592773
+        }
+      },
+      "2021.10.8": {
+        "top": [
+          "certifi"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.464336395263672,
+          "ms": 8.538484573364258,
+          "i-mb": 0.8670120239257812,
+          "mb": 0.8671655654907227
+        }
+      },
+      "2022.9.24": {
+        "top": [
+          "certifi"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.416891098022461,
+          "ms": 8.540153503417969,
+          "i-mb": 0.8668661117553711,
+          "mb": 0.8668661117553711
+        }
+      }
+    },
+    "popularity": []
+  },
+  "charset-normalizer": {
+    "name": "charset-normalizer",
+    "versions": {
+      "3.2.0": {
+        "top": [
+          "charset_normalizer"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 12.011528015136719,
+          "ms": 12.009382247924805,
+          "i-mb": 1.0014705657958984,
+          "mb": 1.0016937255859375
+        }
+      },
+      "2.0.12": {
+        "top": [
+          "charset_normalizer"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.749505996704102,
+          "ms": 11.794328689575195,
+          "i-mb": 0.9971160888671875,
+          "mb": 0.9970932006835938
+        }
+      },
+      "2.1.1": {
+        "top": [
+          "charset_normalizer"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 12.006044387817383,
+          "ms": 12.133598327636719,
+          "i-mb": 1.0035114288330078,
+          "mb": 1.0036087036132812
+        }
+      }
+    },
+    "popularity": []
+  },
+  "idna": {
+    "name": "idna",
+    "versions": {
+      "2.10": {
+        "top": [
+          "idna"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.356363296508789,
+          "ms": 1.3415813446044922,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "3.4": {
+        "top": [
+          "idna"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.4351348876953125,
+          "ms": 3.3969879150390625,
+          "i-mb": 0.2143115997314453,
+          "mb": 0.21433162689208984
+        }
+      },
+      "3.3": {
+        "top": [
+          "idna"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.370046615600586,
+          "ms": 3.3736228942871094,
+          "i-mb": 0.21407127380371094,
+          "mb": 0.2140512466430664
+        }
+      }
+    },
+    "popularity": []
+  },
+  "requests": {
+    "name": "requests",
+    "versions": {
+      "2.27.1": {
+        "top": [
+          "requests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.50927734375,
+          "ms": 11.347055435180664,
+          "i-mb": 3.632732391357422,
+          "mb": 0.4837808609008789
+        }
+      },
+      "2.25.1": {
+        "top": [
+          "requests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 61.71298027038574,
+          "ms": 10.796546936035156,
+          "i-mb": 3.522791862487793,
+          "mb": 0.4593219757080078
+        }
+      },
+      "2.26.0": {
+        "top": [
+          "requests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.94224548339844,
+          "ms": 11.289596557617188,
+          "i-mb": 3.627192497253418,
+          "mb": 0.4765205383300781
+        }
+      },
+      "2.28.1": {
+        "top": [
+          "requests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.64541435241699,
+          "ms": 11.352300643920898,
+          "i-mb": 3.3798742294311523,
+          "mb": 0.4803590774536133
+        }
+      },
+      "2.31.0": {
+        "top": [
+          "requests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 62.13545799255371,
+          "ms": 11.710405349731445,
+          "i-mb": 3.6550703048706055,
+          "mb": 0.43305110931396484
+        }
+      }
+    },
+    "popularity": []
+  },
+  "urllib3": {
+    "name": "urllib3",
+    "versions": {
+      "1.26.16": {
+        "top": [
+          "urllib3"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 36.38052940368652,
+          "ms": 36.19670867919922,
+          "i-mb": 1.4928712844848633,
+          "mb": 1.4927473068237305
+        }
+      },
+      "1.26.9": {
+        "top": [
+          "urllib3"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 36.3316535949707,
+          "ms": 36.520957946777344,
+          "i-mb": 1.489797592163086,
+          "mb": 1.4897403717041016
+        }
+      },
+      "1.26.12": {
+        "top": [
+          "urllib3"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 36.45467758178711,
+          "ms": 36.65947914123535,
+          "i-mb": 1.4911441802978516,
+          "mb": 1.4912214279174805
+        }
+      },
+      "2.0.4": {
+        "top": [
+          "urllib3"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 39.183616638183594,
+          "ms": 39.26897048950195,
+          "i-mb": 1.895986557006836,
+          "mb": 1.8959388732910156
+        }
+      }
+    },
+    "popularity": []
+  },
+  "boto3": {
+    "name": "boto3",
+    "versions": {
+      "1.28.48": {
+        "top": [
+          "boto3"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 94.12431716918945,
+          "ms": 36.840200424194336,
+          "i-mb": 5.478964805603027,
+          "mb": 2.006810188293457
+        }
+      }
+    },
+    "popularity": []
+  },
+  "botocore": {
+    "name": "botocore",
+    "versions": {
+      "1.31.48": {
+        "top": [
+          "botocore"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.110740661621094,
+          "ms": 0.4012584686279297,
+          "i-mb": 0.16735172271728516,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jmespath": {
+    "name": "jmespath",
+    "versions": {
+      "1.0.1": {
+        "top": [
+          "jmespath"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.873296737670898,
+          "ms": 7.871389389038086,
+          "i-mb": 0.7954559326171875,
+          "mb": 0.7954559326171875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "python-dateutil": {
+    "name": "python-dateutil",
+    "versions": {
+      "2.8.2": {
+        "top": [
+          "dateutil"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.2675056457519531,
+          "ms": 0.21457672119140625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "s3transfer": {
+    "name": "s3transfer",
+    "versions": {
+      "0.6.2": {
+        "top": [
+          "s3transfer"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 62.70575523376465,
+          "ms": 19.879579544067383,
+          "i-mb": 3.8258209228515625,
+          "mb": 0.7858695983886719
+        }
+      }
+    },
+    "popularity": []
+  },
+  "six": {
+    "name": "six",
+    "versions": {
+      "1.16.0": {
+        "top": [
+          "six"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.729726791381836,
+          "ms": 1.7616748809814453,
+          "i-mb": 0.0810403823852539,
+          "mb": 0.0810403823852539
+        }
+      }
+    },
+    "popularity": []
+  },
+  "alabaster": {
+    "name": "alabaster",
+    "versions": {
+      "0.7.13": {
+        "top": [
+          "alabaster"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.25200843811035156,
+          "ms": 0.24747848510742188,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "babel": {
+    "name": "babel",
+    "versions": {
+      "2.12.1": {
+        "top": [
+          "babel"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.416559219360352,
+          "ms": 6.396770477294922,
+          "i-mb": 0.6105117797851562,
+          "mb": 0.6105337142944336
+        }
+      }
+    },
+    "popularity": []
+  },
+  "docutils": {
+    "name": "docutils",
+    "versions": {
+      "0.19": {
+        "top": [
+          "docutils"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.32258033752441406,
+          "ms": 0.31256675720214844,
+          "i-mb": 0.00768280029296875,
+          "mb": 0.00768280029296875
+        }
+      },
+      "0.20.1": {
+        "top": [
+          "docutils"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.3211498260498047,
+          "ms": 0.32806396484375,
+          "i-mb": 0.007930755615234375,
+          "mb": 0.007930755615234375
+        }
+      },
+      "0.16": {
+        "top": [
+          "docutils"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.2987384796142578,
+          "ms": 0.30517578125,
+          "i-mb": 0.0032320022583007812,
+          "mb": 0.0032320022583007812
+        }
+      },
+      "0.17.1": {
+        "top": [
+          "docutils"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.31304359436035156,
+          "ms": 0.3120899200439453,
+          "i-mb": 0.0076351165771484375,
+          "mb": 0.0076351165771484375
+        }
+      },
+      "0.18.1": {
+        "top": [
+          "docutils"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.31757354736328125,
+          "ms": 0.3147125244140625,
+          "i-mb": 0.0076751708984375,
+          "mb": 0.0076751708984375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "imagesize": {
+    "name": "imagesize",
+    "versions": {
+      "1.4.1": {
+        "top": [
+          "imagesize"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.004312515258789,
+          "ms": 3.0553340911865234,
+          "i-mb": 0.13434505462646484,
+          "mb": 0.13434505462646484
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jinja2": {
+    "name": "jinja2",
+    "versions": {
+      "3.1.2": {
+        "top": [
+          "jinja2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 29.943227767944336,
+          "ms": 25.373458862304688,
+          "i-mb": 1.9443817138671875,
+          "mb": 1.416769027709961
+        }
+      },
+      "3.0.3": {
+        "top": [
+          "jinja2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 29.285907745361328,
+          "ms": 25.290966033935547,
+          "i-mb": 1.9497480392456055,
+          "mb": 1.4217700958251953
+        }
+      },
+      "2.11.3": {
+        "top": [
+          "jinja2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 19.664764404296875,
+          "ms": 18.517732620239258,
+          "i-mb": 1.4327974319458008,
+          "mb": 1.387354850769043
+        }
+      }
+    },
+    "popularity": []
+  },
+  "markupsafe": {
+    "name": "markupsafe",
+    "versions": {
+      "2.1.3": {
+        "top": [
+          "markupsafe"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.976583480834961,
+          "ms": 4.031181335449219,
+          "i-mb": 0.37187957763671875,
+          "mb": 0.37187957763671875
+        }
+      },
+      "2.0.1": {
+        "top": [
+          "markupsafe"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.064798355102539,
+          "ms": 4.027605056762695,
+          "i-mb": 0.36885738372802734,
+          "mb": 0.3688173294067383
+        }
+      },
+      "2.1.1": {
+        "top": [
+          "markupsafe"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.009246826171875,
+          "ms": 3.972291946411133,
+          "i-mb": 0.3700132369995117,
+          "mb": 0.3699932098388672
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pygments": {
+    "name": "pygments",
+    "versions": {
+      "2.13.0": {
+        "top": [
+          "pygments"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.14781951904296875,
+          "ms": 0.14781951904296875,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.16.1": {
+        "top": [
+          "pygments"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.14472007751464844,
+          "ms": 0.14519691467285156,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "snowballstemmer": {
+    "name": "snowballstemmer",
+    "versions": {
+      "2.2.0": {
+        "top": [
+          "snowballstemmer"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.131763458251953,
+          "ms": 10.207176208496094,
+          "i-mb": 0.2897319793701172,
+          "mb": 0.2897319793701172
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinx": {
+    "name": "sphinx",
+    "versions": {
+      "5.3.0": {
+        "top": [
+          "sphinx"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.3071041107177734,
+          "ms": 0.6396770477294922,
+          "i-mb": 0.1699228286743164,
+          "mb": 0
+        }
+      },
+      "4.5.0": {
+        "top": [
+          "sphinx"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.2732696533203125,
+          "ms": 2.0265579223632812,
+          "i-mb": 0.7079191207885742,
+          "mb": 0.043959617614746094
+        }
+      },
+      "7.2.6": {
+        "top": [
+          "sphinx"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.3015270233154297,
+          "ms": 0.5211830139160156,
+          "i-mb": 0.0045566558837890625,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinxcontrib-applehelp": {
+    "name": "sphinxcontrib-applehelp",
+    "versions": {
+      "1.0.4": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0007152557373046875,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.0.7": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinxcontrib-devhelp": {
+    "name": "sphinxcontrib-devhelp",
+    "versions": {
+      "1.0.5": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.0.2": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinxcontrib-htmlhelp": {
+    "name": "sphinxcontrib-htmlhelp",
+    "versions": {
+      "2.0.1": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.0.4": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0007152557373046875,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinxcontrib-jsmath": {
+    "name": "sphinxcontrib-jsmath",
+    "versions": {
+      "1.0.1": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinxcontrib-qthelp": {
+    "name": "sphinxcontrib-qthelp",
+    "versions": {
+      "1.0.3": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.0.6": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinxcontrib-serializinghtml": {
+    "name": "sphinxcontrib-serializinghtml",
+    "versions": {
+      "1.1.5": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.1.9": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "dnspython": {
+    "name": "dnspython",
+    "versions": {
+      "2.4.2": {
+        "top": [
+          "dns"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.2663135528564453,
+          "ms": 0.2620220184326172,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pymongo": {
+    "name": "pymongo",
+    "versions": {
+      "4.5.0": {
+        "top": [
+          "bson",
+          "gridfs",
+          "pymongo"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 65.68241119384766,
+          "ms": 65.4151439666748,
+          "i-mb": 3.688009262084961,
+          "mb": 3.680233955383301
+        }
+      }
+    },
+    "popularity": []
+  },
+  "blinker": {
+    "name": "blinker",
+    "versions": {
+      "1.6.2": {
+        "top": [
+          "blinker"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 25.439739227294922,
+          "ms": 25.696516036987305,
+          "i-mb": 1.8244390487670898,
+          "mb": 1.8243589401245117
+        }
+      }
+    },
+    "popularity": []
+  },
+  "click": {
+    "name": "click",
+    "versions": {
+      "7.1.2": {
+        "top": [
+          "click"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 10.104894638061523,
+          "ms": 10.103464126586914,
+          "i-mb": 1.2127246856689453,
+          "mb": 1.2127866744995117
+        }
+      },
+      "8.0.4": {
+        "top": [
+          "click"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 15.117645263671875,
+          "ms": 15.346050262451172,
+          "i-mb": 1.1233835220336914,
+          "mb": 1.1233835220336914
+        }
+      },
+      "8.1.7": {
+        "top": [
+          "click"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 15.557527542114258,
+          "ms": 15.519142150878906,
+          "i-mb": 1.1261215209960938,
+          "mb": 1.12615966796875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "flask": {
+    "name": "flask",
+    "versions": {
+      "2.1.0": {
+        "top": [
+          "flask"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 95.84450721740723,
+          "ms": 21.071195602416992,
+          "i-mb": 5.456036567687988,
+          "mb": 0.8427629470825195
+        }
+      },
+      "2.3.3": {
+        "top": [
+          "flask"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 102.01859474182129,
+          "ms": 18.824338912963867,
+          "i-mb": 6.240365028381348,
+          "mb": 0.7682695388793945
+        }
+      },
+      "2.2.2": {
+        "top": [
+          "flask"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 91.59684181213379,
+          "ms": 17.60244369506836,
+          "i-mb": 5.24820613861084,
+          "mb": 0.7991724014282227
+        }
+      }
+    },
+    "popularity": []
+  },
+  "itsdangerous": {
+    "name": "itsdangerous",
+    "versions": {
+      "2.1.2": {
+        "top": [
+          "itsdangerous"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.463693618774414,
+          "ms": 7.436513900756836,
+          "i-mb": 0.6335439682006836,
+          "mb": 0.6335258483886719
+        }
+      }
+    },
+    "popularity": []
+  },
+  "werkzeug": {
+    "name": "werkzeug",
+    "versions": {
+      "2.3.7": {
+        "top": [
+          "werkzeug"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 50.18019676208496,
+          "ms": 46.21553421020508,
+          "i-mb": 3.7958173751831055,
+          "mb": 3.268855094909668
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinx-rtd-theme": {
+    "name": "sphinx-rtd-theme",
+    "versions": {
+      "1.3.0": {
+        "top": [
+          "sphinx_rtd_theme"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinxcontrib-jquery": {
+    "name": "sphinxcontrib-jquery",
+    "versions": {
+      "4.1": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "beautifulsoup4": {
+    "name": "beautifulsoup4",
+    "versions": {
+      "4.12.2": {
+        "top": [
+          "bs4"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 55.30834197998047,
+          "ms": 0.015020370483398438,
+          "i-mb": 1.1674137115478516,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "bs4": {
+    "name": "bs4",
+    "versions": {
+      "0.0.1": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "markdown": {
+    "name": "markdown",
+    "versions": {
+      "3.4.4": {
+        "top": [
+          "markdown"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 15.527963638305664,
+          "ms": 15.639543533325195,
+          "i-mb": 0.7190818786621094,
+          "mb": 0.7190818786621094
+        }
+      }
+    },
+    "popularity": []
+  },
+  "soupsieve": {
+    "name": "soupsieve",
+    "versions": {
+      "2.5": {
+        "top": [
+          "soupsieve"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pandas": {
+    "name": "pandas",
+    "versions": {
+      "2.1.0": {
+        "top": [
+          "pandas"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 272.10092544555664,
+          "ms": 205.33347129821777,
+          "i-mb": 11.710834503173828,
+          "mb": 9.42090129852295
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pillow": {
+    "name": "pillow",
+    "versions": {
+      "10.0.0": {
+        "top": [
+          "PIL"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.31685829162597656,
+          "ms": 0.3120899200439453,
+          "i-mb": 0.0027437210083007812,
+          "mb": 0.0027437210083007812
+        }
+      },
+      "10.0.1": {
+        "top": [
+          "PIL"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.3192424774169922,
+          "ms": 0.31065940856933594,
+          "i-mb": 0.0027437210083007812,
+          "mb": 0.0027437210083007812
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pytz": {
+    "name": "pytz",
+    "versions": {
+      "2023.3.post1": {
+        "top": [
+          "pytz"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.911806106567383,
+          "ms": 2.9480457305908203,
+          "i-mb": 0.41672515869140625,
+          "mb": 0.4167051315307617
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyyaml": {
+    "name": "pyyaml",
+    "versions": {
+      "6.0.1": {
+        "top": [
+          "_yaml",
+          "yaml"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 10.544061660766602,
+          "ms": 10.338783264160156,
+          "i-mb": 0.6048593521118164,
+          "mb": 0.6048793792724609
+        }
+      },
+      "6.0": {
+        "top": [
+          "_yaml",
+          "yaml"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 10.581493377685547,
+          "ms": 10.570049285888672,
+          "i-mb": 0.6047515869140625,
+          "mb": 0.6047735214233398
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tornado": {
+    "name": "tornado",
+    "versions": {
+      "6.3.3": {
+        "top": [
+          "tornado"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.147674560546875,
+          "ms": 2.1767616271972656,
+          "i-mb": 0.22626113891601562,
+          "mb": 0.22626113891601562
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tzdata": {
+    "name": "tzdata",
+    "versions": {
+      "2023.3": {
+        "top": [
+          "tzdata"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.13184547424316406,
+          "ms": 0.12755393981933594,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "dulwich": {
+    "name": "dulwich",
+    "versions": {
+      "0.21.6": {
+        "top": [
+          "dulwich"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1609325408935547,
+          "ms": 0.11610984802246094,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "openstackdocstheme": {
+    "name": "openstackdocstheme",
+    "versions": {
+      "3.2.0": {
+        "top": [
+          "openstackdocstheme"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pbr": {
+    "name": "pbr",
+    "versions": {
+      "5.11.1": {
+        "top": [
+          "pbr"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.13184547424316406,
+          "ms": 0.1316070556640625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "reno": {
+    "name": "reno",
+    "versions": {
+      "4.0.0": {
+        "top": [
+          "reno"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 26.182889938354492,
+          "ms": 9.34457778930664,
+          "i-mb": 1.9581127166748047,
+          "mb": 0.9269208908081055
+        }
+      }
+    },
+    "popularity": []
+  },
+  "more-itertools": {
+    "name": "more-itertools",
+    "versions": {
+      "9.0.0": {
+        "top": [
+          "more_itertools"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.814769744873047,
+          "ms": 2.7856826782226562,
+          "i-mb": 0.5714950561523438,
+          "mb": 0.5714912414550781
+        }
+      }
+    },
+    "popularity": []
+  },
+  "asgiref": {
+    "name": "asgiref",
+    "versions": {
+      "3.7.2": {
+        "top": [
+          "asgiref"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1659393310546875,
+          "ms": 0.1285076141357422,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "django": {
+    "name": "django",
+    "versions": {
+      "4.2.5": {
+        "top": [
+          "django"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.127668380737305,
+          "ms": 4.5719146728515625,
+          "i-mb": 0.577061653137207,
+          "mb": 0.25368404388427734
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sqlparse": {
+    "name": "sqlparse",
+    "versions": {
+      "0.4.4": {
+        "top": [
+          "sqlparse"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.531787872314453,
+          "ms": 5.463600158691406,
+          "i-mb": 0.5712127685546875,
+          "mb": 0.5712127685546875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "typing-extensions": {
+    "name": "typing-extensions",
+    "versions": {
+      "4.4.0": {
+        "top": [
+          "typing_extensions"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.728700637817383,
+          "ms": 2.75421142578125,
+          "i-mb": 0.22716712951660156,
+          "mb": 0.22716712951660156
+        }
+      },
+      "4.1.1": {
+        "top": [
+          "typing_extensions"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.7701854705810547,
+          "ms": 2.7627944946289062,
+          "i-mb": 0.2134552001953125,
+          "mb": 0.2134552001953125
+        }
+      },
+      "4.7.1": {
+        "top": [
+          "typing_extensions"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.705450057983398,
+          "ms": 7.68280029296875,
+          "i-mb": 0.9495677947998047,
+          "mb": 0.9495458602905273
+        }
+      }
+    },
+    "popularity": []
+  },
+  "attrs": {
+    "name": "attrs",
+    "versions": {
+      "23.1.0": {
+        "top": [
+          "attr",
+          "attrs"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 19.49310302734375,
+          "ms": 19.74797248840332,
+          "i-mb": 1.273249626159668,
+          "mb": 1.273268699645996
+        }
+      },
+      "22.1.0": {
+        "top": [
+          "attr",
+          "attrs"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 18.464326858520508,
+          "ms": 18.41902732849121,
+          "i-mb": 1.2211647033691406,
+          "mb": 1.2211503982543945
+        }
+      }
+    },
+    "popularity": []
+  },
+  "autopage": {
+    "name": "autopage",
+    "versions": {
+      "0.5.1": {
+        "top": [
+          "autopage"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.167245864868164,
+          "ms": 5.142927169799805,
+          "i-mb": 0.6796398162841797,
+          "mb": 0.6796398162841797
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cliff": {
+    "name": "cliff",
+    "versions": {
+      "4.3.0": {
+        "top": [
+          "cliff"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.35452842712402344,
+          "ms": 0.1430511474609375,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cmd2": {
+    "name": "cmd2",
+    "versions": {
+      "2.4.3": {
+        "top": [
+          "cmd2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 68.93777847290039,
+          "ms": 45.18556594848633,
+          "i-mb": 3.1964492797851562,
+          "mb": 2.2031917572021484
+        }
+      }
+    },
+    "popularity": []
+  },
+  "debtcollector": {
+    "name": "debtcollector",
+    "versions": {
+      "2.5.0": {
+        "top": [
+          "debtcollector"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 25.81000328063965,
+          "ms": 19.961118698120117,
+          "i-mb": 1.4435300827026367,
+          "mb": 1.0701837539672852
+        }
+      }
+    },
+    "popularity": []
+  },
+  "importlib-metadata": {
+    "name": "importlib-metadata",
+    "versions": {
+      "5.0.0": {
+        "top": [
+          "importlib_metadata"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 23.88453483581543,
+          "ms": 17.192840576171875,
+          "i-mb": 1.8184070587158203,
+          "mb": 0.8499813079833984
+        }
+      },
+      "4.8.3": {
+        "top": [
+          "importlib_metadata"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 23.54907989501953,
+          "ms": 17.11869239807129,
+          "i-mb": 1.8281183242797852,
+          "mb": 0.846095085144043
+        }
+      },
+      "6.8.0": {
+        "top": [
+          "importlib_metadata"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 28.056859970092773,
+          "ms": 21.182537078857422,
+          "i-mb": 1.668227195739746,
+          "mb": 1.1847419738769531
+        }
+      }
+    },
+    "popularity": []
+  },
+  "iso8601": {
+    "name": "iso8601",
+    "versions": {
+      "2.0.0": {
+        "top": [
+          "iso8601"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.976511001586914,
+          "ms": 4.961729049682617,
+          "i-mb": 0.5305271148681641,
+          "mb": 0.5305471420288086
+        }
+      }
+    },
+    "popularity": []
+  },
+  "keystoneauth1": {
+    "name": "keystoneauth1",
+    "versions": {
+      "5.3.0": {
+        "top": [
+          "keystoneauth1"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 24.286746978759766,
+          "ms": 0.5462169647216797,
+          "i-mb": 1.6337518692016602,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "msgpack": {
+    "name": "msgpack",
+    "versions": {
+      "1.0.5": {
+        "top": [
+          "msgpack"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.397298812866211,
+          "ms": 2.3415088653564453,
+          "i-mb": 0.0928802490234375,
+          "mb": 0.0929269790649414
+        }
+      }
+    },
+    "popularity": []
+  },
+  "netaddr": {
+    "name": "netaddr",
+    "versions": {
+      "0.8.0": {
+        "top": [
+          "netaddr"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 21.899700164794922,
+          "ms": 21.75736427307129,
+          "i-mb": 1.726125717163086,
+          "mb": 1.726165771484375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "netifaces": {
+    "name": "netifaces",
+    "versions": {
+      "0.11.0": {
+        "top": [
+          "netifaces"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.16736984252929688,
+          "ms": 0.16689300537109375,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "os-service-types": {
+    "name": "os-service-types",
+    "versions": {
+      "1.7.0": {
+        "top": [
+          "os_service_types"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 23.468494415283203,
+          "ms": 22.8726863861084,
+          "i-mb": 1.7482967376708984,
+          "mb": 1.748666763305664
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oslo-i18n": {
+    "name": "oslo-i18n",
+    "versions": {
+      "6.1.0": {
+        "top": [
+          "oslo_i18n"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.018089294433594,
+          "ms": 6.935358047485352,
+          "i-mb": 0.588526725769043,
+          "mb": 0.5867652893066406
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oslo-serialization": {
+    "name": "oslo-serialization",
+    "versions": {
+      "5.2.0": {
+        "top": [
+          "oslo_serialization"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.30303001403808594,
+          "ms": 0.13685226440429688,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oslo-utils": {
+    "name": "oslo-utils",
+    "versions": {
+      "6.2.1": {
+        "top": [
+          "oslo_utils"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.278472900390625,
+          "ms": 0.1270771026611328,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "prettytable": {
+    "name": "prettytable",
+    "versions": {
+      "3.9.0": {
+        "top": [
+          "prettytable"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 27.129411697387695,
+          "ms": 26.105880737304688,
+          "i-mb": 1.6165657043457031,
+          "mb": 1.5832843780517578
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyparsing": {
+    "name": "pyparsing",
+    "versions": {
+      "3.0.9": {
+        "top": [
+          "pyparsing"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 28.15842628479004,
+          "ms": 27.764081954956055,
+          "i-mb": 2.3976402282714844,
+          "mb": 2.3960046768188477
+        }
+      },
+      "3.1.1": {
+        "top": [
+          "pyparsing"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 29.396533966064453,
+          "ms": 29.53195571899414,
+          "i-mb": 2.5504379272460938,
+          "mb": 2.5455923080444336
+        }
+      },
+      "2.4.7": {
+        "top": [
+          "pyparsing"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 17.661571502685547,
+          "ms": 17.310380935668945,
+          "i-mb": 1.7019023895263672,
+          "mb": 1.7020330429077148
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyperclip": {
+    "name": "pyperclip",
+    "versions": {
+      "1.8.2": {
+        "top": [
+          "pyperclip"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.793903350830078,
+          "ms": 7.893562316894531,
+          "i-mb": 0.619110107421875,
+          "mb": 0.6190938949584961
+        }
+      }
+    },
+    "popularity": []
+  },
+  "stevedore": {
+    "name": "stevedore",
+    "versions": {
+      "5.1.0": {
+        "top": [
+          "stevedore"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 26.859045028686523,
+          "ms": 26.618242263793945,
+          "i-mb": 1.9277868270874023,
+          "mb": 1.9584112167358398
+        }
+      }
+    },
+    "popularity": []
+  },
+  "wcwidth": {
+    "name": "wcwidth",
+    "versions": {
+      "0.2.6": {
+        "top": [
+          "wcwidth"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.8366107940673828,
+          "ms": 0.8308887481689453,
+          "i-mb": 0.007297515869140625,
+          "mb": 0.007297515869140625
+        }
+      }
+    },
+    "popularity": []
+  },
+  "wrapt": {
+    "name": "wrapt",
+    "versions": {
+      "1.15.0": {
+        "top": [
+          "wrapt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.590293884277344,
+          "ms": 7.610082626342773,
+          "i-mb": 0.8025007247924805,
+          "mb": 0.8024787902832031
+        }
+      }
+    },
+    "popularity": []
+  },
+  "zipp": {
+    "name": "zipp",
+    "versions": {
+      "3.6.0": {
+        "top": [
+          "zipp"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.066083908081055,
+          "ms": 6.104469299316406,
+          "i-mb": 0.7027339935302734,
+          "mb": 0.7027339935302734
+        }
+      },
+      "3.16.2": {
+        "top": [
+          "zipp"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.40416145324707,
+          "ms": 6.275415420532227,
+          "i-mb": 0.7116785049438477,
+          "mb": 0.7118244171142578
+        }
+      },
+      "3.10.0": {
+        "top": [
+          "zipp"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.319761276245117,
+          "ms": 6.331920623779297,
+          "i-mb": 0.7057056427001953,
+          "mb": 0.7057094573974609
+        }
+      }
+    },
+    "popularity": []
+  },
+  "bleach": {
+    "name": "bleach",
+    "versions": {
+      "5.0.1": {
+        "top": [
+          "bleach"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 39.61634635925293,
+          "ms": 37.21117973327637,
+          "i-mb": 2.377307891845703,
+          "mb": 2.1646728515625
+        }
+      },
+      "6.0.0": {
+        "top": [
+          "bleach"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 39.60752487182617,
+          "ms": 37.51683235168457,
+          "i-mb": 2.387784004211426,
+          "mb": 2.175233840942383
+        }
+      }
+    },
+    "popularity": []
+  },
+  "defusedxml": {
+    "name": "defusedxml",
+    "versions": {
+      "0.7.1": {
+        "top": [
+          "defusedxml"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.9644031524658203,
+          "ms": 0.9250640869140625,
+          "i-mb": 0.011490821838378906,
+          "mb": 0.011490821838378906
+        }
+      }
+    },
+    "popularity": []
+  },
+  "fastjsonschema": {
+    "name": "fastjsonschema",
+    "versions": {
+      "2.18.0": {
+        "top": [
+          "fastjsonschema"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 23.180246353149414,
+          "ms": 23.247480392456055,
+          "i-mb": 1.6600465774536133,
+          "mb": 1.6600980758666992
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jsonschema": {
+    "name": "jsonschema",
+    "versions": {
+      "4.19.0": {
+        "top": [
+          "jsonschema"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 71.53749465942383,
+          "ms": 29.996395111083984,
+          "i-mb": 2.8365278244018555,
+          "mb": 1.8780584335327148
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jsonschema-specifications": {
+    "name": "jsonschema-specifications",
+    "versions": {
+      "2023.7.1": {
+        "top": [
+          "jsonschema_specifications"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 41.43834114074707,
+          "ms": 11.072635650634766,
+          "i-mb": 1.7120447158813477,
+          "mb": 0.4753589630126953
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter-client": {
+    "name": "jupyter-client",
+    "versions": {
+      "8.3.1": {
+        "top": [
+          "jupyter_client"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 94.5901870727539,
+          "ms": 60.17470359802246,
+          "i-mb": 5.097707748413086,
+          "mb": 3.003488540649414
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter-core": {
+    "name": "jupyter-core",
+    "versions": {
+      "5.3.1": {
+        "top": [
+          "jupyter",
+          "jupyter_core"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.5870800018310547,
+          "ms": 0.31065940856933594,
+          "i-mb": 0.21084022521972656,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyterlab-pygments": {
+    "name": "jupyterlab-pygments",
+    "versions": {
+      "0.2.2": {
+        "top": [
+          "jupyterlab_pygments"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mistune": {
+    "name": "mistune",
+    "versions": {
+      "3.0.1": {
+        "top": [
+          "mistune"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 9.915351867675781,
+          "ms": 9.772539138793945,
+          "i-mb": 0.7090120315551758,
+          "mb": 0.7090415954589844
+        }
+      },
+      "0.8.4": {
+        "top": [
+          "mistune"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 12.09115982055664,
+          "ms": 12.137651443481445,
+          "i-mb": 0.6391782760620117,
+          "mb": 0.6391563415527344
+        }
+      }
+    },
+    "popularity": []
+  },
+  "nbclient": {
+    "name": "nbclient",
+    "versions": {
+      "0.8.0": {
+        "top": [
+          "nbclient"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 174.3009090423584,
+          "ms": 2.203702926635742,
+          "i-mb": 5.688268661499023,
+          "mb": 0.021936416625976562
+        }
+      }
+    },
+    "popularity": []
+  },
+  "nbconvert": {
+    "name": "nbconvert",
+    "versions": {
+      "7.8.0": {
+        "top": [
+          "nbconvert"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 315.53053855895996,
+          "ms": 40.509700775146484,
+          "i-mb": 11.995609283447266,
+          "mb": 0.9676685333251953
+        }
+      }
+    },
+    "popularity": []
+  },
+  "nbformat": {
+    "name": "nbformat",
+    "versions": {
+      "5.9.2": {
+        "top": [
+          "nbformat"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 89.48802947998047,
+          "ms": 9.27877426147461,
+          "i-mb": 3.7400407791137695,
+          "mb": 0.2764749526977539
+        }
+      }
+    },
+    "popularity": []
+  },
+  "nbsphinx": {
+    "name": "nbsphinx",
+    "versions": {
+      "0.9.3": {
+        "top": [
+          "nbsphinx"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pandocfilters": {
+    "name": "pandocfilters",
+    "versions": {
+      "1.5.0": {
+        "top": [
+          "pandocfilters"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.891395568847656,
+          "ms": 4.9381256103515625,
+          "i-mb": 0.4878559112548828,
+          "mb": 0.48787784576416016
+        }
+      }
+    },
+    "popularity": []
+  },
+  "platformdirs": {
+    "name": "platformdirs",
+    "versions": {
+      "3.10.0": {
+        "top": [
+          "platformdirs"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.33692741394043,
+          "ms": 6.337404251098633,
+          "i-mb": 0.6438674926757812,
+          "mb": 0.6438999176025391
+        }
+      },
+      "2.5.4": {
+        "top": [
+          "platformdirs"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.286144256591797,
+          "ms": 6.169795989990234,
+          "i-mb": 0.6266880035400391,
+          "mb": 0.6266880035400391
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyzmq": {
+    "name": "pyzmq",
+    "versions": {
+      "25.1.1": {
+        "top": [
+          "zmq"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 19.744873046875,
+          "ms": 19.741296768188477,
+          "i-mb": 0.9211149215698242,
+          "mb": 0.9213523864746094
+        }
+      }
+    },
+    "popularity": []
+  },
+  "referencing": {
+    "name": "referencing",
+    "versions": {
+      "0.30.2": {
+        "top": [
+          "referencing"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 30.20000457763672,
+          "ms": 9.935140609741211,
+          "i-mb": 1.5708160400390625,
+          "mb": 0.11314010620117188
+        }
+      }
+    },
+    "popularity": []
+  },
+  "rpds-py": {
+    "name": "rpds-py",
+    "versions": {
+      "0.10.3": {
+        "top": [
+          "rpds"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.7638931274414062,
+          "ms": 0.782012939453125,
+          "i-mb": 0.0018520355224609375,
+          "mb": 0.001895904541015625
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tinycss2": {
+    "name": "tinycss2",
+    "versions": {
+      "1.2.1": {
+        "top": [
+          "tinycss2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.0575523376464844,
+          "ms": 1.1594295501708984,
+          "i-mb": 0.09239482879638672,
+          "mb": 0.07963180541992188
+        }
+      }
+    },
+    "popularity": []
+  },
+  "traitlets": {
+    "name": "traitlets",
+    "versions": {
+      "5.10.0": {
+        "top": [
+          "traitlets"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 13.000726699829102,
+          "ms": 13.016223907470703,
+          "i-mb": 1.044997215270996,
+          "mb": 1.0449647903442383
+        }
+      }
+    },
+    "popularity": []
+  },
+  "webencodings": {
+    "name": "webencodings",
+    "versions": {
+      "0.5.1": {
+        "top": [
+          "webencodings"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.8747577667236328,
+          "ms": 0.9067058563232422,
+          "i-mb": 0.0336151123046875,
+          "mb": 0.0336151123046875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "argcomplete": {
+    "name": "argcomplete",
+    "versions": {
+      "2.0.0": {
+        "top": [
+          "argcomplete"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.46574592590332,
+          "ms": 5.483150482177734,
+          "i-mb": 0.7050647735595703,
+          "mb": 0.7050647735595703
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cachetools": {
+    "name": "cachetools",
+    "versions": {
+      "4.2.4": {
+        "top": [
+          "cachetools"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.1942386627197266,
+          "ms": 1.191854476928711,
+          "i-mb": 0.06200885772705078,
+          "mb": 0.06194877624511719
+        }
+      },
+      "5.3.1": {
+        "top": [
+          "cachetools"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.6295909881591797,
+          "ms": 1.5511512756347656,
+          "i-mb": 0.06820964813232422,
+          "mb": 0.06820964813232422
+        }
+      },
+      "5.2.0": {
+        "top": [
+          "cachetools"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.4271736145019531,
+          "ms": 1.4119148254394531,
+          "i-mb": 0.061901092529296875,
+          "mb": 0.061901092529296875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cffi": {
+    "name": "cffi",
+    "versions": {
+      "1.15.1": {
+        "top": [
+          "_cffi_backend",
+          "cffi"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.950979232788086,
+          "ms": 1.4426708221435547,
+          "i-mb": 0.13522911071777344,
+          "mb": 0.07122421264648438
+        }
+      }
+    },
+    "popularity": []
+  },
+  "colorlog": {
+    "name": "colorlog",
+    "versions": {
+      "6.7.0": {
+        "top": [
+          "colorlog"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.669210433959961,
+          "ms": 7.611989974975586,
+          "i-mb": 0.6882495880126953,
+          "mb": 0.6882495880126953
+        }
+      }
+    },
+    "popularity": []
+  },
+  "commonmark": {
+    "name": "commonmark",
+    "versions": {
+      "0.9.1": {
+        "top": [
+          "commonmark"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 12.884855270385742,
+          "ms": 12.961864471435547,
+          "i-mb": 0.5459327697753906,
+          "mb": 0.5459537506103516
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cryptography": {
+    "name": "cryptography",
+    "versions": {
+      "41.0.3": {
+        "top": [
+          "cryptography"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.4267692565917969,
+          "ms": 0.3631114959716797,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "38.0.1": {
+        "top": [
+          "cryptography"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.229328155517578,
+          "ms": 1.8732547760009766,
+          "i-mb": 0.8048801422119141,
+          "mb": 0.1649456024169922
+        }
+      },
+      "38.0.3": {
+        "top": [
+          "cryptography"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.148265838623047,
+          "ms": 1.8723011016845703,
+          "i-mb": 0.8048982620239258,
+          "mb": 0.1649456024169922
+        }
+      }
+    },
+    "popularity": []
+  },
+  "distlib": {
+    "name": "distlib",
+    "versions": {
+      "0.3.7": {
+        "top": [
+          "distlib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.542350769042969,
+          "ms": 4.507303237915039,
+          "i-mb": 0.1923675537109375,
+          "mb": 0.19234752655029297
+        }
+      },
+      "0.3.6": {
+        "top": [
+          "distlib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.555463790893555,
+          "ms": 4.547119140625,
+          "i-mb": 0.19234752655029297,
+          "mb": 0.19237709045410156
+        }
+      }
+    },
+    "popularity": []
+  },
+  "filelock": {
+    "name": "filelock",
+    "versions": {
+      "3.8.0": {
+        "top": [
+          "filelock"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.336139678955078,
+          "ms": 7.372140884399414,
+          "i-mb": 0.6675729751586914,
+          "mb": 0.6675825119018555
+        }
+      },
+      "3.12.4": {
+        "top": [
+          "filelock"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 14.637947082519531,
+          "ms": 14.621973037719727,
+          "i-mb": 1.1634883880615234,
+          "mb": 1.1634559631347656
+        }
+      }
+    },
+    "popularity": []
+  },
+  "gcp-docuploader": {
+    "name": "gcp-docuploader",
+    "versions": {
+      "0.6.4": {
+        "top": [
+          "docuploader"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.4706382751464844,
+          "ms": 0.21123886108398438,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "0.6.3": {
+        "top": [
+          "docuploader"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.47016143798828125,
+          "ms": 0.23317337036132812,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "gcp-releasetool": {
+    "name": "gcp-releasetool",
+    "versions": {
+      "1.10.0": {
+        "top": [
+          "autorelease",
+          "protos",
+          "releasetool",
+          "tests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.34117698669433594,
+          "ms": 0.3361701965332031,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.8.7": {
+        "top": [
+          "autorelease",
+          "protos",
+          "releasetool",
+          "tests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.34236907958984375,
+          "ms": 0.3376007080078125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-api-core": {
+    "name": "google-api-core",
+    "versions": {
+      "2.8.2": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.10.2": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.34.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.11.1": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-auth": {
+    "name": "google-auth",
+    "versions": {
+      "2.11.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.23.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.14.1": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-cloud-core": {
+    "name": "google-cloud-core",
+    "versions": {
+      "2.3.2": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.3.1": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.3.3": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-cloud-storage": {
+    "name": "google-cloud-storage",
+    "versions": {
+      "2.10.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.6.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.0.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-crc32c": {
+    "name": "google-crc32c",
+    "versions": {
+      "1.5.0": {
+        "top": [
+          "google_crc32c"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.528350830078125,
+          "ms": 59.70168113708496,
+          "i-mb": 3.920670509338379,
+          "mb": 3.9207448959350586
+        }
+      },
+      "1.3.0": {
+        "top": [
+          "google_crc32c"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.80229377746582,
+          "ms": 58.624267578125,
+          "i-mb": 3.9211244583129883,
+          "mb": 3.921229362487793
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-resumable-media": {
+    "name": "google-resumable-media",
+    "versions": {
+      "2.4.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.3.3": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "2.6.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "googleapis-common-protos": {
+    "name": "googleapis-common-protos",
+    "versions": {
+      "1.60.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.57.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.56.3": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jaraco-classes": {
+    "name": "jaraco-classes",
+    "versions": {
+      "3.2.3": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jeepney": {
+    "name": "jeepney",
+    "versions": {
+      "0.8.0": {
+        "top": [
+          "jeepney"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.2198638916015625,
+          "ms": 6.144046783447266,
+          "i-mb": 0.6487970352172852,
+          "mb": 0.6487970352172852
+        }
+      },
+      "0.7.1": {
+        "top": [
+          "jeepney"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.120204925537109,
+          "ms": 6.0367584228515625,
+          "i-mb": 0.64892578125,
+          "mb": 0.6489191055297852
+        }
+      }
+    },
+    "popularity": []
+  },
+  "keyring": {
+    "name": "keyring",
+    "versions": {
+      "23.11.0": {
+        "top": [
+          "keyring"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 33.60295295715332,
+          "ms": 5.910158157348633,
+          "i-mb": 1.7253913879394531,
+          "mb": 0.1806650161743164
+        }
+      },
+      "23.4.1": {
+        "top": [
+          "keyring"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 32.25994110107422,
+          "ms": 4.80341911315918,
+          "i-mb": 1.6965703964233398,
+          "mb": 0.18662071228027344
+        }
+      }
+    },
+    "popularity": []
+  },
+  "nox": {
+    "name": "nox",
+    "versions": {
+      "2022.8.7": {
+        "top": [
+          "nox"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 50.38595199584961,
+          "ms": 9.565353393554688,
+          "i-mb": 2.9756078720092773,
+          "mb": 0.09690284729003906
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pkginfo": {
+    "name": "pkginfo",
+    "versions": {
+      "1.8.3": {
+        "top": [
+          "pkginfo"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 17.1511173248291,
+          "ms": 16.917943954467773,
+          "i-mb": 1.243027687072754,
+          "mb": 1.2430648803710938
+        }
+      }
+    },
+    "popularity": []
+  },
+  "protobuf": {
+    "name": "protobuf",
+    "versions": {
+      "3.19.5": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "3.20.3": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "4.24.3": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "py": {
+    "name": "py",
+    "versions": {
+      "1.11.0": {
+        "top": [
+          "py"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.0030269622802734,
+          "ms": 1.0476112365722656,
+          "i-mb": 0.0049304962158203125,
+          "mb": 0.0049304962158203125
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyasn1": {
+    "name": "pyasn1",
+    "versions": {
+      "0.5.0": {
+        "top": [
+          "pyasn1"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.13113021850585938,
+          "ms": 0.12683868408203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "0.4.8": {
+        "top": [
+          "pyasn1"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1316070556640625,
+          "ms": 0.1304149627685547,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyasn1-modules": {
+    "name": "pyasn1-modules",
+    "versions": {
+      "0.3.0": {
+        "top": [
+          "pyasn1_modules"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.15735626220703125,
+          "ms": 0.10752677917480469,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "0.2.8": {
+        "top": [
+          "pyasn1_modules"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.16045570373535156,
+          "ms": 0.10967254638671875,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pycparser": {
+    "name": "pycparser",
+    "versions": {
+      "2.21": {
+        "top": [
+          "pycparser"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.693477630615234,
+          "ms": 11.678695678710938,
+          "i-mb": 1.1188163757324219,
+          "mb": 1.1188735961914062
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyjwt": {
+    "name": "pyjwt",
+    "versions": {
+      "2.4.0": {
+        "top": [
+          "jwt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 25.032997131347656,
+          "ms": 24.919748306274414,
+          "i-mb": 1.8033037185668945,
+          "mb": 1.8031177520751953
+        }
+      },
+      "2.8.0": {
+        "top": [
+          "jwt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 25.352954864501953,
+          "ms": 25.211334228515625,
+          "i-mb": 1.836273193359375,
+          "mb": 1.8361873626708984
+        }
+      },
+      "2.6.0": {
+        "top": [
+          "jwt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 25.036334991455078,
+          "ms": 24.737119674682617,
+          "i-mb": 1.8198375701904297,
+          "mb": 1.819915771484375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "readme-renderer": {
+    "name": "readme-renderer",
+    "versions": {
+      "37.3": {
+        "top": [
+          "readme_renderer"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1323223114013672,
+          "ms": 0.15306472778320312,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "requests-toolbelt": {
+    "name": "requests-toolbelt",
+    "versions": {
+      "0.10.1": {
+        "top": [
+          "requests_toolbelt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 65.9630298614502,
+          "ms": 5.848884582519531,
+          "i-mb": 2.6820573806762695,
+          "mb": 0.11709976196289062
+        }
+      },
+      "1.0.0": {
+        "top": [
+          "requests_toolbelt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 67.37089157104492,
+          "ms": 5.503416061401367,
+          "i-mb": 2.6906137466430664,
+          "mb": 0.10148429870605469
+        }
+      }
+    },
+    "popularity": []
+  },
+  "rfc3986": {
+    "name": "rfc3986",
+    "versions": {
+      "2.0.0": {
+        "top": [
+          "rfc3986"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 20.962953567504883,
+          "ms": 20.937442779541016,
+          "i-mb": 0.605076789855957,
+          "mb": 0.605076789855957
+        }
+      }
+    },
+    "popularity": []
+  },
+  "rich": {
+    "name": "rich",
+    "versions": {
+      "12.6.0": {
+        "top": [
+          "rich"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.25775146484375,
+          "ms": 2.9249191284179688,
+          "i-mb": 0.34324073791503906,
+          "mb": 0.3401603698730469
+        }
+      }
+    },
+    "popularity": []
+  },
+  "rsa": {
+    "name": "rsa",
+    "versions": {
+      "4.9": {
+        "top": [
+          "rsa"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.215261459350586,
+          "ms": 7.014036178588867,
+          "i-mb": 0.7551250457763672,
+          "mb": 0.7535314559936523
+        }
+      }
+    },
+    "popularity": []
+  },
+  "secretstorage": {
+    "name": "secretstorage",
+    "versions": {
+      "3.3.3": {
+        "top": [
+          "secretstorage"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 17.798423767089844,
+          "ms": 5.794048309326172,
+          "i-mb": 1.0914649963378906,
+          "mb": 0.1301136016845703
+        }
+      }
+    },
+    "popularity": []
+  },
+  "twine": {
+    "name": "twine",
+    "versions": {
+      "4.0.1": {
+        "top": [
+          "twine"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 31.279802322387695,
+          "ms": 0.6232261657714844,
+          "i-mb": 1.7710285186767578,
+          "mb": 0.014468193054199219
+        }
+      }
+    },
+    "popularity": []
+  },
+  "virtualenv": {
+    "name": "virtualenv",
+    "versions": {
+      "20.24.5": {
+        "top": [
+          "virtualenv"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 53.47418785095215,
+          "ms": 36.55290603637695,
+          "i-mb": 3.7571182250976562,
+          "mb": 2.127086639404297
+        }
+      },
+      "20.16.7": {
+        "top": [
+          "virtualenv"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 50.71592330932617,
+          "ms": 38.47551345825195,
+          "i-mb": 3.4322729110717773,
+          "mb": 2.393463134765625
+        }
+      }
+    },
+    "popularity": []
+  },
+  "wheel": {
+    "name": "wheel",
+    "versions": {
+      "0.38.4": {
+        "top": [
+          "wheel"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.25081634521484375,
+          "ms": 0.2543926239013672,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "0.41.2": {
+        "top": [
+          "wheel"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.24890899658203125,
+          "ms": 0.25463104248046875,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mock": {
+    "name": "mock",
+    "versions": {
+      "5.1.0": {
+        "top": [
+          "mock"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 34.267425537109375,
+          "ms": 33.675193786621094,
+          "i-mb": 2.4738807678222656,
+          "mb": 2.473726272583008
+        }
+      }
+    },
+    "popularity": []
+  },
+  "nose": {
+    "name": "nose",
+    "versions": {
+      "1.3.7": {
+        "top": [
+          "nose"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 70.0225830078125,
+          "ms": 70.28961181640625,
+          "i-mb": 3.8244714736938477,
+          "mb": 3.8244619369506836
+        }
+      }
+    },
+    "popularity": []
+  },
+  "absl-py": {
+    "name": "absl-py",
+    "versions": {
+      "1.4.0": {
+        "top": [
+          "absl"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1323223114013672,
+          "ms": 0.1423358917236328,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "contourpy": {
+    "name": "contourpy",
+    "versions": {
+      "1.1.0": {
+        "top": [
+          "contourpy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 60.975074768066406,
+          "ms": 1.4286041259765625,
+          "i-mb": 4.928036689758301,
+          "mb": 0.04903984069824219
+        }
+      },
+      "1.1.1": {
+        "top": [
+          "contourpy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 61.44356727600098,
+          "ms": 2.053499221801758,
+          "i-mb": 4.906148910522461,
+          "mb": 0.050506591796875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cycler": {
+    "name": "cycler",
+    "versions": {
+      "0.11.0": {
+        "top": [
+          "cycler"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.9500980377197266,
+          "ms": 0.9715557098388672,
+          "i-mb": 0.05214881896972656,
+          "mb": 0.05214881896972656
+        }
+      }
+    },
+    "popularity": []
+  },
+  "fonttools": {
+    "name": "fonttools",
+    "versions": {
+      "4.42.1": {
+        "top": [
+          "fontTools"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.107641220092773,
+          "ms": 5.0868988037109375,
+          "i-mb": 0.24618911743164062,
+          "mb": 0.2462291717529297
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jax": {
+    "name": "jax",
+    "versions": {
+      "0.4.14": {
+        "top": [
+          "jax"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jaxlib": {
+    "name": "jaxlib",
+    "versions": {
+      "0.4.14": {
+        "top": [
+          "jaxlib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.331878662109375,
+          "ms": 0.25153160095214844,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "kiwisolver": {
+    "name": "kiwisolver",
+    "versions": {
+      "1.4.5": {
+        "top": [
+          "kiwisolver"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.3985633850097656,
+          "ms": 1.3573169708251953,
+          "i-mb": 0.011902809143066406,
+          "mb": 0.011880874633789062
+        }
+      }
+    },
+    "popularity": []
+  },
+  "matplotlib": {
+    "name": "matplotlib",
+    "versions": {
+      "3.8.0": {
+        "top": [
+          "matplotlib",
+          "pylab"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 296.7255115509033,
+          "ms": 209.67817306518555,
+          "i-mb": 14.671163558959961,
+          "mb": 6.150742530822754
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ml-dtypes": {
+    "name": "ml-dtypes",
+    "versions": {
+      "0.2.0": {
+        "top": [
+          "ml_dtypes"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 62.83736228942871,
+          "ms": 1.6758441925048828,
+          "i-mb": 5.057460784912109,
+          "mb": 0.09319877624511719
+        }
+      }
+    },
+    "popularity": []
+  },
+  "opt-einsum": {
+    "name": "opt-einsum",
+    "versions": {
+      "3.3.0": {
+        "top": [
+          "opt_einsum"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 63.45081329345703,
+          "ms": 3.3974647521972656,
+          "i-mb": 5.132608413696289,
+          "mb": 0.19029712677001953
+        }
+      }
+    },
+    "popularity": []
+  },
+  "joblib": {
+    "name": "joblib",
+    "versions": {
+      "1.3.2": {
+        "top": [
+          "joblib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 82.6117992401123,
+          "ms": 82.53169059753418,
+          "i-mb": 6.834329605102539,
+          "mb": 6.8341779708862305
+        }
+      }
+    },
+    "popularity": []
+  },
+  "scikit-learn": {
+    "name": "scikit-learn",
+    "versions": {
+      "1.3.0": {
+        "top": [
+          "sklearn"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 288.76256942749023,
+          "ms": 195.5239772796631,
+          "i-mb": 20.229870796203613,
+          "mb": 11.340808868408203
+        }
+      }
+    },
+    "popularity": []
+  },
+  "threadpoolctl": {
+    "name": "threadpoolctl",
+    "versions": {
+      "3.2.0": {
+        "top": [
+          "threadpoolctl"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 9.892940521240234,
+          "ms": 9.964704513549805,
+          "i-mb": 1.0091562271118164,
+          "mb": 1.0091161727905273
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tenacity": {
+    "name": "tenacity",
+    "versions": {
+      "8.2.3": {
+        "top": [
+          "tenacity"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 29.227256774902344,
+          "ms": 28.987407684326172,
+          "i-mb": 1.9755544662475586,
+          "mb": 1.9754114151000977
+        }
+      }
+    },
+    "popularity": []
+  },
+  "recommonmark": {
+    "name": "recommonmark",
+    "versions": {
+      "0.7.1": {
+        "top": [
+          "recommonmark"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.3833770751953125,
+          "ms": 0.15735626220703125,
+          "i-mb": 0.0010957717895507812,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "latexcodec": {
+    "name": "latexcodec",
+    "versions": {
+      "2.0.1": {
+        "top": [
+          "latexcodec"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 9.429931640625,
+          "ms": 7.575750350952148,
+          "i-mb": 0.19071102142333984,
+          "mb": 0.06737709045410156
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pybtex": {
+    "name": "pybtex",
+    "versions": {
+      "0.24.0": {
+        "top": [
+          "pybtex",
+          "tests"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.5962848663330078,
+          "ms": 0.27108192443847656,
+          "i-mb": 0.0057697296142578125,
+          "mb": 0.005105018615722656
+        }
+      }
+    },
+    "popularity": []
+  },
+  "regex": {
+    "name": "regex",
+    "versions": {
+      "2023.8.8": {
+        "top": [
+          "regex"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.950855255126953,
+          "ms": 6.977319717407227,
+          "i-mb": 0.6959018707275391,
+          "mb": 0.6959199905395508
+        }
+      }
+    },
+    "popularity": []
+  },
+  "asttokens": {
+    "name": "asttokens",
+    "versions": {
+      "2.4.0": {
+        "top": [
+          "asttokens"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.051229476928711,
+          "ms": 5.184412002563477,
+          "i-mb": 0.7427282333374023,
+          "mb": 0.7436256408691406
+        }
+      }
+    },
+    "popularity": []
+  },
+  "backcall": {
+    "name": "backcall",
+    "versions": {
+      "0.2.0": {
+        "top": [
+          "backcall"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.296468734741211,
+          "ms": 5.201578140258789,
+          "i-mb": 0.7159633636474609,
+          "mb": 0.7159433364868164
+        }
+      }
+    },
+    "popularity": []
+  },
+  "decorator": {
+    "name": "decorator",
+    "versions": {
+      "5.1.1": {
+        "top": [
+          "decorator"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.362749099731445,
+          "ms": 5.274295806884766,
+          "i-mb": 0.7399616241455078,
+          "mb": 0.7399196624755859
+        }
+      }
+    },
+    "popularity": []
+  },
+  "exceptiongroup": {
+    "name": "exceptiongroup",
+    "versions": {
+      "1.1.3": {
+        "top": [
+          "exceptiongroup"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 9.618043899536133,
+          "ms": 9.511947631835938,
+          "i-mb": 0.9582319259643555,
+          "mb": 0.9582118988037109
+        }
+      }
+    },
+    "popularity": []
+  },
+  "executing": {
+    "name": "executing",
+    "versions": {
+      "1.2.0": {
+        "top": [
+          "executing"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.013269424438477,
+          "ms": 11.087179183959961,
+          "i-mb": 1.006321907043457,
+          "mb": 1.0063419342041016
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ipython": {
+    "name": "ipython",
+    "versions": {
+      "8.15.0": {
+        "top": [
+          "IPython"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 213.2720947265625,
+          "ms": 0,
+          "i-mb": 11.789531707763672,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jedi": {
+    "name": "jedi",
+    "versions": {
+      "0.19.0": {
+        "top": [
+          "jedi"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 52.47688293457031,
+          "ms": 26.274442672729492,
+          "i-mb": 4.28665828704834,
+          "mb": 2.3858089447021484
+        }
+      }
+    },
+    "popularity": []
+  },
+  "matplotlib-inline": {
+    "name": "matplotlib-inline",
+    "versions": {
+      "0.1.6": {
+        "top": [
+          "matplotlib_inline"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "parso": {
+    "name": "parso",
+    "versions": {
+      "0.8.3": {
+        "top": [
+          "parso"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 25.617122650146484,
+          "ms": 25.504589080810547,
+          "i-mb": 1.8008413314819336,
+          "mb": 1.8006553649902344
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pexpect": {
+    "name": "pexpect",
+    "versions": {
+      "4.8.0": {
+        "top": [
+          "pexpect"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.543159484863281,
+          "ms": 2.886056900024414,
+          "i-mb": 0.5907459259033203,
+          "mb": 0.1368875503540039
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pickleshare": {
+    "name": "pickleshare",
+    "versions": {
+      "0.7.5": {
+        "top": [
+          "pickleshare"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.748178482055664,
+          "ms": 3.7975311279296875,
+          "i-mb": 0.1624755859375,
+          "mb": 0.1624755859375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "prompt-toolkit": {
+    "name": "prompt-toolkit",
+    "versions": {
+      "3.0.39": {
+        "top": [
+          "prompt_toolkit"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.57221984863281,
+          "ms": 58.78877639770508,
+          "i-mb": 3.345320701599121,
+          "mb": 3.5054121017456055
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ptyprocess": {
+    "name": "ptyprocess",
+    "versions": {
+      "0.7.0": {
+        "top": [
+          "ptyprocess"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.5638809204101562,
+          "ms": 3.5910606384277344,
+          "i-mb": 0.4398384094238281,
+          "mb": 0.4398384094238281
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pure-eval": {
+    "name": "pure-eval",
+    "versions": {
+      "0.2.2": {
+        "top": [
+          "pure_eval"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.82830810546875,
+          "ms": 6.797313690185547,
+          "i-mb": 0.8582782745361328,
+          "mb": 0.8583335876464844
+        }
+      }
+    },
+    "popularity": []
+  },
+  "stack-data": {
+    "name": "stack-data",
+    "versions": {
+      "0.6.2": {
+        "top": [
+          "stack_data"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 24.291038513183594,
+          "ms": 6.441354751586914,
+          "i-mb": 1.9361095428466797,
+          "mb": 0.24408912658691406
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ghp-import": {
+    "name": "ghp-import",
+    "versions": {
+      "2.1.0": {
+        "top": [
+          "ghp_import"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.43556022644043,
+          "ms": 5.413293838500977,
+          "i-mb": 0.6717758178710938,
+          "mb": 0.6082477569580078
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mergedeep": {
+    "name": "mergedeep",
+    "versions": {
+      "1.3.4": {
+        "top": [
+          "mergedeep"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.0345916748046875,
+          "ms": 3.045797348022461,
+          "i-mb": 0.22706031799316406,
+          "mb": 0.22703075408935547
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mkdocs": {
+    "name": "mkdocs",
+    "versions": {
+      "1.5.2": {
+        "top": [
+          "mkdocs"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.3304481506347656,
+          "ms": 0.12564659118652344,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pathspec": {
+    "name": "pathspec",
+    "versions": {
+      "0.11.2": {
+        "top": [
+          "pathspec"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 12.128353118896484,
+          "ms": 12.217283248901367,
+          "i-mb": 0.9106044769287109,
+          "mb": 0.9105424880981445
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyyaml-env-tag": {
+    "name": "pyyaml-env-tag",
+    "versions": {
+      "0.1": {
+        "top": [
+          "yaml_env_tag"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 12.490510940551758,
+          "ms": 2.069711685180664,
+          "i-mb": 0.7819728851318359,
+          "mb": 0.2252492904663086
+        }
+      }
+    },
+    "popularity": []
+  },
+  "watchdog": {
+    "name": "watchdog",
+    "versions": {
+      "3.0.0": {
+        "top": [
+          "watchdog"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1327991485595703,
+          "ms": 0.13065338134765625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "html5lib": {
+    "name": "html5lib",
+    "versions": {
+      "1.1": {
+        "top": [
+          "html5lib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 31.378746032714844,
+          "ms": 29.2203426361084,
+          "i-mb": 1.9068889617919922,
+          "mb": 1.7130012512207031
+        }
+      }
+    },
+    "popularity": []
+  },
+  "isodate": {
+    "name": "isodate",
+    "versions": {
+      "0.6.1": {
+        "top": [
+          "isodate"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.608081817626953,
+          "ms": 3.7627220153808594,
+          "i-mb": 0.4494314193725586,
+          "mb": 0.38721370697021484
+        }
+      }
+    },
+    "popularity": []
+  },
+  "bcrypt": {
+    "name": "bcrypt",
+    "versions": {
+      "4.0.1": {
+        "top": [
+          "bcrypt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.652406692504883,
+          "ms": 2.6941299438476562,
+          "i-mb": 0.03251075744628906,
+          "mb": 0.03252696990966797
+        }
+      }
+    },
+    "popularity": []
+  },
+  "lxml": {
+    "name": "lxml",
+    "versions": {
+      "4.9.3": {
+        "top": [
+          "lxml"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1366138458251953,
+          "ms": 0.13184547424316406,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "paramiko": {
+    "name": "paramiko",
+    "versions": {
+      "3.3.1": {
+        "top": [
+          "paramiko"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 63.714027404785156,
+          "ms": 50.79078674316406,
+          "i-mb": 3.520336151123047,
+          "mb": 3.479991912841797
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pynacl": {
+    "name": "pynacl",
+    "versions": {
+      "1.5.0": {
+        "top": [
+          "nacl"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1354217529296875,
+          "ms": 0.1380443572998047,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "grpcio": {
+    "name": "grpcio",
+    "versions": {
+      "1.58.0": {
+        "top": [
+          "grpc"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 36.327362060546875,
+          "ms": 35.62808036804199,
+          "i-mb": 2.36832332611084,
+          "mb": 2.3685359954833984
+        }
+      }
+    },
+    "popularity": []
+  },
+  "grpcio-tools": {
+    "name": "grpcio-tools",
+    "versions": {
+      "1.58.0": {
+        "top": [
+          "grpc_tools"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.18739700317382812,
+          "ms": 0.013589859008789062,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "docker": {
+    "name": "docker",
+    "versions": {
+      "6.1.3": {
+        "top": [
+          "docker"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 83.1902027130127,
+          "ms": 14.365911483764648,
+          "i-mb": 4.0028886795043945,
+          "mb": 0.6654930114746094
+        }
+      }
+    },
+    "popularity": []
+  },
+  "gitdb": {
+    "name": "gitdb",
+    "versions": {
+      "4.0.10": {
+        "top": [
+          "gitdb"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 9.991168975830078,
+          "ms": 9.206533432006836,
+          "i-mb": 0.73486328125,
+          "mb": 0.670710563659668
+        }
+      }
+    },
+    "popularity": []
+  },
+  "gitpython": {
+    "name": "gitpython",
+    "versions": {
+      "3.1.36": {
+        "top": [
+          "git"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oslo-config": {
+    "name": "oslo-config",
+    "versions": {
+      "9.2.0": {
+        "top": [
+          "oslo_config"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.3314018249511719,
+          "ms": 0.1373291015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "smmap": {
+    "name": "smmap",
+    "versions": {
+      "5.0.0": {
+        "top": [
+          "smmap"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.8723735809326172,
+          "ms": 0.8747577667236328,
+          "i-mb": 0.02850818634033203,
+          "mb": 0.0284881591796875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "websocket-client": {
+    "name": "websocket-client",
+    "versions": {
+      "1.6.3": {
+        "top": [
+          "websocket"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 29.581308364868164,
+          "ms": 29.74390983581543,
+          "i-mb": 1.8184080123901367,
+          "mb": 1.8187150955200195
+        }
+      }
+    },
+    "popularity": []
+  },
+  "async-timeout": {
+    "name": "async-timeout",
+    "versions": {
+      "4.0.3": {
+        "top": [
+          "async_timeout"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 26.59773826599121,
+          "ms": 24.741411209106445,
+          "i-mb": 1.7726449966430664,
+          "mb": 1.7727079391479492
+        }
+      }
+    },
+    "popularity": []
+  },
+  "redis": {
+    "name": "redis",
+    "versions": {
+      "5.0.0": {
+        "top": [
+          "redis"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 59.67092514038086,
+          "ms": 35.66861152648926,
+          "i-mb": 3.3677902221679688,
+          "mb": 1.9949312210083008
+        }
+      }
+    },
+    "popularity": []
+  },
+  "psutil": {
+    "name": "psutil",
+    "versions": {
+      "5.9.5": {
+        "top": [
+          "psutil"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 14.862537384033203,
+          "ms": 14.773368835449219,
+          "i-mb": 1.083251953125,
+          "mb": 1.0832672119140625
+        }
+      }
+    },
+    "popularity": []
+  },
+  "iniconfig": {
+    "name": "iniconfig",
+    "versions": {
+      "2.0.0": {
+        "top": [
+          "iniconfig"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.390789031982422,
+          "ms": 3.4325122833251953,
+          "i-mb": 0.3526420593261719,
+          "mb": 0.3526420593261719
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pluggy": {
+    "name": "pluggy",
+    "versions": {
+      "1.3.0": {
+        "top": [
+          "pluggy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 25.736331939697266,
+          "ms": 25.624990463256836,
+          "i-mb": 1.493729591369629,
+          "mb": 1.4938879013061523
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pytest": {
+    "name": "pytest",
+    "versions": {
+      "7.4.2": {
+        "top": [
+          "_pytest",
+          "py",
+          "pytest"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 78.13620567321777,
+          "ms": 47.812461853027344,
+          "i-mb": 3.564568519592285,
+          "mb": 2.1737499237060547
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tomli": {
+    "name": "tomli",
+    "versions": {
+      "2.0.1": {
+        "top": [
+          "tomli"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.916595458984375,
+          "ms": 5.879878997802734,
+          "i-mb": 0.7225732803344727,
+          "mb": 0.7225933074951172
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pysocks": {
+    "name": "pysocks",
+    "versions": {
+      "1.7.1": {
+        "top": [
+          "socks",
+          "sockshandler"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 24.496793746948242,
+          "ms": 24.416446685791016,
+          "i-mb": 1.9088058471679688,
+          "mb": 1.9089069366455078
+        }
+      }
+    },
+    "popularity": []
+  },
+  "coverage": {
+    "name": "coverage",
+    "versions": {
+      "7.3.1": {
+        "top": [
+          "coverage"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 40.1148796081543,
+          "ms": 40.528297424316406,
+          "i-mb": 2.653717041015625,
+          "mb": 2.653644561767578
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pytest-cov": {
+    "name": "pytest-cov",
+    "versions": {
+      "4.1.0": {
+        "top": [
+          "pytest_cov"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.18715858459472656,
+          "ms": 0.12612342834472656,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "unidecode": {
+    "name": "unidecode",
+    "versions": {
+      "1.3.6": {
+        "top": [
+          "unidecode"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.1965503692626953,
+          "ms": 2.1522045135498047,
+          "i-mb": 0.23113155364990234,
+          "mb": 0.23113155364990234
+        }
+      }
+    },
+    "popularity": []
+  },
+  "eventlet": {
+    "name": "eventlet",
+    "versions": {
+      "0.33.3": {
+        "top": [
+          "eventlet"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 83.1911563873291,
+          "ms": 80.01470565795898,
+          "i-mb": 3.850590705871582,
+          "mb": 3.926847457885742
+        }
+      }
+    },
+    "popularity": []
+  },
+  "greenlet": {
+    "name": "greenlet",
+    "versions": {
+      "2.0.2": {
+        "top": [
+          "greenlet"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.3790130615234375,
+          "ms": 1.3115406036376953,
+          "i-mb": 0.0026979446411132812,
+          "mb": 0.0026979446411132812
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oslo-context": {
+    "name": "oslo-context",
+    "versions": {
+      "5.2.0": {
+        "top": [
+          "oslo_context"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1888275146484375,
+          "ms": 0.10251998901367188,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oslo-log": {
+    "name": "oslo-log",
+    "versions": {
+      "5.3.0": {
+        "top": [
+          "oslo_log"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.6144046783447266,
+          "ms": 0.1895427703857422,
+          "i-mb": 0.0002307891845703125,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyinotify": {
+    "name": "pyinotify",
+    "versions": {
+      "0.9.6": {
+        "top": [
+          "pyinotify"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 15.2435302734375,
+          "ms": 15.301704406738281,
+          "i-mb": 1.1988763809204102,
+          "mb": 1.1988039016723633
+        }
+      }
+    },
+    "popularity": []
+  },
+  "chardet": {
+    "name": "chardet",
+    "versions": {
+      "4.0.0": {
+        "top": [
+          "chardet"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 10.529279708862305,
+          "ms": 10.552167892456055,
+          "i-mb": 1.3183584213256836,
+          "mb": 1.3184185028076172
+        }
+      },
+      "5.2.0": {
+        "top": [
+          "chardet"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 14.318704605102539,
+          "ms": 14.153480529785156,
+          "i-mb": 1.2034597396850586,
+          "mb": 1.203460693359375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "fixtures": {
+    "name": "fixtures",
+    "versions": {
+      "4.1.0": {
+        "top": [
+          "fixtures"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 49.849510192871094,
+          "ms": 49.53742027282715,
+          "i-mb": 4.138375282287598,
+          "mb": 4.138686180114746
+        }
+      }
+    },
+    "popularity": []
+  },
+  "future": {
+    "name": "future",
+    "versions": {
+      "0.18.3": {
+        "top": [
+          "future",
+          "libfuturize",
+          "libpasteurize",
+          "past"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.3631114959716797,
+          "ms": 0.3542900085449219,
+          "i-mb": 0.0044765472412109375,
+          "mb": 0.0044765472412109375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "psycopg2-binary": {
+    "name": "psycopg2-binary",
+    "versions": {
+      "2.9.7": {
+        "top": [
+          "psycopg2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 14.726400375366211,
+          "ms": 14.570474624633789,
+          "i-mb": 1.0239677429199219,
+          "mb": 1.0239009857177734
+        }
+      }
+    },
+    "popularity": []
+  },
+  "numpydoc": {
+    "name": "numpydoc",
+    "versions": {
+      "1.5.0": {
+        "top": [
+          "numpydoc"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.5233287811279297,
+          "ms": 0.27441978454589844,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "appdirs": {
+    "name": "appdirs",
+    "versions": {
+      "1.4.4": {
+        "top": [
+          "appdirs"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.20384788513183594,
+          "ms": 0.2009868621826172,
+          "i-mb": 0.013821601867675781,
+          "mb": 0.013821601867675781
+        }
+      }
+    },
+    "popularity": []
+  },
+  "dogpile-cache": {
+    "name": "dogpile-cache",
+    "versions": {
+      "1.2.2": {
+        "top": [
+          "dogpile"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.964113235473633,
+          "ms": 0.30040740966796875,
+          "i-mb": 0.20470237731933594,
+          "mb": 0.0041675567626953125
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jsonpatch": {
+    "name": "jsonpatch",
+    "versions": {
+      "1.33": {
+        "top": [
+          "jsonpatch"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.8014907836914062,
+          "ms": 0.39577484130859375,
+          "i-mb": 0.07498931884765625,
+          "mb": 0.033405303955078125
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jsonpointer": {
+    "name": "jsonpointer",
+    "versions": {
+      "2.4": {
+        "top": [
+          "jsonpointer"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.379251480102539,
+          "ms": 1.3387203216552734,
+          "i-mb": 0.05206489562988281,
+          "mb": 0.05206489562988281
+        }
+      }
+    },
+    "popularity": []
+  },
+  "openstacksdk": {
+    "name": "openstacksdk",
+    "versions": {
+      "1.5.0": {
+        "top": [
+          "openstack"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 169.45838928222656,
+          "ms": 70.44672966003418,
+          "i-mb": 6.532964706420898,
+          "mb": 4.834255218505859
+        }
+      }
+    },
+    "popularity": []
+  },
+  "os-client-config": {
+    "name": "os-client-config",
+    "versions": {
+      "2.1.0": {
+        "top": [
+          "os_client_config"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 172.3766326904297,
+          "ms": 1.2137889862060547,
+          "i-mb": 6.520943641662598,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "osc-lib": {
+    "name": "osc-lib",
+    "versions": {
+      "2.8.1": {
+        "top": [
+          "osc_lib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 32.854557037353516,
+          "ms": 0.7855892181396484,
+          "i-mb": 1.6837635040283203,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "requestsexceptions": {
+    "name": "requestsexceptions",
+    "versions": {
+      "1.4.0": {
+        "top": [
+          "requestsexceptions"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 60.45055389404297,
+          "ms": 59.55243110656738,
+          "i-mb": 3.6668262481689453,
+          "mb": 3.6665239334106445
+        }
+      }
+    },
+    "popularity": []
+  },
+  "simplejson": {
+    "name": "simplejson",
+    "versions": {
+      "3.19.1": {
+        "top": [
+          "simplejson"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.8090476989746094,
+          "ms": 2.7627944946289062,
+          "i-mb": 0.10757827758789062,
+          "mb": 0.10764312744140625
+        }
+      }
+    },
+    "popularity": []
+  },
+  "gunicorn": {
+    "name": "gunicorn",
+    "versions": {
+      "20.1.0": {
+        "top": [
+          "gunicorn"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1354217529296875,
+          "ms": 0.1392364501953125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "21.2.0": {
+        "top": [
+          "gunicorn"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.164031982421875,
+          "ms": 0.11444091796875,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "astroid": {
+    "name": "astroid",
+    "versions": {
+      "2.15.6": {
+        "top": [
+          "astroid"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 128.07917594909668,
+          "ms": 116.18185043334961,
+          "i-mb": 5.275433540344238,
+          "mb": 3.754243850708008
+        }
+      }
+    },
+    "popularity": []
+  },
+  "black": {
+    "name": "black",
+    "versions": {
+      "23.9.1": {
+        "top": [
+          "2ec0e72aa72355e6eccf__mypyc",
+          "_black_version",
+          "black",
+          "blackd",
+          "blib2to3"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "dill": {
+    "name": "dill",
+    "versions": {
+      "0.3.7": {
+        "top": [
+          "dill"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 26.756763458251953,
+          "ms": 26.46017074584961,
+          "i-mb": 1.7543020248413086,
+          "mb": 1.7543401718139648
+        }
+      }
+    },
+    "popularity": []
+  },
+  "isort": {
+    "name": "isort",
+    "versions": {
+      "5.12.0": {
+        "top": [
+          "isort"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 42.72007942199707,
+          "ms": 42.61589050292969,
+          "i-mb": 2.6859264373779297,
+          "mb": 2.685688018798828
+        }
+      }
+    },
+    "popularity": []
+  },
+  "lazy-object-proxy": {
+    "name": "lazy-object-proxy",
+    "versions": {
+      "1.9.0": {
+        "top": [
+          "lazy_object_proxy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.588769912719727,
+          "ms": 5.547285079956055,
+          "i-mb": 0.72796630859375,
+          "mb": 0.7279882431030273
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mccabe": {
+    "name": "mccabe",
+    "versions": {
+      "0.7.0": {
+        "top": [
+          "mccabe"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.150960922241211,
+          "ms": 6.057024002075195,
+          "i-mb": 0.6138362884521484,
+          "mb": 0.6138362884521484
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mypy-extensions": {
+    "name": "mypy-extensions",
+    "versions": {
+      "1.0.0": {
+        "top": [
+          "mypy_extensions"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.2482872009277344,
+          "ms": 2.2063255310058594,
+          "i-mb": 0.24888229370117188,
+          "mb": 0.24888229370117188
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pylint": {
+    "name": "pylint",
+    "versions": {
+      "2.17.5": {
+        "top": [
+          "pylint"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.850055694580078,
+          "ms": 0.2663135528564453,
+          "i-mb": 0.18657875061035156,
+          "mb": 0.0017604827880859375
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tomlkit": {
+    "name": "tomlkit",
+    "versions": {
+      "0.12.1": {
+        "top": [
+          "tomlkit"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 14.619827270507812,
+          "ms": 14.509201049804688,
+          "i-mb": 1.0090351104736328,
+          "mb": 1.008901596069336
+        }
+      }
+    },
+    "popularity": []
+  },
+  "aiohttp": {
+    "name": "aiohttp",
+    "versions": {
+      "3.8.5": {
+        "top": [
+          "aiohttp"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 97.5642204284668,
+          "ms": 51.36299133300781,
+          "i-mb": 4.537545204162598,
+          "mb": 2.003742218017578
+        }
+      }
+    },
+    "popularity": []
+  },
+  "aiosignal": {
+    "name": "aiosignal",
+    "versions": {
+      "1.3.1": {
+        "top": [
+          "aiosignal"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.6502609252929688,
+          "ms": 0.14281272888183594,
+          "i-mb": 0.17090320587158203,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "frozenlist": {
+    "name": "frozenlist",
+    "versions": {
+      "1.4.0": {
+        "top": [
+          "frozenlist"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.4843215942382812,
+          "ms": 2.521514892578125,
+          "i-mb": 0.2455282211303711,
+          "mb": 0.24555015563964844
+        }
+      }
+    },
+    "popularity": []
+  },
+  "multidict": {
+    "name": "multidict",
+    "versions": {
+      "6.0.4": {
+        "top": [
+          "multidict"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 5.334138870239258,
+          "ms": 5.319118499755859,
+          "i-mb": 0.5283994674682617,
+          "mb": 0.528325080871582
+        }
+      }
+    },
+    "popularity": []
+  },
+  "yarl": {
+    "name": "yarl",
+    "versions": {
+      "1.9.2": {
+        "top": [
+          "yarl"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.595964431762695,
+          "ms": 3.2732486724853516,
+          "i-mb": 0.9061622619628906,
+          "mb": 0.13338947296142578
+        }
+      }
+    },
+    "popularity": []
+  },
+  "networkx": {
+    "name": "networkx",
+    "versions": {
+      "3.1": {
+        "top": [
+          "networkx"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 73.24910163879395,
+          "ms": 72.96395301818848,
+          "i-mb": 6.126058578491211,
+          "mb": 6.12598991394043
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pydot": {
+    "name": "pydot",
+    "versions": {
+      "1.4.2": {
+        "top": [
+          "dot_parser",
+          "pydot"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 35.35795211791992,
+          "ms": 5.356311798095703,
+          "i-mb": 2.9815053939819336,
+          "mb": 0.33071041107177734
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ply": {
+    "name": "ply",
+    "versions": {
+      "3.11": {
+        "top": [
+          "ply"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1347064971923828,
+          "ms": 0.13375282287597656,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "comm": {
+    "name": "comm",
+    "versions": {
+      "0.1.4": {
+        "top": [
+          "comm"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 20.399093627929688,
+          "ms": 6.900310516357422,
+          "i-mb": 1.5751466751098633,
+          "mb": 0.3401069641113281
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ipywidgets": {
+    "name": "ipywidgets",
+    "versions": {
+      "8.1.1": {
+        "top": [
+          "ipywidgets"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 252.80284881591797,
+          "ms": 0,
+          "i-mb": 12.888280868530273,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyterlab-widgets": {
+    "name": "jupyterlab-widgets",
+    "versions": {
+      "3.0.9": {
+        "top": [
+          "jupyterlab_widgets"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.23984909057617188,
+          "ms": 0.2346038818359375,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "widgetsnbextension": {
+    "name": "widgetsnbextension",
+    "versions": {
+      "4.0.9": {
+        "top": [
+          "widgetsnbextension"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.24056434631347656,
+          "ms": 0.23293495178222656,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "toml": {
+    "name": "toml",
+    "versions": {
+      "0.10.2": {
+        "top": [
+          "toml"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.9184818267822266,
+          "ms": 2.9783248901367188,
+          "i-mb": 0.09151077270507812,
+          "mb": 0.09151268005371094
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tabulate": {
+    "name": "tabulate",
+    "versions": {
+      "0.9.0": {
+        "top": [
+          "tabulate"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 10.33329963684082,
+          "ms": 10.380268096923828,
+          "i-mb": 1.0596952438354492,
+          "mb": 1.059739112854004
+        }
+      }
+    },
+    "popularity": []
+  },
+  "httplib2": {
+    "name": "httplib2",
+    "versions": {
+      "0.22.0": {
+        "top": [
+          "httplib2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 52.1390438079834,
+          "ms": 23.291826248168945,
+          "i-mb": 3.619879722595215,
+          "mb": 1.8746967315673828
+        }
+      }
+    },
+    "popularity": []
+  },
+  "python-keystoneclient": {
+    "name": "python-keystoneclient",
+    "versions": {
+      "5.2.0": {
+        "top": [
+          "keystoneclient"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 28.52773666381836,
+          "ms": 0.5514621734619141,
+          "i-mb": 1.6539106369018555,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tqdm": {
+    "name": "tqdm",
+    "versions": {
+      "4.66.1": {
+        "top": [
+          "tqdm"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.763572692871094,
+          "ms": 11.792898178100586,
+          "i-mb": 1.1908302307128906,
+          "mb": 1.1909494400024414
+        }
+      }
+    },
+    "popularity": []
+  },
+  "entrypoints": {
+    "name": "entrypoints",
+    "versions": {
+      "0.4": {
+        "top": [
+          "entrypoints"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.416175842285156,
+          "ms": 8.31460952758789,
+          "i-mb": 0.7612123489379883,
+          "mb": 0.7611360549926758
+        }
+      }
+    },
+    "popularity": []
+  },
+  "toolz": {
+    "name": "toolz",
+    "versions": {
+      "0.12.0": {
+        "top": [
+          "tlz",
+          "toolz"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.874914169311523,
+          "ms": 11.87276840209961,
+          "i-mb": 0.9295883178710938,
+          "mb": 0.9295902252197266
+        }
+      }
+    },
+    "popularity": []
+  },
+  "docopt": {
+    "name": "docopt",
+    "versions": {
+      "0.6.2": {
+        "top": [
+          "docopt"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.44274330139160156,
+          "ms": 0.4489421844482422,
+          "i-mb": 0.03404808044433594,
+          "mb": 0.03404808044433594
+        }
+      }
+    },
+    "popularity": []
+  },
+  "h5py": {
+    "name": "h5py",
+    "versions": {
+      "3.9.0": {
+        "top": [
+          "h5py"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 76.37381553649902,
+          "ms": 16.588926315307617,
+          "i-mb": 5.852724075317383,
+          "mb": 0.7003316879272461
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mpmath": {
+    "name": "mpmath",
+    "versions": {
+      "1.3.0": {
+        "top": [
+          "mpmath"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 15.339136123657227,
+          "ms": 15.272378921508789,
+          "i-mb": 1.8127241134643555,
+          "mb": 1.8127641677856445
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-api-python-client": {
+    "name": "google-api-python-client",
+    "versions": {
+      "2.99.0": {
+        "top": [
+          "apiclient",
+          "googleapiclient"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 107.30886459350586,
+          "ms": 38.564443588256836,
+          "i-mb": 7.028343200683594,
+          "mb": 1.8503923416137695
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-auth-httplib2": {
+    "name": "google-auth-httplib2",
+    "versions": {
+      "0.1.1": {
+        "top": [
+          "google_auth_httplib2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 58.17461013793945,
+          "ms": 1.477956771850586,
+          "i-mb": 3.853300094604492,
+          "mb": 0.04148292541503906
+        }
+      }
+    },
+    "popularity": []
+  },
+  "uritemplate": {
+    "name": "uritemplate",
+    "versions": {
+      "4.1.1": {
+        "top": [
+          "uritemplate"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.438161849975586,
+          "ms": 4.395723342895508,
+          "i-mb": 0.2878561019897461,
+          "mb": 0.2878561019897461
+        }
+      }
+    },
+    "popularity": []
+  },
+  "anyio": {
+    "name": "anyio",
+    "versions": {
+      "4.0.0": {
+        "top": [
+          "anyio"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 37.258148193359375,
+          "ms": 26.090145111083984,
+          "i-mb": 1.9530973434448242,
+          "mb": 1.1959333419799805
+        }
+      }
+    },
+    "popularity": []
+  },
+  "argon2-cffi": {
+    "name": "argon2-cffi",
+    "versions": {
+      "23.1.0": {
+        "top": [
+          "argon2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 10.23244857788086,
+          "ms": 3.614187240600586,
+          "i-mb": 1.0052986145019531,
+          "mb": 0.20488548278808594
+        }
+      }
+    },
+    "popularity": []
+  },
+  "argon2-cffi-bindings": {
+    "name": "argon2-cffi-bindings",
+    "versions": {
+      "21.2.0": {
+        "top": [
+          "_argon2_cffi_bindings"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.6811618804931641,
+          "ms": 0.2739429473876953,
+          "i-mb": 0.0020704269409179688,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "arrow": {
+    "name": "arrow",
+    "versions": {
+      "1.2.3": {
+        "top": [
+          "arrow"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 16.681909561157227,
+          "ms": 14.631509780883789,
+          "i-mb": 1.4117469787597656,
+          "mb": 1.2679157257080078
+        }
+      }
+    },
+    "popularity": []
+  },
+  "async-lru": {
+    "name": "async-lru",
+    "versions": {
+      "2.0.4": {
+        "top": [
+          "async_lru"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 28.042316436767578,
+          "ms": 20.23935317993164,
+          "i-mb": 2.018610954284668,
+          "mb": 1.2617321014404297
+        }
+      }
+    },
+    "popularity": []
+  },
+  "debugpy": {
+    "name": "debugpy",
+    "versions": {
+      "1.8.0": {
+        "top": [
+          "debugpy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.55584716796875,
+          "ms": 2.523660659790039,
+          "i-mb": 0.16975975036621094,
+          "mb": 0.16975975036621094
+        }
+      }
+    },
+    "popularity": []
+  },
+  "fqdn": {
+    "name": "fqdn",
+    "versions": {
+      "1.5.1": {
+        "top": [
+          "fqdn"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.26798248291015625,
+          "ms": 0.2765655517578125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ipykernel": {
+    "name": "ipykernel",
+    "versions": {
+      "6.25.2": {
+        "top": [
+          "ipykernel",
+          "ipykernel_launcher"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 108.47902297973633,
+          "ms": 0,
+          "i-mb": 5.120196342468262,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ipython-genutils": {
+    "name": "ipython-genutils",
+    "versions": {
+      "0.2.0": {
+        "top": [
+          "ipython_genutils"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.2415180206298828,
+          "ms": 0.23031234741210938,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "isoduration": {
+    "name": "isoduration",
+    "versions": {
+      "20.11.0": {
+        "top": [
+          "isoduration"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 23.42081069946289,
+          "ms": 6.662607192993164,
+          "i-mb": 1.881521224975586,
+          "mb": 0.29019927978515625
+        }
+      }
+    },
+    "popularity": []
+  },
+  "json5": {
+    "name": "json5",
+    "versions": {
+      "0.9.14": {
+        "top": [
+          "json5"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.8857250213623047,
+          "ms": 0.8723735809326172,
+          "i-mb": 0.06039619445800781,
+          "mb": 0.06037616729736328
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter": {
+    "name": "jupyter",
+    "versions": {
+      "1.0.0": {
+        "top": [
+          "jupyter"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.5985965728759766,
+          "ms": 0,
+          "i-mb": 0.020486831665039062,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter-console": {
+    "name": "jupyter-console",
+    "versions": {
+      "6.6.3": {
+        "top": [
+          "jupyter_console"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.5409927368164062,
+          "ms": 0,
+          "i-mb": 0.165924072265625,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter-events": {
+    "name": "jupyter-events",
+    "versions": {
+      "0.7.0": {
+        "top": [
+          "jupyter_events"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 136.13462448120117,
+          "ms": 20.51997184753418,
+          "i-mb": 6.264317512512207,
+          "mb": 0.92364501953125
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter-lsp": {
+    "name": "jupyter-lsp",
+    "versions": {
+      "2.2.0": {
+        "top": [
+          "jupyter_lsp"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 255.07307052612305,
+          "ms": 7.095098495483398,
+          "i-mb": 9.598433494567871,
+          "mb": 0.16572284698486328
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter-server": {
+    "name": "jupyter-server",
+    "versions": {
+      "2.7.3": {
+        "top": [
+          "jupyter_server"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 11.03067398071289,
+          "ms": 0.0069141387939453125,
+          "i-mb": 0.6917448043823242,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyter-server-terminals": {
+    "name": "jupyter-server-terminals",
+    "versions": {
+      "0.4.4": {
+        "top": [
+          "jupyter_server_terminals"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyterlab": {
+    "name": "jupyterlab",
+    "versions": {
+      "4.0.6": {
+        "top": [
+          "jupyterlab"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 380.9852600097656,
+          "ms": 0,
+          "i-mb": 13.457242012023926,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "jupyterlab-server": {
+    "name": "jupyterlab-server",
+    "versions": {
+      "2.25.0": {
+        "top": [
+          "jupyterlab_server"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 355.804443359375,
+          "ms": 7.95435905456543,
+          "i-mb": 13.311837196350098,
+          "mb": 0.16388797760009766
+        }
+      }
+    },
+    "popularity": []
+  },
+  "nest-asyncio": {
+    "name": "nest-asyncio",
+    "versions": {
+      "1.5.7": {
+        "top": [
+          "nest_asyncio"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 24.45673942565918,
+          "ms": 24.601221084594727,
+          "i-mb": 1.7736682891845703,
+          "mb": 1.773575782775879
+        }
+      }
+    },
+    "popularity": []
+  },
+  "notebook": {
+    "name": "notebook",
+    "versions": {
+      "7.0.3": {
+        "top": [
+          "notebook"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.6279220581054688,
+          "ms": 0,
+          "i-mb": 0.0027589797973632812,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "notebook-shim": {
+    "name": "notebook-shim",
+    "versions": {
+      "0.2.3": {
+        "top": [
+          "notebook_shim"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.9007453918457031,
+          "ms": 0.2579689025878906,
+          "i-mb": 0.0005064010620117188,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "overrides": {
+    "name": "overrides",
+    "versions": {
+      "7.4.0": {
+        "top": [
+          "overrides"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 7.840394973754883,
+          "ms": 7.788658142089844,
+          "i-mb": 0.8450889587402344,
+          "mb": 0.845067024230957
+        }
+      }
+    },
+    "popularity": []
+  },
+  "prometheus-client": {
+    "name": "prometheus-client",
+    "versions": {
+      "0.17.1": {
+        "top": [
+          "prometheus_client"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 39.655447006225586,
+          "ms": 39.69120979309082,
+          "i-mb": 2.957376480102539,
+          "mb": 2.957193374633789
+        }
+      }
+    },
+    "popularity": []
+  },
+  "python-json-logger": {
+    "name": "python-json-logger",
+    "versions": {
+      "2.0.7": {
+        "top": [
+          "pythonjsonlogger"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1327991485595703,
+          "ms": 0.13208389282226562,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "qtconsole": {
+    "name": "qtconsole",
+    "versions": {
+      "5.4.4": {
+        "top": [
+          "qtconsole"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.40078163146972656,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "qtpy": {
+    "name": "qtpy",
+    "versions": {
+      "2.4.0": {
+        "top": [
+          "qtpy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "rfc3339-validator": {
+    "name": "rfc3339-validator",
+    "versions": {
+      "0.1.4": {
+        "top": [
+          "rfc3339_validator"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.170894622802734,
+          "ms": 2.3550987243652344,
+          "i-mb": 0.4439563751220703,
+          "mb": 0.29466915130615234
+        }
+      }
+    },
+    "popularity": []
+  },
+  "rfc3986-validator": {
+    "name": "rfc3986-validator",
+    "versions": {
+      "0.1.1": {
+        "top": [
+          "rfc3986_validator"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 9.704351425170898,
+          "ms": 9.75799560546875,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "send2trash": {
+    "name": "send2trash",
+    "versions": {
+      "1.8.2": {
+        "top": [
+          "send2trash"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.172086715698242,
+          "ms": 4.170417785644531,
+          "i-mb": 0.4060325622558594,
+          "mb": 0.40607452392578125
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sniffio": {
+    "name": "sniffio",
+    "versions": {
+      "1.3.0": {
+        "top": [
+          "sniffio"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.2494068145751953,
+          "ms": 3.1909942626953125,
+          "i-mb": 0.26519203186035156,
+          "mb": 0.2651700973510742
+        }
+      }
+    },
+    "popularity": []
+  },
+  "terminado": {
+    "name": "terminado",
+    "versions": {
+      "0.17.1": {
+        "top": [
+          "terminado"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 63.0800724029541,
+          "ms": 56.81037902832031,
+          "i-mb": 3.945108413696289,
+          "mb": 3.2813024520874023
+        }
+      }
+    },
+    "popularity": []
+  },
+  "uri-template": {
+    "name": "uri-template",
+    "versions": {
+      "1.3.0": {
+        "top": [
+          "uri_template"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.000974655151367,
+          "ms": 3.04412841796875,
+          "i-mb": 0.22561073303222656,
+          "mb": 0.22561073303222656
+        }
+      }
+    },
+    "popularity": []
+  },
+  "webcolors": {
+    "name": "webcolors",
+    "versions": {
+      "1.13": {
+        "top": [
+          "webcolors"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.701925277709961,
+          "ms": 3.6754608154296875,
+          "i-mb": 0.22029972076416016,
+          "mb": 0.22029972076416016
+        }
+      }
+    },
+    "popularity": []
+  },
+  "grpcio-status": {
+    "name": "grpcio-status",
+    "versions": {
+      "1.48.2": {
+        "top": [
+          "grpc_status"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1983642578125,
+          "ms": 0.11110305786132812,
+          "i-mb": 0,
+          "mb": 0
+        }
+      },
+      "1.58.0": {
+        "top": [
+          "grpc_status"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.25463104248046875,
+          "ms": 0.13256072998046875,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "proto-plus": {
+    "name": "proto-plus",
+    "versions": {
+      "1.22.3": {
+        "top": [
+          "proto"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 29.71172332763672,
+          "ms": 29.54578399658203,
+          "i-mb": 1.5350608825683594,
+          "mb": 1.5351734161376953
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyserial": {
+    "name": "pyserial",
+    "versions": {
+      "3.5": {
+        "top": [
+          "serial"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 1.6007423400878906,
+          "ms": 1.6362667083740234,
+          "i-mb": 0.07458019256591797,
+          "mb": 0.07462406158447266
+        }
+      }
+    },
+    "popularity": []
+  },
+  "fasteners": {
+    "name": "fasteners",
+    "versions": {
+      "0.18": {
+        "top": [
+          "fasteners"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 9.495735168457031,
+          "ms": 9.56869125366211,
+          "i-mb": 0.9051141738891602,
+          "mb": 0.9051046371459961
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oslo-concurrency": {
+    "name": "oslo-concurrency",
+    "versions": {
+      "5.2.0": {
+        "top": [
+          "oslo_concurrency"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.4756450653076172,
+          "ms": 0.18477439880371094,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "webob": {
+    "name": "webob",
+    "versions": {
+      "1.8.7": {
+        "top": [
+          "webob"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 36.409616470336914,
+          "ms": 36.19265556335449,
+          "i-mb": 2.030454635620117,
+          "mb": 2.0303831100463867
+        }
+      }
+    },
+    "popularity": []
+  },
+  "et-xmlfile": {
+    "name": "et-xmlfile",
+    "versions": {
+      "1.1.0": {
+        "top": [
+          "et_xmlfile"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.062725067138672,
+          "ms": 3.046751022338867,
+          "i-mb": 0.1402139663696289,
+          "mb": 0.1402139663696289
+        }
+      }
+    },
+    "popularity": []
+  },
+  "openpyxl": {
+    "name": "openpyxl",
+    "versions": {
+      "3.1.2": {
+        "top": [
+          "openpyxl"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 138.3514404296875,
+          "ms": 133.87608528137207,
+          "i-mb": 7.556537628173828,
+          "mb": 7.276974678039551
+        }
+      }
+    },
+    "popularity": []
+  },
+  "colorama": {
+    "name": "colorama",
+    "versions": {
+      "0.4.6": {
+        "top": [
+          "colorama"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.908945083618164,
+          "ms": 2.855539321899414,
+          "i-mb": 0.13105201721191406,
+          "mb": 0.1310272216796875
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyproject-api": {
+    "name": "pyproject-api",
+    "versions": {
+      "1.6.1": {
+        "top": [
+          "pyproject_api"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 37.737369537353516,
+          "ms": 32.254695892333984,
+          "i-mb": 1.5717287063598633,
+          "mb": 1.115041732788086
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tox": {
+    "name": "tox",
+    "versions": {
+      "4.11.3": {
+        "top": [
+          "tox"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 87.80026435852051,
+          "ms": 11.192798614501953,
+          "i-mb": 4.495037078857422,
+          "mb": 0.1730175018310547
+        }
+      }
+    },
+    "popularity": []
+  },
+  "dm-tree": {
+    "name": "dm-tree",
+    "versions": {
+      "0.1.8": {
+        "top": [
+          "tree"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.698225021362305,
+          "ms": 8.711576461791992,
+          "i-mb": 0.8413534164428711,
+          "mb": 0.8413534164428711
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-cloud": {
+    "name": "google-cloud",
+    "versions": {
+      "0.34.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-cloud-datastore": {
+    "name": "google-cloud-datastore",
+    "versions": {
+      "2.18.0": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-cloud-bigquery": {
+    "name": "google-cloud-bigquery",
+    "versions": {
+      "3.11.4": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0007152557373046875,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "mako": {
+    "name": "mako",
+    "versions": {
+      "1.2.4": {
+        "top": [
+          "mako"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1614093780517578,
+          "ms": 0.11563301086425781,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sympy": {
+    "name": "sympy",
+    "versions": {
+      "1.12": {
+        "top": [
+          "isympy",
+          "sympy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 177.94370651245117,
+          "ms": 161.8046760559082,
+          "i-mb": 13.98011302947998,
+          "mb": 12.299914360046387
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ruamel-yaml": {
+    "name": "ruamel-yaml",
+    "versions": {
+      "0.17.32": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.000476837158203125,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "ruamel-yaml-clib": {
+    "name": "ruamel-yaml-clib",
+    "versions": {
+      "0.2.7": {
+        "top": [
+          "_ruamel_yaml"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0,
+          "ms": 0,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyopenssl": {
+    "name": "pyopenssl",
+    "versions": {
+      "23.2.0": {
+        "top": [
+          "OpenSSL"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 42.574405670166016,
+          "ms": 34.009456634521484,
+          "i-mb": 2.7704544067382812,
+          "mb": 1.8811101913452148
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oauth2client": {
+    "name": "oauth2client",
+    "versions": {
+      "4.1.3": {
+        "top": [
+          "oauth2client"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.25773048400878906,
+          "ms": 0.13947486877441406,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "argparse": {
+    "name": "argparse",
+    "versions": {
+      "1.4.0": {
+        "top": [
+          "argparse"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 3.0145645141601562,
+          "ms": 3.02886962890625,
+          "i-mb": 0.15621280670166016,
+          "mb": 0.15621280670166016
+        }
+      }
+    },
+    "popularity": []
+  },
+  "google-cloud-pubsub": {
+    "name": "google-cloud-pubsub",
+    "versions": {
+      "2.18.4": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.0002384185791015625,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "grpc-google-iam-v1": {
+    "name": "grpc-google-iam-v1",
+    "versions": {
+      "0.12.6": {
+        "top": [],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.000476837158203125,
+          "ms": 0.0002384185791015625,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "oauthlib": {
+    "name": "oauthlib",
+    "versions": {
+      "3.2.2": {
+        "top": [
+          "oauthlib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.522562026977539,
+          "ms": 4.534721374511719,
+          "i-mb": 0.1918020248413086,
+          "mb": 0.1918020248413086
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sphinx-copybutton": {
+    "name": "sphinx-copybutton",
+    "versions": {
+      "0.5.2": {
+        "top": [
+          "sphinx_copybutton"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 100.1901626586914,
+          "ms": 64.0871524810791,
+          "i-mb": 4.753753662109375,
+          "mb": 3.8610095977783203
+        }
+      }
+    },
+    "popularity": []
+  },
+  "flake8": {
+    "name": "flake8",
+    "versions": {
+      "6.1.0": {
+        "top": [
+          "flake8"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.94694709777832,
+          "ms": 3.945589065551758,
+          "i-mb": 0.20291996002197266,
+          "mb": 0.1913013458251953
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pycodestyle": {
+    "name": "pycodestyle",
+    "versions": {
+      "2.11.0": {
+        "top": [
+          "pycodestyle"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 12.845993041992188,
+          "ms": 12.79759407043457,
+          "i-mb": 1.017561912536621,
+          "mb": 1.017561912536621
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyflakes": {
+    "name": "pyflakes",
+    "versions": {
+      "3.1.0": {
+        "top": [
+          "pyflakes"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.1327991485595703,
+          "ms": 0.13017654418945312,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pyrsistent": {
+    "name": "pyrsistent",
+    "versions": {
+      "0.19.3": {
+        "top": [
+          "_pyrsistent_version",
+          "pyrsistent"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.336544036865234,
+          "ms": 8.26406478881836,
+          "i-mb": 0.9213399887084961,
+          "mb": 0.9213171005249023
+        }
+      }
+    },
+    "popularity": []
+  },
+  "seaborn": {
+    "name": "seaborn",
+    "versions": {
+      "0.12.2": {
+        "top": [
+          "seaborn"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 520.183801651001,
+          "ms": 29.29997444152832,
+          "i-mb": 23.917284965515137,
+          "mb": 1.024703025817871
+        }
+      }
+    },
+    "popularity": []
+  },
+  "sqlalchemy": {
+    "name": "sqlalchemy",
+    "versions": {
+      "2.0.20": {
+        "top": [
+          "sqlalchemy"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 118.61252784729004,
+          "ms": 110.32271385192871,
+          "i-mb": 7.225955963134766,
+          "mb": 6.753730773925781
+        }
+      }
+    },
+    "popularity": []
+  },
+  "pymdown-extensions": {
+    "name": "pymdown-extensions",
+    "versions": {
+      "10.3": {
+        "top": [
+          "pymdownx"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.8394718170166016,
+          "ms": 0.7703304290771484,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "tzlocal": {
+    "name": "tzlocal",
+    "versions": {
+      "5.0.1": {
+        "top": [
+          "tzlocal"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 8.422136306762695,
+          "ms": 8.40139389038086,
+          "i-mb": 0.7356948852539062,
+          "mb": 0.7356948852539062
+        }
+      }
+    },
+    "popularity": []
+  },
+  "alembic": {
+    "name": "alembic",
+    "versions": {
+      "1.12.0": {
+        "top": [
+          "alembic"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 166.2919521331787,
+          "ms": 45.458316802978516,
+          "i-mb": 8.452740669250488,
+          "mb": 1.880467414855957
+        }
+      }
+    },
+    "popularity": []
+  },
+  "termcolor": {
+    "name": "termcolor",
+    "versions": {
+      "2.3.0": {
+        "top": [
+          "termcolor"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 2.3860931396484375,
+          "ms": 2.3632049560546875,
+          "i-mb": 0.16344833374023438,
+          "mb": 0.16344833374023438
+        }
+      }
+    },
+    "popularity": []
+  },
+  "xmltodict": {
+    "name": "xmltodict",
+    "versions": {
+      "0.13.0": {
+        "top": [
+          "xmltodict"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 30.3955078125,
+          "ms": 30.883312225341797,
+          "i-mb": 1.729914665222168,
+          "mb": 1.729914665222168
+        }
+      }
+    },
+    "popularity": []
+  },
+  "shapely": {
+    "name": "shapely",
+    "versions": {
+      "2.0.1": {
+        "top": [
+          "shapely"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 68.11070442199707,
+          "ms": 7.716894149780273,
+          "i-mb": 5.389040946960449,
+          "mb": 0.35823631286621094
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cssselect": {
+    "name": "cssselect",
+    "versions": {
+      "1.2.0": {
+        "top": [
+          "cssselect"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.628513336181641,
+          "ms": 6.574153900146484,
+          "i-mb": 0.42047786712646484,
+          "mb": 0.42047786712646484
+        }
+      }
+    },
+    "popularity": []
+  },
+  "llvmlite": {
+    "name": "llvmlite",
+    "versions": {
+      "0.40.1": {
+        "top": [
+          "llvmlite"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.2300739288330078,
+          "ms": 0.23508071899414062,
+          "i-mb": 0,
+          "mb": 0
+        }
+      }
+    },
+    "popularity": []
+  },
+  "numba": {
+    "name": "numba",
+    "versions": {
+      "0.57.1": {
+        "top": [
+          "numba"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 151.41630172729492,
+          "ms": 100.27170181274414,
+          "i-mb": 10.74360179901123,
+          "mb": 7.318802833557129
+        }
+      }
+    },
+    "popularity": []
+  },
+  "imageio": {
+    "name": "imageio",
+    "versions": {
+      "2.31.3": {
+        "top": [
+          "imageio"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 71.40922546386719,
+          "ms": 11.34634017944336,
+          "i-mb": 5.573761940002441,
+          "mb": 0.5739669799804688
+        }
+      }
+    },
+    "popularity": []
+  },
+  "deprecation": {
+    "name": "deprecation",
+    "versions": {
+      "2.1.0": {
+        "top": [
+          "deprecation"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 6.211996078491211,
+          "ms": 5.883216857910156,
+          "i-mb": 0.5800714492797852,
+          "mb": 0.5771188735961914
+        }
+      }
+    },
+    "popularity": []
+  },
+  "requests-oauthlib": {
+    "name": "requests-oauthlib",
+    "versions": {
+      "1.3.1": {
+        "top": [
+          "requests_oauthlib"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 69.34404373168945,
+          "ms": 8.161306381225586,
+          "i-mb": 3.063126564025879,
+          "mb": 0.4975318908691406
+        }
+      }
+    },
+    "popularity": []
+  },
+  "contextlib2": {
+    "name": "contextlib2",
+    "versions": {
+      "21.6.0": {
+        "top": [
+          "contextlib2"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 0.5626678466796875,
+          "ms": 0.5502700805664062,
+          "i-mb": 0.04943561553955078,
+          "mb": 0.04943561553955078
+        }
+      }
+    },
+    "popularity": []
+  },
+  "cloudpickle": {
+    "name": "cloudpickle",
+    "versions": {
+      "2.2.1": {
+        "top": [
+          "cloudpickle"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 13.35287094116211,
+          "ms": 13.414382934570312,
+          "i-mb": 0.9663915634155273,
+          "mb": 0.9663848876953125
+        }
+      }
+    },
+    "popularity": []
+  },
+  "astunparse": {
+    "name": "astunparse",
+    "versions": {
+      "1.6.3": {
+        "top": [
+          "astunparse"
+        ],
+        "requirements": {},
+        "cost": {
+          "i-ms": 4.834413528442383,
+          "ms": 2.9249191284179688,
+          "i-mb": 0.6486148834228516,
+          "mb": 0.511540412902832
+        }
+      }
+    },
+    "popularity": []
+  }
+}
