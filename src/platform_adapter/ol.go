@@ -1,4 +1,4 @@
-package openlambda
+package platform_adapter
 
 import (
 	"bytes"
@@ -10,7 +10,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	platform "platform_adapter_go"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -18,6 +17,7 @@ import (
 	"sync"
 	"syscall"
 	"time"
+	"github.com/open-lambda/ReqBench/rb/workload"
 )
 
 type LatencyRecord struct {
@@ -98,11 +98,11 @@ func (record *LatencyRecord) parseJSON(jsonData []byte) error {
 }
 
 type OpenLambda struct {
-	platform.BasePlatformAdapter
+	ConfigLoader
 	PID            int
 	olDir          string
-	runUrl         string
-	collectLatency bool
+	olUrl          string
+	collectLatency string
 	latencyRecords []LatencyRecord
 	LatenciesMutex *sync.Mutex
 
@@ -110,6 +110,11 @@ type OpenLambda struct {
 }
 
 func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
+
+	o.olDir = o.Config["ol_dir"]
+	o.olUrl = strings.TrimSuffix(o.Config["ol_url"], "/") 
+	o.collectLatency = o.Config["collect_latency"]
+
 	tmpFilePath := o.currentDir + "/tmp.csv"
 	if _, err := os.Stat(tmpFilePath); err == nil {
 		os.Remove(tmpFilePath)
@@ -206,48 +211,50 @@ func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
 	}
 }
 
-func (o *OpenLambda) DeployFunc(f platform.Function) error {
+func (o *OpenLambda) DeployFunc(funcs []workload.Function) error {
 	// write code to registry dir
-	meta := f.Meta
-	path := fmt.Sprintf(o.olDir+"/default-ol/registry/%s", f.Name)
-	if os.IsExist(os.MkdirAll(path, 0777)) {
-		err := os.RemoveAll(path)
-		if err != nil {
+
+	for f := range funcs {
+		meta := f.Meta
+		path := fmt.Sprintf(o.olDir+"/default-ol/registry/%s", f.Name)
+		if os.IsExist(os.MkdirAll(path, 0777)) {
+			err := os.RemoveAll(path)
+			if err != nil {
+				panic(err)
+			}
+			err = os.MkdirAll(path, 0777)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		_lines := f.Code
+		var lines []string
+		for _, line := range _lines {
+			lines = append(lines, line)
+		}
+		code := strings.Join(lines, "\n")
+
+		funcPath := filepath.Join(path, "f.py")
+		requirementsInPath := filepath.Join(path, "requirements.in")
+		requirementsTxtPath := filepath.Join(path, "requirements.txt")
+
+		if err := ioutil.WriteFile(funcPath, []byte(code), 0777); err != nil {
 			panic(err)
 		}
-		err = os.MkdirAll(path, 0777)
-		if err != nil {
+		if err := ioutil.WriteFile(requirementsInPath, []byte(meta.RequirementsIn), 0777); err != nil {
+			panic(err)
+		}
+		if err := ioutil.WriteFile(requirementsTxtPath, []byte(meta.RequirementsTxt), 0777); err != nil {
 			panic(err)
 		}
 	}
-
-	_lines := f.Code
-	var lines []string
-	for _, line := range _lines {
-		lines = append(lines, line)
-	}
-	code := strings.Join(lines, "\n")
-
-	funcPath := filepath.Join(path, "f.py")
-	requirementsInPath := filepath.Join(path, "requirements.in")
-	requirementsTxtPath := filepath.Join(path, "requirements.txt")
-
-	if err := ioutil.WriteFile(funcPath, []byte(code), 0777); err != nil {
-		panic(err)
-	}
-	if err := ioutil.WriteFile(requirementsInPath, []byte(meta.RequirementsIn), 0777); err != nil {
-		panic(err)
-	}
-	if err := ioutil.WriteFile(requirementsTxtPath, []byte(meta.RequirementsTxt), 0777); err != nil {
-		panic(err)
-	}
-
 	return nil
 }
 
 func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string]interface{}) error {
 	// invoke function
-	url := o.runUrl + funcName
+	url := o.olUrl + "/run/" + funcName
 	var resp *http.Response
 	var err error
 

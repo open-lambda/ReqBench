@@ -1,4 +1,4 @@
-package platform
+package workload
 
 import (
 	"encoding/json"
