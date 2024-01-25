@@ -1,0 +1,7 @@
+{
+    "ol_dir": "/root/open-lambda/",
+    "cg_dir": "/sys/fs/cgroup/default-ol-sandboxes",
+    "lock_stat": {
+        "intervals": 10
+    }
+}
