@@ -1,4 +1,4 @@
-package platform_adapter
+package openlambda
 
 import (
 	"bytes"
@@ -10,6 +10,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"rb/platform_adapter"
+	"rb/workload"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -17,7 +19,6 @@ import (
 	"sync"
 	"syscall"
 	"time"
-	"github.com/open-lambda/ReqBench/rb/workload"
 )
 
 type LatencyRecord struct {
@@ -98,23 +99,23 @@ func (record *LatencyRecord) parseJSON(jsonData []byte) error {
 }
 
 type OpenLambda struct {
-	ConfigLoader
+	platform_adapter.BasePlatformAdapter
 	PID            int
+	warmupTime     float64
+	warmupMemory   int
 	olDir          string
-	olUrl          string
-	collectLatency string
+	runUrl         string
+	collectLatency bool
 	latencyRecords []LatencyRecord
 	LatenciesMutex *sync.Mutex
+	currentDir     string
 
-	currentDir string
+	startConfig map[string]interface{}
+	killConfig  map[string]interface{}
 }
 
 func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
-
-	o.olDir = o.Config["ol_dir"]
-	o.olUrl = strings.TrimSuffix(o.Config["ol_url"], "/") 
-	o.collectLatency = o.Config["collect_latency"]
-
+	o.startConfig = options
 	tmpFilePath := o.currentDir + "/tmp.csv"
 	if _, err := os.Stat(tmpFilePath); err == nil {
 		os.Remove(tmpFilePath)
@@ -146,7 +147,14 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 
 	output := string(out)
 
-	// todo: warmup and profiling
+	// todo: warmup and profiling(maybe move the start to the config.json)
+	if warmup, ok := options["features.warmup"].(bool); ok && warmup {
+		o.warmupMemory = getTotalMem(o.Config["cg_dir"].(string), "CG")
+		o.warmupTime = extractWarmupTime(output)
+	}
+	if profileLock, ok := options["profile_lock"].(bool); ok && profileLock {
+
+	}
 
 	re := regexp.MustCompile(`PID: (\d+)`)
 	match := re.FindStringSubmatch(output)
@@ -211,10 +219,31 @@ func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
 	}
 }
 
-func (o *OpenLambda) DeployFunc(funcs []workload.Function) error {
-	// write code to registry dir
+func (o *OpenLambda) DeployFuncs(funcs []workload.Function) error {
+	deployChan := make(chan workload.Function, 64)
+	errChan := make(chan error)
+	for i := 0; i < 8; i++ {
+		go o.DeployFunction(deployChan, errChan)
+	}
+	for _, f := range funcs {
+		select {
+		case deployChan <- f:
+		case err := <-errChan:
+			return err
+		}
+	}
+	close(deployChan)
+	close(errChan)
+	return nil
+}
 
-	for f := range funcs {
+func (o *OpenLambda) DeployFunction(deployTask chan workload.Function, errChan chan error) {
+	for {
+		f, ok := <-deployTask
+		if !ok {
+			return
+		}
+		// write code to registry dir
 		meta := f.Meta
 		path := fmt.Sprintf(o.olDir+"/default-ol/registry/%s", f.Name)
 		if os.IsExist(os.MkdirAll(path, 0777)) {
@@ -240,21 +269,20 @@ func (o *OpenLambda) DeployFunc(funcs []workload.Function) error {
 		requirementsTxtPath := filepath.Join(path, "requirements.txt")
 
 		if err := ioutil.WriteFile(funcPath, []byte(code), 0777); err != nil {
-			panic(err)
+			errChan <- err
 		}
 		if err := ioutil.WriteFile(requirementsInPath, []byte(meta.RequirementsIn), 0777); err != nil {
-			panic(err)
+			errChan <- err
 		}
 		if err := ioutil.WriteFile(requirementsTxtPath, []byte(meta.RequirementsTxt), 0777); err != nil {
-			panic(err)
+			errChan <- err
 		}
 	}
-	return nil
 }
 
 func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string]interface{}) error {
 	// invoke function
-	url := o.olUrl + "/run/" + funcName
+	url := o.runUrl + funcName
 	var resp *http.Response
 	var err error
 
@@ -294,4 +322,34 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 
 func NewOpenLambda() *OpenLambda {
 	return &OpenLambda{}
+}
+
+func extractWarmupTime(out string) float64 {
+	logFilePathRegex := regexp.MustCompile(`Log File: (.+\.out)`)
+	matches := logFilePathRegex.FindStringSubmatch(out)
+	var logFilePath string
+	if len(matches) > 1 {
+		logFilePath = matches[1]
+	}
+
+	if logFilePath != "" {
+		fileContent, err := ioutil.ReadFile(logFilePath)
+		if err != nil {
+			fmt.Printf("Error reading file: %s\n", err)
+			return 0
+		}
+
+		warmupTimeRegex := regexp.MustCompile(`warmup time is (\d+(\.\d+)?) ms`)
+		warmupMatches := warmupTimeRegex.FindStringSubmatch(string(fileContent))
+		if len(warmupMatches) > 1 {
+			var warmupTime float64
+			fmt.Sscanf(warmupMatches[1], "%f", &warmupTime)
+			return warmupTime
+		}
+	}
+	return 0
+}
+
+func getTotalMem(cg_dir string, memType string) int {
+	return 0
 }

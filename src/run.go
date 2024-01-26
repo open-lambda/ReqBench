@@ -1,8 +1,9 @@
-package platform
+package main
 
 import (
 	"fmt"
 	"path"
+	"rb/workload"
 )
 
 type trial struct {
@@ -17,6 +18,7 @@ func runOneTrial(dir string, treeSizes []int, tasks int, dryRun bool, ingoreIndi
 	skew bool, invokeLength int, totalTime int,
 	useCacheWorkload bool, useCacheTree bool,
 	sleepTime int) error {
+	var wl, _ = workload.ReadWorkloadFromJson("workload.json")
 	if ingoreIndices == nil {
 		ingoreIndices = []int{0, 1, 2}
 	}
@@ -24,28 +26,25 @@ func runOneTrial(dir string, treeSizes []int, tasks int, dryRun bool, ingoreIndi
 		treeSizes = []int{1}
 	}
 
-	var w1, w2 *Workload
+	var w1, w2 *workload.Workload
 	var err error
 	if useCacheWorkload {
-		w1, err = readWorkloadFromJson(path.Join(dir, "w1.json"))
+		w1, err = workload.ReadWorkloadFromJson(path.Join(dir, "w1.json"))
 		if err != nil {
 			return err
 		}
-		w2, err = readWorkloadFromJson(path.Join(dir, "w2.json"))
+		w2, err = workload.ReadWorkloadFromJson(path.Join(dir, "w2.json"))
 		if err != nil {
 			return err
 		}
 		if saveMetrics {
-			w2.addMetrics([]string{"latency"})
+			w2.AddMetrics([]string{"latency"})
 		}
-	} else {
-		workload.generateTrace()
-
 	}
 
 	// record how many calls are having empty importing modules, used to calculate hit rate
-	emptyPkgCallsW1 := w1.getEmptyPkgCallsCnt()
-	emptyPkgCallsW2 := w2.getEmptyPkgCallsCnt()
+	//emptyPkgCallsW1 := w1.GetEmptyPkgCallsCnt()
+	//emptyPkgCallsW2 := w2.GetEmptyPkgCallsCnt()
 
 	trials := make([]trial, 0)
 	// todo: trialsResults := make([]
@@ -72,14 +71,11 @@ func runOneTrial(dir string, treeSizes []int, tasks int, dryRun bool, ingoreIndi
 			}
 			AutoRun("openlambda", w1, startOptions, killOptions,
 				"config.json", tasks, invokeLength, totalTime)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	return nil
-}
-
-var workload, _ = readWorkloadFromJson("workload.json")
-
-func main() {
-
 }

@@ -1,3 +1,3 @@
-module github.com/open-lambda/ReqBench/rb
+module rb
 
 go 1.18

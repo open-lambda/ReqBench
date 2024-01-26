@@ -1,15 +1,27 @@
-package platform
+package main
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
-	"platform_adapter_go/openlambda"
+	"rb/platform_adapter"
+	"rb/platform_adapter/openlambda"
+	"rb/workload"
 	"strconv"
 	"sync"
 	"time"
 )
+
+type RunOptions struct {
+	PlatformType string
+	Workload     *workload.Workload
+	ConfigPath   string
+	Tasks        int
+	Timeout      int
+	TotalTime    int
+}
 
 var seen = make(map[string]int)
 var seenLock = &sync.Mutex{}
@@ -28,21 +40,12 @@ func getId(name string) string {
 	return name + "_" + strconv.Itoa(seen[name])
 }
 
-func deployFuncs(funcs []Function, platform PlatformAdapter) error {
-	var wg sync.WaitGroup
-	for _, fn := range funcs {
-		wg.Add(1)
-		go func(fn Function) {
-			defer wg.Done()
-			_ = platform.DeployFunc(fn)
-		}(fn)
-	}
-	wg.Wait()
-
-	return nil
+func deployFuncs(funcs []workload.Function, platform platform_adapter.PlatformAdapter) error {
+	err := platform.DeployFuncs(funcs)
+	return err
 }
 
-func task(platform PlatformAdapter, timeout int, reqQ chan Call, errQ chan error) {
+func task(platform platform_adapter.PlatformAdapter, timeout int, reqQ chan workload.Call, errQ chan error) {
 	for {
 		select {
 		case req, ok := <-reqQ:
@@ -70,7 +73,7 @@ func task(platform PlatformAdapter, timeout int, reqQ chan Call, errQ chan error
 	}
 }
 
-func run(calls []Call, tasks int, platform PlatformAdapter, timeout int, totalTime int) (map[string]interface{}, error) {
+func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAdapter, timeout int, totalTime int) (map[string]interface{}, error) {
 	/*	workload: the workload to run
 		num_tasks: the number of tasks to run
 		platform: the platform to run on
@@ -78,7 +81,7 @@ func run(calls []Call, tasks int, platform PlatformAdapter, timeout int, totalTi
 		total_time: the total time to run the workload
 		returns: the number of tasks that were run
 	*/
-	reqQ := make(chan Call, 64)
+	reqQ := make(chan workload.Call, 64)
 	errQ := make(chan error)
 	for i := 0; i < tasks; i++ {
 		go task(platform, timeout, reqQ, errQ)
@@ -86,7 +89,7 @@ func run(calls []Call, tasks int, platform PlatformAdapter, timeout int, totalTi
 	t0 := time.Now()
 	for _, call := range calls {
 		select {
-		case reqQ <- Call{Name: call.Name}:
+		case reqQ <- workload.Call{Name: call.Name}:
 		case err := <-errQ:
 			panic(err)
 		}
@@ -104,7 +107,7 @@ func run(calls []Call, tasks int, platform PlatformAdapter, timeout int, totalTi
 	}, nil
 }
 
-func readWorkload(path string) (wl Workload, err error) {
+func readWorkload(path string) (wl workload.Workload, err error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return wl, err
@@ -121,7 +124,7 @@ func readWorkload(path string) (wl Workload, err error) {
 	return wl, nil
 }
 
-func newPlatformAdapter(platformType string) PlatformAdapter {
+func newPlatformAdapter(platformType string) platform_adapter.PlatformAdapter {
 	switch platformType {
 	case "openlambda":
 		return openlambda.NewOpenLambda()
@@ -135,54 +138,66 @@ func newPlatformAdapter(platformType string) PlatformAdapter {
 }
 
 // AutoRun start worker, deploy functions, run workload, kill worker
-func AutoRun(platformType string, wl *Workload,
-	startOptions map[string]interface{}, killOptions map[string]interface{},
-	configPath string, tasks int, timeout int, totalTime int) (int, error) {
-	// platform
-	platform := newPlatformAdapter(platformType)
-	// config
-	platform.LoadConfig(configPath)
+func AutoRun(opts RunOptions) (map[string]interface{}, error) {
+	platform := newPlatformAdapter(opts.PlatformType)
+	platform.LoadConfig(opts.ConfigPath)
 
-	// deploy functions
-	deployFuncs(wl.Funcs, platform)
+	if err := deployFuncs(opts.Workload.Funcs, platform); err != nil {
+		log.Fatalf("failed to deploy functions: %v", err)
+	}
 
-	platform.StartWorker(startOptions)
-	run(wl.Calls, tasks, platform, timeout, totalTime)
-	platform.KillWorker(killOptions)
-	return nil
+	err := platform.StartWorker(nil)
+	if err != nil {
+		log.Fatalf("failed to start worker: %v", err)
+	}
+
+	resMap, err := run(opts.Workload.Calls, opts.Tasks, platform, opts.Timeout, opts.TotalTime)
+	if err != nil {
+		platform.KillWorker(nil)
+		log.Fatalf("failed to run workload: %v", err)
+	}
+
+	err = platform.KillWorker(nil)
+	if err != nil {
+		log.Fatalf("failed to kill worker: %v", err)
+	}
+
+	return resMap, nil
 }
 
-func main(argc int, argv []string) {
-	// platform
-	platformType := argv[1]
-	platform := newPlatformAdapter(platformType)
-	// workload
-	wl, err := readWorkload(argv[2])
-	if err != nil {
-		panic(err)
+func main() {
+	if len(os.Args) < 7 {
+		panic("Not enough arguments")
 	}
-	// config
-	platform.LoadConfig(argv[3])
-	// # tasks
-	tasks, err := strconv.Atoi(argv[4])
-	if err != nil {
-		panic(err)
-	}
-	// timeout
-	timeout, err := strconv.Atoi(argv[5])
-	if err != nil {
-		panic(err)
-	}
-	// total_time
-	totalTime, err := strconv.Atoi(argv[6])
+
+	tasks, err := strconv.Atoi(os.Args[4])
 	if err != nil {
 		panic(err)
 	}
 
-	// deploy functions
-	deployFuncs(wl.Funcs, platform)
+	timeout, err := strconv.Atoi(os.Args[5])
+	if err != nil {
+		panic(err)
+	}
 
-	platform.StartWorker(nil)
-	run(wl.Calls, tasks, platform, timeout, totalTime)
-	platform.KillWorker(nil)
+	totalTime, err := strconv.Atoi(os.Args[6])
+	if err != nil {
+		panic(err)
+	}
+
+	wl, err := readWorkload(os.Args[2])
+	if err != nil {
+		panic(err)
+	}
+
+	opts := RunOptions{
+		PlatformType: os.Args[1],
+		Workload:     &wl,
+		ConfigPath:   os.Args[3],
+		Tasks:        tasks,
+		Timeout:      timeout,
+		TotalTime:    totalTime,
+	}
+
+	AutoRun(opts)
 }
