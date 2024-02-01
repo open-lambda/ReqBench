@@ -131,19 +131,11 @@ func task(platform platform_adapter.PlatformAdapter, timeout int, reqQ chan work
 				return
 			}
 
-			done := make(chan error, 1)
-			go func() {
-				err := platform.InvokeFunc(req.Name, timeout, options)
-				done <- err
-			}()
-
-			select {
-			case err := <-done:
-				if err != nil {
-					errQ <- fmt.Errorf("failed to invoke function %s: %s", req.Name, err)
-				} else {
-					errQ <- nil
-				}
+			err := platform.InvokeFunc(req.Name, timeout, options)
+			if err != nil {
+				errQ <- fmt.Errorf("failed to invoke function %s: %s", req.Name, err)
+			} else {
+				errQ <- nil
 			}
 		}
 	}
