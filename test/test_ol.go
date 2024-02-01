@@ -14,8 +14,6 @@ func main() {
 		panic(err)
 	}
 
-	//tasks, timeout, totalTime := 2, 2, 10
-
 	err = rb.StartWorker(nil)
 	if err != nil {
 		panic(err)
