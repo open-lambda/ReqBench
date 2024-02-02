@@ -4,7 +4,7 @@ import (
 	"rb" // TODO: Use GitHub URL when rb is public for direct import access.
 	"rb/platform_adapter"
 	"rb/platform_adapter/mock" // TODO: I think it would be better have all PlatformAdapter implementations in one package. 
-							   //       That way we do not need to import different package for each platform		
+							   // That way we do not need to import different package for each platform	
 )
 
 func main() {

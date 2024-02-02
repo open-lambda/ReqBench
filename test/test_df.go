@@ -11,6 +11,14 @@ type Record struct {
 	memory		float64		`csv:"memory(mb)"`
 }
 
+func (r Record) ToSlice() []string {
+	return []string {
+		r.fn_name,
+		fmt.Sprintf("%f", r.latency),
+		fmt.Sprintf("%f", r.memory),
+	}
+}
+
 func main() {
 	var r Record
 	df := util.NewDataFrame(r)
