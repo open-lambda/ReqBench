@@ -14,9 +14,14 @@ type ReqBench struct {
 }
 
 func NewReqBench(platform platform_adapter.PlatformAdapter, workload_path string) (*ReqBench, error) {
-	wl, err := workload.ReadWorkloadFromJson(workload_path)
-	if err != nil {
-		return nil, err
+	var wl *workload.Workload = nil
+
+	if workload_path != "" {
+		var err error = nil
+		wl, err = workload.ReadWorkloadFromJson(workload_path)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return  &ReqBench{
@@ -111,14 +116,8 @@ func (rb *ReqBench) Play(tasks int, timeout int, totalTime int, options map[stri
 	return result, nil
 }
 
-func (rb *ReqBench) LoadWorkload(path string) error {
-	wl, err := workload.ReadWorkloadFromJson(path)
-	if err != nil {
-		return err
-	}
-
+func (rb *ReqBench) SetWorkload(wl *workload.Workload) {
 	rb.wl = wl
-	return nil
 }
 
 

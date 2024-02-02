@@ -1,5 +1,5 @@
 {
     "ol_dir": "/root/open-lambda/",
     "ol_url": "localhost:5000",
-    "collect_latency": false
+    "csv_path": "ol_result.csv"
 }
