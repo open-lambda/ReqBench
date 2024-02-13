@@ -119,7 +119,7 @@ func (wl *Workload) AddMetrics(metrics []string) {
 	}
 }
 
-func (wl *Workload) shuffleCalls() {
+func (wl *Workload) ShuffleCalls() {
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(wl.Calls), func(i, j int) { wl.Calls[i], wl.Calls[j] = wl.Calls[j], wl.Calls[i] })
 }
@@ -127,13 +127,13 @@ func (wl *Workload) shuffleCalls() {
 // generateTrace is not necessary to be implemented in go
 // func (wl *Workload) generateTrace(invokeLength int, skew bool, weight []float64, s float64)
 
-func (wl *Workload) randomSplit(ratio float64) (Workload, Workload) {
+func (wl *Workload) RandomSplit(ratio float64) (Workload, Workload) {
 	wlTrain := Workload{}
 	wlTest := Workload{}
 	wlTrainAdded := make(map[string]bool)
 	wlTestAdded := make(map[string]bool)
 
-	wl.shuffleCalls()
+	wl.ShuffleCalls()
 
 	trainSize := int(float64(len(wl.Calls)) * ratio)
 	wlTrain.Calls = wl.Calls[:trainSize]

@@ -17,6 +17,8 @@ import (
 type RunOptions struct {
 	PlatformType string
 	Workload     *workload.Workload
+	StartOptions map[string]interface{}
+	KillOptions  map[string]interface{}
 	ConfigPath   string
 	Tasks        int
 	Timeout      int
