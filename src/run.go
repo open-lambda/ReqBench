@@ -1,14 +1,33 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-gota/gota/dataframe"
 	"github.com/go-gota/gota/series"
 	"os"
+	"os/exec"
 	"path"
 	. "rb/workload"
+	"strings"
 	"time"
 )
+
+type treeGenOpts struct {
+	SinglePkg         bool
+	entropyPenalty    int    // 0 for false, 1 for true
+	Costs             string // a path to costs dict
+	AvgDistWeights    bool
+	BiasedDistWeights bool
+}
+
+func (t treeGenOpts) Marshal() string {
+	b, err := json.Marshal(t)
+	if err != nil {
+		return ""
+	}
+	return string(b)
+}
 
 type trial struct {
 	treePath string
@@ -31,6 +50,7 @@ func runOneTrial(dir string, pkgWeightPath string, treeSizes []int, tasks int, d
 
 	dfCombined := dataframe.New(
 		series.New([]int{}, series.Int, "nodes"),
+		series.New([]int{}, series.String, "rule"),
 		series.New([]float64{}, series.Float, "throughput"),
 		series.New([]float64{}, series.Float, "mem_usage"),
 	)
@@ -49,8 +69,43 @@ func runOneTrial(dir string, pkgWeightPath string, treeSizes []int, tasks int, d
 			w2.AddMetrics([]string{"latency"})
 		}
 	} else {
-		// todo: generate workload trace, and do a split, better do this in python
+		wl.GenerateTrace(invokeLength, skew, nil, 0)
+		w1, w2 = wl.RandomSplit(0.5)
+		w1.SaveToJson(path.Join(dir, "w1.json"))
+		w2.SaveToJson(path.Join(dir, "w2.json"))
+		w2.AddMetrics([]string{"latency"})
+	}
 
+	// todo generate tree rules
+	var opts []treeGenOpts
+	strSizes := []string{}
+	for _, size := range treeSizes {
+		strSizes = append(strSizes, fmt.Sprintf("%d", size))
+	}
+	treeSizesStr := strings.Join(strSizes, ",")
+	if useCacheTree {
+
+	} else {
+		for i, opt := range opts {
+			opt := opt
+			i := i
+			go func() {
+				cmd := exec.Command("python", "tree_gen.py",
+					"--opts_json", opt.Marshal(),
+					"--opts_name", fmt.Sprintf("v%d", i),
+					"--workload_path", path.Join(dir, fmt.Sprintf("w%d.json", i)),
+					"--dir_name", dir,
+					"--tree_sizes", treeSizesStr,
+				)
+				if err := cmd.Start(); err != nil {
+					panic(err)
+				}
+
+				if err := cmd.Wait(); err != nil {
+					panic(err)
+				}
+			}()
+		}
 	}
 
 	// todo: record how many calls are having empty importing modules, used to calculate hit rate
@@ -58,8 +113,6 @@ func runOneTrial(dir string, pkgWeightPath string, treeSizes []int, tasks int, d
 	//emptyPkgCallsW2 := w2.getEmptyPkgCallsCnt()
 
 	trials := make([]trial, 0)
-	// train the tree with w1
-
 	// run each tree
 	for i, trial := range trials {
 		treePath := trial.treePath
@@ -111,8 +164,9 @@ func runOneTrial(dir string, pkgWeightPath string, treeSizes []int, tasks int, d
 	return dfCombined, nil
 }
 
+var wl, _ = ReadWorkloadFromJson("workload.json")
+
 func main() {
-	var wl, _ = ReadWorkloadFromJson("workload.json")
 
 	useCacheWorkload := true
 	useCacheTree := true

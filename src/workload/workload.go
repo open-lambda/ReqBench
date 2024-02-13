@@ -124,10 +124,42 @@ func (wl *Workload) ShuffleCalls() {
 	rand.Shuffle(len(wl.Calls), func(i, j int) { wl.Calls[i], wl.Calls[j] = wl.Calls[j], wl.Calls[i] })
 }
 
-// generateTrace is not necessary to be implemented in go
-// func (wl *Workload) generateTrace(invokeLength int, skew bool, weight []float64, s float64)
+func (wl *Workload) GenerateTrace(target int, skew bool, weights []float64, s float64) {
+	wl.Calls = []Call{}
 
-func (wl *Workload) RandomSplit(ratio float64) (Workload, Workload) {
+	functionNames := make([]string, len(wl.Funcs))
+	for i, f := range wl.Funcs {
+		functionNames[i] = f.Name
+	}
+
+	rand.Seed(time.Now().UnixNano())
+
+	if !skew {
+		if target <= len(functionNames) {
+			for _, name := range RandomSample(functionNames, target) {
+				wl.addCall(name)
+			}
+		} else {
+			for _, name := range RandomChoices(functionNames, nil, target) {
+				wl.addCall(name)
+			}
+		}
+		return
+	}
+
+	if weights != nil {
+		for _, name := range RandomChoices(functionNames, weights, target) {
+			wl.addCall(name)
+		}
+	} else {
+		numFuncs := len(functionNames)
+		for _, idx := range Zipf(numFuncs, target, s) {
+			wl.addCall(functionNames[idx])
+		}
+	}
+}
+
+func (wl *Workload) RandomSplit(ratio float64) (*Workload, *Workload) {
 	wlTrain := Workload{}
 	wlTest := Workload{}
 	wlTrainAdded := make(map[string]bool)
@@ -155,7 +187,7 @@ func (wl *Workload) RandomSplit(ratio float64) (Workload, Workload) {
 		wlTest.addCall(call.Name)
 		wlTestAdded[call.Name] = true
 	}
-	return wlTrain, wlTest
+	return &wlTrain, &wlTest
 }
 
 func (wl *Workload) GetEmptyPkgCallsCnt() int {
@@ -187,7 +219,7 @@ func (wl *Workload) addCall(name string) {
 	wl.Calls = append(wl.Calls, Call{Name: name})
 }
 
-func (wl *Workload) saveToJson(path string) error {
+func (wl *Workload) SaveToJson(path string) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
@@ -227,4 +259,71 @@ func contains(slice []string, val string) bool {
 		}
 	}
 	return false
+}
+
+func RandomSample(array []string, n int) []string {
+	rand.Seed(time.Now().UnixNano())
+
+	if n >= len(array) {
+		return array
+	}
+
+	temp := make([]string, len(array))
+	copy(temp, array)
+
+	result := make([]string, n)
+	for i := 0; i < n; i++ {
+		index := rand.Intn(len(temp))
+		result[i] = temp[index]
+
+		temp = append(temp[:index], temp[index+1:]...)
+	}
+
+	return result
+}
+
+func RandomChoices(array []string, weights []float64, k int) []string {
+	if weights == nil || len(weights) != len(array) {
+		weights = make([]float64, len(array))
+		for i := range weights {
+			weights[i] = 1.0
+		}
+	}
+	rand.Seed(time.Now().UnixNano())
+
+	if len(array) != len(weights) {
+		panic("array and weights must be of the same length")
+	}
+
+	totalWeight := 0.0
+	for _, weight := range weights {
+		totalWeight += weight
+	}
+
+	results := make([]string, k)
+	for i := 0; i < k; i++ {
+		r := rand.Float64() * totalWeight
+		for j, weight := range weights {
+			r -= weight
+			if r <= 0 {
+				results[i] = array[j]
+				break
+			}
+		}
+	}
+
+	return results
+}
+
+func Zipf(numFuncs, target int, s float64) []int {
+	rand.Seed(time.Now().UnixNano())
+	// range is [1, numFuncs]
+	zipf := rand.NewZipf(rand.New(rand.NewSource(rand.Int63())), s, 1, uint64(numFuncs))
+
+	samples := make([]int, target)
+	for i := 0; i < target; i++ {
+		samples[i] = int(zipf.Uint64())
+	}
+
+	return samples
 }

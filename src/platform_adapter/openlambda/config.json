@@ -1,13 +1,9 @@
 {
     "timeout": 10,
-
-    "ol": {
-        "ol_dir": "/root/open-lambda/",
-        "ol_url": "localhost:5000",
-        "collect_latency": true
-    },
-
-    "docker": {},
-
-    "aws": {}
+    "ol_dir": "/root/open-lambda/",
+    "ol_url": "localhost:5000",
+    "collect_latency": true,
+    "monitor_container": false,
+    "profile_lock": false,
+    "lock_stat_path": ""
 }
