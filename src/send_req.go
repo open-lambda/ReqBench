@@ -8,6 +8,7 @@ import (
 	"os"
 	"rb/platform_adapter"
 	"rb/platform_adapter/openlambda"
+	"rb/util"
 	"rb/workload"
 	"strconv"
 	"sync"
@@ -52,7 +53,6 @@ func task(platform platform_adapter.PlatformAdapter, timeout int, reqQ chan work
 		select {
 		case req, ok := <-reqQ:
 			if !ok {
-				errQ <- nil
 				return
 			}
 
@@ -69,6 +69,8 @@ func task(platform platform_adapter.PlatformAdapter, timeout int, reqQ chan work
 			case err := <-done:
 				if err != nil {
 					errQ <- fmt.Errorf("failed to invoke function %s: %s", req.Name, err)
+				} else {
+					errQ <- nil
 				}
 			}
 		}
@@ -89,11 +91,38 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 		go task(platform, timeout, reqQ, errQ)
 	}
 	t0 := time.Now()
-	for _, call := range calls {
+
+	callIdx := 0
+	waiting := 0
+	fails := 0
+	successes := 0
+	start := time.Now()
+	for {
+		elapsed := time.Since(start).Seconds()
+		if elapsed > float64(totalTime) || ((successes+fails+waiting) == len(calls) && totalTime <= 0) {
+			for waiting > 0 {
+				err := <-errQ
+				if err != nil {
+					fails += 1
+				} else {
+					successes += 1
+				}
+				waiting -= 1
+			}
+			break
+		}
+
 		select {
-		case reqQ <- workload.Call{Name: call.Name}:
+		case reqQ <- workload.Call{Name: calls[callIdx].Name}:
+			waiting += 1
+			callIdx = (callIdx + 1) % len(calls)
 		case err := <-errQ:
-			panic(err)
+			if err != nil {
+				fails += 1
+			} else {
+				successes += 1
+			}
+			waiting -= 1
 		}
 	}
 	close(reqQ)
@@ -101,10 +130,10 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 	t1 := time.Now()
 
 	seconds := t1.Sub(t0).Seconds()
-	througput := float64(len(calls)) / seconds
+	throughput := float64(len(calls)) / seconds
 
 	return map[string]interface{}{
-		"throughput": througput,
+		"throughput": throughput,
 		"seconds":    seconds,
 	}, nil
 }
@@ -148,58 +177,22 @@ func AutoRun(opts RunOptions) (map[string]interface{}, error) {
 		log.Fatalf("failed to deploy functions: %v", err)
 	}
 
-	err := platform.StartWorker(nil)
+	err := platform.StartWorker(opts.StartOptions)
 	if err != nil {
 		log.Fatalf("failed to start worker: %v", err)
 	}
 
-	resMap, err := run(opts.Workload.Calls, opts.Tasks, platform, opts.Timeout, opts.TotalTime)
+	runStats, err := run(opts.Workload.Calls, opts.Tasks, platform, opts.Timeout, opts.TotalTime)
 	if err != nil {
 		platform.KillWorker(nil)
 		log.Fatalf("failed to run workload: %v", err)
 	}
 
-	err = platform.KillWorker(nil)
+	err = platform.KillWorker(opts.KillOptions)
 	if err != nil {
 		log.Fatalf("failed to kill worker: %v", err)
 	}
+	runStats = util.Union(runStats, platform.GetStats())
 
-	return resMap, nil
-}
-
-func main() {
-	if len(os.Args) < 7 {
-		panic("Not enough arguments")
-	}
-
-	tasks, err := strconv.Atoi(os.Args[4])
-	if err != nil {
-		panic(err)
-	}
-
-	timeout, err := strconv.Atoi(os.Args[5])
-	if err != nil {
-		panic(err)
-	}
-
-	totalTime, err := strconv.Atoi(os.Args[6])
-	if err != nil {
-		panic(err)
-	}
-
-	wl, err := readWorkload(os.Args[2])
-	if err != nil {
-		panic(err)
-	}
-
-	opts := RunOptions{
-		PlatformType: os.Args[1],
-		Workload:     &wl,
-		ConfigPath:   os.Args[3],
-		Tasks:        tasks,
-		Timeout:      timeout,
-		TotalTime:    totalTime,
-	}
-
-	AutoRun(opts)
+	return runStats, nil
 }

@@ -1,4 +1,4 @@
-package main
+package platform_adapter
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type LockStat struct {
+type LockStatMonitor struct {
 	index     int
 	Intervals int
 	FilePath  string
@@ -21,8 +21,8 @@ type LockStat struct {
 	stopChan  chan struct{}
 }
 
-func NewLockStat(intervals int, filePath string) *LockStat {
-	return &LockStat{
+func NewLockStatMonitor(intervals int, filePath string) *LockStatMonitor {
+	return &LockStatMonitor{
 		index:     0,
 		Intervals: intervals,
 		FilePath:  filePath,
@@ -31,12 +31,12 @@ func NewLockStat(intervals int, filePath string) *LockStat {
 	}
 }
 
-func (ls *LockStat) clearLockStat() {
+func (ls *LockStatMonitor) clearLockStat() {
 	cmd := "echo 0 > /proc/lock_stat"
 	exec.Command("bash", "-c", cmd).Run()
 }
 
-func (ls *LockStat) startLockStat() {
+func (ls *LockStatMonitor) StartMonitor() {
 	ls.clearLockStat()
 	ls.startTime = time.Now()
 
@@ -65,7 +65,7 @@ func (ls *LockStat) startLockStat() {
 	}
 }
 
-func (ls *LockStat) stopLockStat() {
+func (ls *LockStatMonitor) StopMonitor() {
 	ls.clearLockStat()
 	ls.endTime = time.Now()
 	ls.stopChan <- struct{}{}
@@ -89,7 +89,7 @@ func (ls *LockStat) stopLockStat() {
 	ls.writeToFile(output)
 }
 
-func (ls *LockStat) readLockStat() string {
+func (ls *LockStatMonitor) readLockStat() string {
 	data, err := ioutil.ReadFile("/proc/lock_stat")
 	if err != nil {
 		fmt.Printf("Error reading /proc/lock_stat: %s\n", err)
@@ -98,7 +98,7 @@ func (ls *LockStat) readLockStat() string {
 	return string(data)
 }
 
-func (ls *LockStat) writeToFile(output string) {
+func (ls *LockStatMonitor) writeToFile(output string) {
 	ls.lock.Lock()
 	defer ls.lock.Unlock()
 

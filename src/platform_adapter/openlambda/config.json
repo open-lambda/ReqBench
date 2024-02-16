@@ -1,9 +1,16 @@
 {
     "timeout": 10,
     "ol_dir": "/root/open-lambda/",
-    "ol_url": "localhost:5000",
+    "run_url": "localhost:5000",
     "collect_latency": true,
     "monitor_container": false,
     "profile_lock": false,
-    "lock_stat_path": ""
+    "lock_stat_path": "",
+    "start_option": {
+        "import_cache_tree": "",
+        "limits.mem_mb": 500
+    },
+    "kill_option": {
+
+    }
 }

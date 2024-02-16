@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"rb/platform_adapter"
+	"rb/util"
 	"rb/workload"
 	"reflect"
 	"regexp"
@@ -100,9 +100,10 @@ func (record *LatencyRecord) parseJSON(jsonData []byte) error {
 
 type OpenLambda struct {
 	platform_adapter.BasePlatformAdapter
-	PID            int
-	warmupTime     float64
-	warmupMemory   int
+	PID          int64
+	warmupTime   float64
+	warmupMemory uint64
+
 	olDir          string
 	runUrl         string
 	collectLatency bool
@@ -110,19 +111,25 @@ type OpenLambda struct {
 	LatenciesMutex *sync.Mutex
 	currentDir     string
 
+	lockMonitor *platform_adapter.LockStatMonitor
+
 	startConfig map[string]interface{}
 	killConfig  map[string]interface{}
 }
 
 func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
+	if options != nil {
+		options = o.Config["start_options"].(map[string]interface{})
+	}
 	o.startConfig = options
+
 	tmpFilePath := o.currentDir + "/tmp.csv"
 	if _, err := os.Stat(tmpFilePath); err == nil {
 		os.Remove(tmpFilePath)
 	}
 
 	var optParts []string
-	for k, v := range options {
+	for k, v := range o.startConfig {
 		optParts = append(optParts, k+"="+v.(string))
 	}
 	optstr := strings.Join(optParts, ",")
@@ -147,13 +154,14 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 
 	output := string(out)
 
-	// todo: warmup and profiling(maybe move the start to the config.json)
-	if warmup, ok := options["features.warmup"].(bool); ok && warmup {
-		o.warmupMemory = getTotalMem(o.Config["cg_dir"].(string), "CG")
+	if warmup, ok := o.startConfig["features.warmup"].(bool); ok && warmup {
+		o.warmupMemory, _ = util.GetTotalMem(o.Config["cg_dir"].(string), "CG")
 		o.warmupTime = extractWarmupTime(output)
 	}
-	if profileLock, ok := options["profile_lock"].(bool); ok && profileLock {
-
+	if profileLock, ok := o.startConfig["profile_lock"].(bool); ok && profileLock {
+		monitor := platform_adapter.NewLockStatMonitor(1, o.currentDir+"/lock_stat.log")
+		o.lockMonitor = monitor
+		monitor.StartMonitor()
 	}
 
 	re := regexp.MustCompile(`PID: (\d+)`)
@@ -163,7 +171,7 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 		if err != nil {
 
 		}
-		o.PID = pid
+		o.PID = int64(pid)
 		fmt.Println("The OL PID is", pid)
 		return nil
 	} else {
@@ -172,7 +180,24 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 }
 
 func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
+	if options != nil {
+		options = o.Config["kill_options"].(map[string]interface{})
+	}
+	o.killConfig = options
+
 	// kill worker
+	// 1. stop monitor(if any)
+	if o.lockMonitor != nil {
+		o.lockMonitor.StopMonitor()
+	}
+
+	// 2. set stats
+	if warmup, ok := o.startConfig["features.warmup"].(bool); ok && warmup {
+		o.Stats["warmup_time"] = o.warmupTime
+		o.Stats["warmup_memory"] = o.warmupMemory
+	}
+
+	// 3. kill worker
 	if o.PID == 0 {
 		fmt.Println("PID has not been set")
 		return fmt.Errorf("PID has not been set")
@@ -288,7 +313,7 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 
 	jsonData, err := json.Marshal(options)
 	if err != nil {
-		log.Fatalf("failed to marshal latency dict: %v", err)
+		err := fmt.Errorf("InvokeFunc: failed to marshal options: %v", err)
 		return err
 	}
 	client := &http.Client{
@@ -296,12 +321,12 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 	}
 	resp, err = client.Post(url, "text/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		log.Fatalf("failed to post to %s: %v", url, err)
+		err := fmt.Errorf("InvokeFunc: failed to post to %s: %v", url, err)
 		return err
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("failed to read response body: %v", err)
+		err := fmt.Errorf("InvokeFunc: failed to read response body: %v", err)
 		return err
 	}
 	resp.Body.Close()
@@ -310,7 +335,7 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 		var record LatencyRecord
 		err = record.parseJSON(body)
 		if err != nil {
-			log.Fatalf("failed to parse latency record: %v", err)
+			err := fmt.Errorf("InvokeFunc: failed to parse latency record: %v", err)
 			return err
 		}
 		o.LatenciesMutex.Lock()
@@ -320,8 +345,29 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 	return nil
 }
 
+func (o *OpenLambda) LoadConfig(config interface{}) error {
+	o.BasePlatformAdapter.LoadConfig(config)
+	o.killConfig = getOrDefault(o.Config, "kill_options", map[string]interface{}{}).(map[string]interface{})
+	o.startConfig = getOrDefault(o.Config, "start_options", map[string]interface{}{}).(map[string]interface{})
+	o.olDir = getOrDefault(o.Config, "ol_dir", "/root/open-lambda").(string)
+	o.runUrl = getOrDefault(o.Config, "run_url", "http://localhost:5000/run/").(string)
+
+	return nil
+}
+
+func getOrDefault(m map[string]interface{}, key string, defaultValue interface{}) interface{} {
+	if val, ok := m[key]; ok {
+		return val
+	}
+	return defaultValue
+}
+
 func NewOpenLambda() *OpenLambda {
-	return &OpenLambda{}
+	return &OpenLambda{
+		BasePlatformAdapter: platform_adapter.BasePlatformAdapter{
+			Stats: make(map[string]interface{}),
+		},
+	}
 }
 
 func extractWarmupTime(out string) float64 {
@@ -347,9 +393,5 @@ func extractWarmupTime(out string) float64 {
 			return warmupTime
 		}
 	}
-	return 0
-}
-
-func getTotalMem(cg_dir string, memType string) int {
 	return 0
 }
