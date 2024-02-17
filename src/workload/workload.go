@@ -28,7 +28,7 @@ type Function struct {
 
 type Meta struct {
 	RequirementsIn  string   `json:"requirements_in"`
-	RequirementsTxt string   `json:"requirements.txt"`
+	RequirementsTxt string   `json:"requirements_txt"`
 	ImportMods      []string `json:"import_mods"`
 }
 
