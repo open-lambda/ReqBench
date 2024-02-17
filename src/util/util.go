@@ -18,19 +18,15 @@ func getProcessMemoryInfo(pid int32, mode string) (uint64, error) {
 		return 0, err
 	}
 
+	memInfo, err := process.MemoryMaps(true)
+	if err != nil {
+		return 0, err
+	}
 	switch mode {
 	case "PSS":
-		memMap, err := process.MemoryMaps(true)
-		if err != nil {
-			return 0, err
-		}
-		return memMap.Pss / 1024, nil
+		return (*memInfo)[0].Pss / 1024, nil
 	case "RSS":
-		memInfo, err := process.MemoryInfo()
-		if err != nil {
-			return 0, err
-		}
-		return memInfo.Rss / 1024, nil
+		return (*memInfo)[0].Rss / 1024, nil
 	default:
 		return 0, fmt.Errorf("unsupported mode: %s", mode)
 	}

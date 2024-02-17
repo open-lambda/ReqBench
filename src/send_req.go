@@ -96,10 +96,13 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 	waiting := 0
 	fails := 0
 	successes := 0
+	progressSuccess := 0
+	progressSnapshot := 0.0
 	start := time.Now()
 	for {
 		elapsed := time.Since(start).Seconds()
-		if elapsed > float64(totalTime) || ((successes+fails+waiting) == len(calls) && totalTime <= 0) {
+		if (totalTime > 0 && elapsed > float64(totalTime)) ||
+			((successes+fails+waiting) == len(calls) && totalTime <= 0) {
 			for waiting > 0 {
 				err := <-errQ
 				if err != nil {
@@ -119,10 +122,19 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 		case err := <-errQ:
 			if err != nil {
 				fails += 1
+				fmt.Printf("%s\n", err.Error())
 			} else {
 				successes += 1
+				progressSuccess += 1
 			}
 			waiting -= 1
+		}
+
+		// show throughput stats about every 1 seconds
+		if elapsed > progressSnapshot+1 {
+			log.Printf("throughput: %.1f/second\n", float64(progressSuccess)/(elapsed-progressSnapshot))
+			progressSnapshot = elapsed
+			progressSuccess = 0
 		}
 	}
 	close(reqQ)
@@ -130,7 +142,7 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 	t1 := time.Now()
 
 	seconds := t1.Sub(t0).Seconds()
-	throughput := float64(len(calls)) / seconds
+	throughput := float64(successes) / seconds
 
 	return map[string]interface{}{
 		"throughput": throughput,
@@ -171,13 +183,16 @@ func newPlatformAdapter(platformType string) platform_adapter.PlatformAdapter {
 // AutoRun start worker, deploy functions, run workload, kill worker
 func AutoRun(opts RunOptions) (map[string]interface{}, error) {
 	platform := newPlatformAdapter(opts.PlatformType)
-	platform.LoadConfig(opts.ConfigPath)
+	err := platform.LoadConfig(opts.ConfigPath)
+	if err != nil {
+		return nil, err
+	}
 
 	if err := deployFuncs(opts.Workload.Funcs, platform); err != nil {
 		log.Fatalf("failed to deploy functions: %v", err)
 	}
 
-	err := platform.StartWorker(opts.StartOptions)
+	err = platform.StartWorker(opts.StartOptions)
 	if err != nil {
 		log.Fatalf("failed to start worker: %v", err)
 	}

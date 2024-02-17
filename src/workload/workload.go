@@ -114,8 +114,8 @@ func (wl *Workload) AddMetrics(metrics []string) {
 	generateLatency := contains(metrics, "latency")
 	generateMem := contains(metrics, "memory")
 
-	for _, f := range wl.Funcs {
-		f.Code = genMeasureCode(f.Meta.ImportMods, generateLatency, generateMem)
+	for i := range wl.Funcs {
+		wl.Funcs[i].Code = genMeasureCode(wl.Funcs[i].Meta.ImportMods, generateLatency, generateMem)
 	}
 }
 
