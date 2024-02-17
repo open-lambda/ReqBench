@@ -1,0 +1,5 @@
+{
+    "lambda_execution_role_arn": "arn:aws:iam::757431809311:role/lambda_executor",
+    "tmp_path": ".tmp",
+    "region": "us-east-1"
+}

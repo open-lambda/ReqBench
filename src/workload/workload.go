@@ -10,10 +10,11 @@ import (
 )
 
 type Workload struct {
-	Funcs    []Function `json:"funcs"`
-	Calls    []Call     `json:"calls"`
-	fnIndex  int
-	emptyPkg map[string]bool
+	Funcs    	[]Function `json:"funcs"`
+	Calls    	[]Call     `json:"calls"`
+	Packages	map[string][]string `json:"pkg_with_version"`
+	fnIndex  	int
+	emptyPkg 	map[string]bool
 }
 
 type Call struct {
@@ -28,7 +29,7 @@ type Function struct {
 
 type Meta struct {
 	RequirementsIn  string   `json:"requirements_in"`
-	RequirementsTxt string   `json:"requirements.txt"`
+	RequirementsTxt string   `json:"requirements_txt"`
 	ImportMods      []string `json:"import_mods"`
 }
 

@@ -1,0 +1,5 @@
+{
+    "lambda_execution_role_arn": "",
+    "tmp_path": ".tmp",
+    "region": "us-east-1"
+}
