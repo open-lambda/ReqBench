@@ -192,11 +192,14 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 		o.warmupMemory, _ = util.GetTotalMem(o.Config["cg_dir"].(string), "CG")
 		o.warmupTime = extractWarmupTime(output)
 	}
-	// todo: change the lockstat dir
+	// todo: change the lockstat dir and intervals
 	if profileLock, ok := o.startConfig["profile_lock"].(bool); ok && profileLock {
-		monitor := platform_adapter.NewLockStatMonitor(1, o.currentDir+"/lock_stat.log")
+		monitor := platform_adapter.NewLockStatMonitor(1.0, o.currentDir)
 		o.lockMonitor = monitor
-		monitor.StartMonitor()
+		err := monitor.StartMonitor()
+		if err != nil {
+			return err
+		}
 	}
 
 	re := regexp.MustCompile(`PID: (\d+)`)
