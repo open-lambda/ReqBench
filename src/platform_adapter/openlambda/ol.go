@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	path2 "path"
 	"path/filepath"
 	"rb/platform_adapter"
 	"rb/util"
@@ -98,6 +99,39 @@ func (record *LatencyRecord) parseJSON(jsonData []byte) error {
 	return nil
 }
 
+func flushToFile(records []LatencyRecord, filePath string) error {
+	// Check if the file exists
+	_, err := os.Stat(filePath)
+	fileExists := !os.IsNotExist(err)
+
+	// Open the file for appending, creating it if it does not exist
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Write headers if the file did not exist
+	if !fileExists {
+		headers := (&LatencyRecord{}).getHeaders() // Assuming records slice is not empty
+		_, err := file.WriteString(strings.Join(headers, ",") + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	// Write each record to the file
+	for _, record := range records {
+		data := record.toSlice()
+		_, err := file.WriteString(strings.Join(data, ",") + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 type OpenLambda struct {
 	platform_adapter.BasePlatformAdapter
 	PID          int64
@@ -118,7 +152,7 @@ type OpenLambda struct {
 }
 
 func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
-	if options != nil {
+	if options == nil {
 		options = o.Config["start_options"].(map[string]interface{})
 	}
 	o.startConfig = options
@@ -130,7 +164,7 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 
 	var optParts []string
 	for k, v := range o.startConfig {
-		optParts = append(optParts, k+"="+v.(string))
+		optParts = append(optParts, k+"="+fmt.Sprintf("%v", v))
 	}
 	optstr := strings.Join(optParts, ",")
 
@@ -158,6 +192,7 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 		o.warmupMemory, _ = util.GetTotalMem(o.Config["cg_dir"].(string), "CG")
 		o.warmupTime = extractWarmupTime(output)
 	}
+	// todo: change the lockstat dir
 	if profileLock, ok := o.startConfig["profile_lock"].(bool); ok && profileLock {
 		monitor := platform_adapter.NewLockStatMonitor(1, o.currentDir+"/lock_stat.log")
 		o.lockMonitor = monitor
@@ -180,7 +215,7 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 }
 
 func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
-	if options != nil {
+	if options == nil {
 		options = o.Config["kill_options"].(map[string]interface{})
 	}
 	o.killConfig = options
@@ -191,10 +226,20 @@ func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
 		o.lockMonitor.StopMonitor()
 	}
 
-	// 2. set stats
+	// 2. set stats & save metrics
 	if warmup, ok := o.startConfig["features.warmup"].(bool); ok && warmup {
 		o.Stats["warmup_time"] = o.warmupTime
 		o.Stats["warmup_memory"] = o.warmupMemory
+	}
+	if saveMetrics, ok := o.killConfig["save_metrics"].(bool); ok && saveMetrics {
+		metricsFilePath := o.currentDir + "/latency.csv"
+		if csvPath := o.killConfig["csv_name"]; csvPath != nil {
+			metricsFilePath = csvPath.(string)
+		}
+		err := flushToFile(o.latencyRecords, metricsFilePath)
+		if err != nil {
+			return err
+		}
 	}
 
 	// 3. kill worker
@@ -248,7 +293,7 @@ func (o *OpenLambda) DeployFuncs(funcs []workload.Function) error {
 	deployChan := make(chan workload.Function, 64)
 	errChan := make(chan error)
 	for i := 0; i < 8; i++ {
-		go o.DeployFunction(deployChan, errChan)
+		go o.deployFunction(deployChan, errChan)
 	}
 	for _, f := range funcs {
 		select {
@@ -262,7 +307,7 @@ func (o *OpenLambda) DeployFuncs(funcs []workload.Function) error {
 	return nil
 }
 
-func (o *OpenLambda) DeployFunction(deployTask chan workload.Function, errChan chan error) {
+func (o *OpenLambda) deployFunction(deployTask chan workload.Function, errChan chan error) {
 	for {
 		f, ok := <-deployTask
 		if !ok {
@@ -270,7 +315,7 @@ func (o *OpenLambda) DeployFunction(deployTask chan workload.Function, errChan c
 		}
 		// write code to registry dir
 		meta := f.Meta
-		path := fmt.Sprintf(o.olDir+"/default-ol/registry/%s", f.Name)
+		path := path2.Join(o.olDir, "/default-ol/registry/", f.Name)
 		if os.IsExist(os.MkdirAll(path, 0777)) {
 			err := os.RemoveAll(path)
 			if err != nil {
@@ -351,7 +396,7 @@ func (o *OpenLambda) LoadConfig(config interface{}) error {
 	o.startConfig = getOrDefault(o.Config, "start_options", map[string]interface{}{}).(map[string]interface{})
 	o.olDir = getOrDefault(o.Config, "ol_dir", "/root/open-lambda").(string)
 	o.runUrl = getOrDefault(o.Config, "run_url", "http://localhost:5000/run/").(string)
-
+	o.currentDir = getOrDefault(o.Config, "current_dir", ".").(string)
 	return nil
 }
 

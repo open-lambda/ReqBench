@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -19,7 +20,15 @@ func main() {
 		panic(err)
 	}
 
-	configPath := os.Args[3]
+	configArg := os.Args[3]
+	var configMap map[string]interface{}
+	err = json.Unmarshal([]byte(configArg), &configMap)
+	var config interface{}
+	if err == nil {
+		config = configMap
+	} else {
+		config = configArg
+	}
 
 	tasks, err := strconv.Atoi(os.Args[4])
 	if err != nil {
@@ -39,7 +48,7 @@ func main() {
 	opts := RunOptions{
 		PlatformType: PlatformType,
 		Workload:     &wl,
-		ConfigPath:   configPath,
+		Config:       config,
 		Tasks:        tasks,
 		Timeout:      timeout,
 		TotalTime:    totalTime,
@@ -48,5 +57,13 @@ func main() {
 	}
 
 	stats, err := AutoRun(opts)
-	fmt.Println(stats)
+	if err != nil {
+		panic(err)
+	}
+
+	statsJsonStr, err := json.Marshal(stats)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("stats:", string(statsJsonStr))
 }

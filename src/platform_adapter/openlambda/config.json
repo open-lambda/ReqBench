@@ -1,16 +1,19 @@
 {
     "timeout": 10,
     "ol_dir": "/root/open-lambda/",
-    "run_url": "localhost:5000",
+    "run_url": "http://localhost:5000/run/",
+    "cg_dir": "/sys/fs/cgroup/default-ol-sandboxes",
     "collect_latency": true,
     "monitor_container": false,
     "profile_lock": false,
     "lock_stat_path": "",
-    "start_option": {
+    "start_options": {
+        "features.warmup": true,
         "import_cache_tree": "",
         "limits.mem_mb": 500
     },
-    "kill_option": {
-
+    "kill_options": {
+        "save_metrics": true,
+        "csv_name": "./latency.csv"
     }
 }

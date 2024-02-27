@@ -20,7 +20,7 @@ type RunOptions struct {
 	Workload     *workload.Workload
 	StartOptions map[string]interface{}
 	KillOptions  map[string]interface{}
-	ConfigPath   string
+	Config       interface{} // path to config file or map of config
 	Tasks        int
 	Timeout      int
 	TotalTime    int
@@ -145,8 +145,8 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 	throughput := float64(successes) / seconds
 
 	return map[string]interface{}{
-		"throughput": throughput,
-		"seconds":    seconds,
+		"ops/s":   throughput,
+		"seconds": seconds,
 	}, nil
 }
 
@@ -183,7 +183,7 @@ func newPlatformAdapter(platformType string) platform_adapter.PlatformAdapter {
 // AutoRun start worker, deploy functions, run workload, kill worker
 func AutoRun(opts RunOptions) (map[string]interface{}, error) {
 	platform := newPlatformAdapter(opts.PlatformType)
-	err := platform.LoadConfig(opts.ConfigPath)
+	err := platform.LoadConfig(opts.Config)
 	if err != nil {
 		return nil, err
 	}

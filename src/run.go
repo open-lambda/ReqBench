@@ -138,7 +138,7 @@ func runOneTrial(dir string, pkgWeightPath string, treeSizes []int, tasks int, d
 				Workload:     w1,
 				StartOptions: startOptions,
 				KillOptions:  killOptions,
-				ConfigPath:   "config.json",
+				Config:       "config.json",
 				Tasks:        tasks,
 				TotalTime:    totalTime,
 			}
@@ -167,7 +167,6 @@ func runOneTrial(dir string, pkgWeightPath string, treeSizes []int, tasks int, d
 var wl, _ = ReadWorkloadFromJson("workload.json")
 
 func main() {
-
 	useCacheWorkload := true
 	useCacheTree := true
 	TRIALS := 10
