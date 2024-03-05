@@ -372,12 +372,14 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 		err := fmt.Errorf("InvokeFunc: failed to post to %s: %v", url, err)
 		return err
 	}
+	defer resp.Body.Close()
+	tRecv := util.GetCurrTime()
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		err := fmt.Errorf("InvokeFunc: failed to read response body: %v", err)
 		return err
 	}
-	resp.Body.Close()
 
 	if o.collectLatency {
 		var record LatencyRecord
@@ -386,6 +388,7 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 			err := fmt.Errorf("InvokeFunc: failed to parse latency record: %v", err)
 			return err
 		}
+		record.Received = tRecv
 		o.LatenciesMutex.Lock()
 		o.latencyRecords = append(o.latencyRecords, record)
 		o.LatenciesMutex.Unlock()
@@ -410,12 +413,12 @@ func getOrDefault(m map[string]interface{}, key string, defaultValue interface{}
 	return defaultValue
 }
 
-func NewOpenLambda() *OpenLambda {
+func NewOpenLambda() (*OpenLambda, error) {
 	return &OpenLambda{
 		BasePlatformAdapter: platform_adapter.BasePlatformAdapter{
 			Stats: make(map[string]interface{}),
 		},
-	}
+	}, nil
 }
 
 func extractWarmupTime(out string) float64 {

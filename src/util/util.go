@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	ps "github.com/shirou/gopsutil/process"
 )
@@ -85,4 +86,8 @@ func Union(map1, map2 map[string]interface{}) map[string]interface{} {
 	}
 
 	return result
+}
+
+func GetCurrTime() float64 {
+	return float64(time.Now().UnixNano()) / float64(time.Millisecond)
 }

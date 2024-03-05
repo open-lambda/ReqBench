@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"rb/platform_adapter"
+	"rb/platform_adapter/docker"
 	"rb/platform_adapter/openlambda"
 	"rb/util"
 	"rb/workload"
@@ -28,10 +29,6 @@ type RunOptions struct {
 
 var seen = make(map[string]int)
 var seenLock = &sync.Mutex{}
-
-func getCurrTime() int64 {
-	return time.Now().UnixNano() / int64(time.Millisecond)
-}
 
 func getId(name string) string {
 	seenLock.Lock()
@@ -60,7 +57,7 @@ func task(platform platform_adapter.PlatformAdapter, timeout int, reqQ chan work
 			go func() {
 				options := make(map[string]interface{})
 				options["invokeId"] = getId(req.Name)
-				options["req"] = getCurrTime()
+				options["req"] = util.GetCurrTime()
 				err := platform.InvokeFunc(req.Name, timeout, options)
 				done <- err
 			}()
@@ -168,21 +165,27 @@ func readWorkload(path string) (wl workload.Workload, err error) {
 }
 
 func newPlatformAdapter(platformType string) platform_adapter.PlatformAdapter {
+	var platform platform_adapter.PlatformAdapter
 	switch platformType {
 	case "openlambda":
-		return openlambda.NewOpenLambda()
+		platform, _ = openlambda.NewOpenLambda()
 	case "docker":
-		return nil
+		platform, _ = docker.NewDockerPlatform()
 	case "awslambda":
-		return nil
+		platform = nil
 	default:
-		return nil
+		platform = nil
 	}
+	return platform
 }
 
 // AutoRun start worker, deploy functions, run workload, kill worker
 func AutoRun(opts RunOptions) (map[string]interface{}, error) {
 	platform := newPlatformAdapter(opts.PlatformType)
+	if platform == nil {
+		return nil, fmt.Errorf("unsupported platform type: %s", opts.PlatformType)
+	}
+
 	err := platform.LoadConfig(opts.Config)
 	if err != nil {
 		return nil, err

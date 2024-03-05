@@ -10,10 +10,12 @@ import (
 )
 
 type Workload struct {
-	Funcs    []Function `json:"funcs"`
-	Calls    []Call     `json:"calls"`
+	Funcs          []Function          `json:"funcs"`
+	Calls          []Call              `json:"calls"`
+	PkgWithVersion map[string][]string `json:"pkg_with_version"`
+
 	fnIndex  int
-	emptyPkg map[string]bool
+	emptyPkg map[string]bool // emptyPkg indicates whether a function's pkg list is empty
 }
 
 type Call struct {
