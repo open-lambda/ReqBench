@@ -9,6 +9,7 @@ import (
 	"rb/platform_adapter"
 	"rb/platform_adapter/docker"
 	"rb/platform_adapter/openlambda"
+	"rb/platform_adapter/aws"
 	"rb/util"
 	"rb/workload"
 	"strconv"
@@ -171,8 +172,8 @@ func newPlatformAdapter(platformType string) platform_adapter.PlatformAdapter {
 		platform, _ = openlambda.NewOpenLambda()
 	case "docker":
 		platform, _ = docker.NewDockerPlatform()
-	case "awslambda":
-		platform = nil
+	case "aws":
+		platform, _ = aws.NewAWSPlatform()
 	default:
 		platform = nil
 	}
@@ -191,13 +192,24 @@ func AutoRun(opts RunOptions) (map[string]interface{}, error) {
 		return nil, err
 	}
 
-	if err := deployFuncs(opts.Workload.Funcs, platform); err != nil {
-		log.Fatalf("failed to deploy functions: %v", err)
-	}
+	if opts.PlatformType == "aws" {
+		err = platform.StartWorker(opts.StartOptions)
+		if err != nil {
+			log.Fatalf("failed to start worker: %v", err)
+		}
 
-	err = platform.StartWorker(opts.StartOptions)
-	if err != nil {
-		log.Fatalf("failed to start worker: %v", err)
+		if err := deployFuncs(opts.Workload.Funcs, platform); err != nil {
+			log.Fatalf("failed to deploy functions: %v", err)
+		}
+	} else {
+		if err := deployFuncs(opts.Workload.Funcs, platform); err != nil {
+			log.Fatalf("failed to deploy functions: %v", err)
+		}
+	
+		err = platform.StartWorker(opts.StartOptions)
+		if err != nil {
+			log.Fatalf("failed to start worker: %v", err)
+		}
 	}
 
 	runStats, err := run(opts.Workload.Calls, opts.Tasks, platform, opts.Timeout, opts.TotalTime)
