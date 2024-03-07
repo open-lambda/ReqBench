@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	INPUTFILE      = "requirements.csv"
+	INPUTFILE      = "five.csv"
 	OUTPUTFILE     = "output.csv"
 	OUTPUTFILEFAIL = "failed.csv"
 	NUM_THREAD     = 1
@@ -78,6 +78,14 @@ func main() {
 		header = append(header, "compiled")
 	}
 
+	//docker build
+	cmd := exec.Command("docker", "build", ".", "-t", "pip-compile")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println(string(output))
+		os.Exit(1)
+	}
+
 	//write header to output files
 	writer.Write(header)
 	writerFail.Write(header)
@@ -124,18 +132,18 @@ func main() {
 			row[compiled_col] = output.content
 		}
 
-		if err := writer.Write(row); err != nil {
-			fmt.Println("Error writing to output file:", err)
-			os.Exit(1)
-		}
-		writer.Flush()
-
-		if err := writer.Error(); err != nil {
-			fmt.Println("Error flushing writer:", err)
-			os.Exit(1)
-		}
-
 		if !output.err {
+			if err := writer.Write(row); err != nil {
+				fmt.Println("Error writing to output file:", err)
+				os.Exit(1)
+			}
+			writer.Flush()
+
+			if err := writer.Error(); err != nil {
+				fmt.Println("Error flushing writer:", err)
+				os.Exit(1)
+			}
+		} else {
 			if err := writerFail.Write(row); err != nil {
 				fmt.Println("Error writing to output file:", err)
 				os.Exit(1)
@@ -158,8 +166,8 @@ func worker(workerid int, compiler *IOChan) {
 			break
 		}
 
-		tempInPath := fmt.Sprintf("temp_%d.in", workerid)
-		tempTxtPath := fmt.Sprintf("temp_%d.txt", workerid)
+		tempInPath := fmt.Sprintf("requirements_%d.in", workerid)
+		tempTxtPath := fmt.Sprintf("requirements_%d.txt", workerid)
 
 		cmd := exec.Command("rm", tempInPath, tempTxtPath)
 		_ = cmd.Run()
@@ -171,13 +179,16 @@ func worker(workerid int, compiler *IOChan) {
 			continue
 		}
 
-		cmd = exec.Command("pip-compile", "--rebuild", tempInPath)
+
+		// docker run -v .:/app pip-compile pip-compile /app/requirements.in
+		cmd = exec.Command("docker", "run", "-v", ".:/app", "pip-compile", "pip-compile", "/app/"+tempInPath)
 		fmt.Printf("running pip-compile for id %s\n", input.id)
 		output, err := cmd.CombinedOutput()
 		requirements := string(output)
 		if err != nil {
 			fmt.Printf("Error running pip-compile for id %s\n", input.id)
 			input.err = true
+			input.content = ""
 			compiler.outputChan <- input
 		} else {
 			compiler.outputChan <- &Content{
