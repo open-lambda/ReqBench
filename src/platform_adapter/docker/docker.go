@@ -71,7 +71,9 @@ func getMem(containerLongID string) (int, error) {
 	return memoryCurrent, nil
 }
 
-func maxMemUsage(containerLongID string, stopChan <-chan struct{}, returnChan chan<- int, interval time.Duration) {
+func maxMemUsage(containerLongID string,
+	stopChan <-chan struct{}, returnChan chan<- int,
+	interval time.Duration) {
 	maxMem := 0
 	for {
 		select {
@@ -80,7 +82,7 @@ func maxMemUsage(containerLongID string, stopChan <-chan struct{}, returnChan ch
 			return
 		default:
 			mem, err := getMem(containerLongID)
-			if err != nil && mem > maxMem {
+			if err == nil && mem > maxMem {
 				maxMem = mem
 			}
 			time.Sleep(interval * time.Millisecond)
@@ -101,48 +103,27 @@ type LatencyRecord struct {
 	Received    float64  `json:"received"`
 }
 
-// todo
-func (record *LatencyRecord) toSlice() []string {
+func (record *LatencyRecord) ToSlice() []string {
+	failedStr := "[]"
+	if len(record.Failed) > 0 {
+		failedStr = fmt.Sprintf("[%s]", strings.Join(record.Failed, ","))
+	}
 	return []string{
 		record.Id,
+		strconv.Itoa(record.Mem),
+		strconv.FormatFloat(record.Req, 'f', 3, 64),
+		strconv.FormatFloat(record.Create, 'f', 3, 64),
+		strconv.FormatFloat(record.Start, 'f', 3, 64),
+		strconv.FormatFloat(record.StartImport, 'f', 3, 64),
+		strconv.FormatFloat(record.EndImport, 'f', 3, 64),
+		strconv.FormatFloat(record.EndExec, 'f', 3, 64),
+		strconv.FormatFloat(record.Received, 'f', 3, 64),
+		failedStr,
 	}
 }
 
-func (record *LatencyRecord) getHeaders() []string {
-	return []string{"Id", "Mem", "Req", "Create", "Start", "StartImport", "EndImport", "EndExec", "Failed", "Received"}
-}
-
-func flushToFile(records []LatencyRecord, filePath string) error {
-	// Check if the file exists
-	_, err := os.Stat(filePath)
-	fileExists := !os.IsNotExist(err)
-
-	// Open the file for appending, creating it if it does not exist
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	// Write headers if the file did not exist
-	if !fileExists {
-		headers := (&LatencyRecord{}).getHeaders() // Assuming records slice is not empty
-		_, err := file.WriteString(strings.Join(headers, ",") + "\n")
-		if err != nil {
-			return err
-		}
-	}
-
-	// Write each record to the file
-	for _, record := range records {
-		data := record.toSlice()
-		_, err := file.WriteString(strings.Join(data, ",") + "\n")
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
+func (record *LatencyRecord) GetHeaders() []string {
+	return []string{"Id", "Mem", "Req", "Create", "Start", "StartImport", "EndImport", "EndExec", "Received", "Failed"}
 }
 
 type DockerPlatform struct {
@@ -154,7 +135,7 @@ type DockerPlatform struct {
 	containersListLock sync.Mutex
 	metricsLock        sync.Mutex
 	evictorStopChan    chan struct{}
-	metrics            []LatencyRecord
+	metrics            []platform_adapter.Record
 }
 
 func NewDockerPlatform() (*DockerPlatform, error) {
@@ -188,7 +169,12 @@ func evictor(d *DockerPlatform, interval time.Duration, stopChan <-chan struct{}
 				d.containersListLock.Unlock()
 
 				ctx := context.Background()
-				err := d.client.ContainerRemove(ctx, containerID, types.ContainerRemoveOptions{})
+				err := d.client.ContainerRemove(ctx, containerID,
+					types.ContainerRemoveOptions{
+						RemoveVolumes: false,
+						RemoveLinks:   false,
+						Force:         true,
+					})
 				if err != nil {
 					log.Printf("Error removing container %s: %v", containerID, err)
 				}
@@ -259,13 +245,14 @@ func (d *DockerPlatform) KillWorker(options map[string]interface{}) error {
 	close(d.evictorStopChan)
 
 	// save metrics
-	csvPath := d.Config["csv_name"].(string)
-	csvFile, err := os.Create(csvPath)
+	csvPath := d.Config["csv_path"].(string)
+	dir := filepath.Dir(csvPath)
+	base := filepath.Base(csvPath)
+	ext := filepath.Ext(base)
+	util.GenerateUniqueFilename(dir, base[:len(base)-len(ext)], ext)
+	err := platform_adapter.FlushToFile(d.metrics, csvPath)
 	if err != nil {
-		fmt.Println("Error creating metrics file:", err)
-	} else {
-		defer csvFile.Close()
-		err = flushToFile(d.metrics, csvPath)
+		log.Printf("Error flushing metrics to file: %v", err)
 	}
 
 	// remove all the containers
@@ -290,7 +277,6 @@ func (d *DockerPlatform) DeployFuncs(funcs []workload.Function) error {
 		if err := os.MkdirAll(funcPath, 0755); err != nil {
 			return err
 		}
-		// todo: why os.makedirs(os.path.join(func_path, "tmp"), exist_ok=True)?
 
 		// write the handler code
 		handlerCodePath := filepath.Join(funcPath, "f.py")
@@ -363,7 +349,11 @@ func (d *DockerPlatform) InvokeFunc(funcName string, timeout int, options map[st
 		}
 	case status := <-statusCh:
 		if status.StatusCode != 0 {
-			log.Printf("Container %s stopped with error %s, Statuscode is %d", containerID, status.Error, status.StatusCode)
+			errMessage := "nil or empty"
+			if status.Error != nil {
+				errMessage = status.Error.Message
+			}
+			log.Printf("Container %s stopped, Statuscode is %d, status.Error.Message is %s", containerID, status.StatusCode, errMessage)
 		}
 	}
 	tReceived := util.GetCurrTime()
@@ -373,7 +363,7 @@ func (d *DockerPlatform) InvokeFunc(funcName string, timeout int, options map[st
 	maxMem := <-memCh
 
 	// get the output (logs)
-	out, err := d.client.ContainerLogs(context.Background(), resp.ID, types.ContainerLogsOptions{ShowStdout: true})
+	out, err := d.client.ContainerLogs(context.Background(), resp.ID, container.LogsOptions{ShowStdout: true, ShowStderr: true})
 	if err != nil {
 		panic(err)
 	}
@@ -381,9 +371,17 @@ func (d *DockerPlatform) InvokeFunc(funcName string, timeout int, options map[st
 
 	// parse the output
 	var res map[string]interface{}
-	err = json.NewDecoder(out).Decode(&res)
+
+	outputBytes, err := ioutil.ReadAll(out)
 	if err != nil {
-		log.Printf("Error decoding the output %v in container %s, the output log is %s", err, containerID, res)
+		panic(err)
+	}
+	outputBytes = removeNonASCIIBytes(outputBytes)
+	err = json.Unmarshal(outputBytes, &res)
+	if err != nil {
+		log.Printf("Error decoding the output in container %s, the output log is", containerID)
+		outputString := string(outputBytes)
+		fmt.Println(outputString)
 	}
 
 	// save metrics
@@ -396,11 +394,12 @@ func (d *DockerPlatform) InvokeFunc(funcName string, timeout int, options map[st
 		StartImport: res["start_import"].(float64),
 		EndImport:   res["end_import"].(float64),
 		EndExec:     res["end_execute"].(float64),
-		Failed:      res["failed"].([]string),
+		Failed:      toStrSlice(res["failed"].([]interface{})),
 		Received:    tReceived,
 	}
 	d.metricsLock.Lock()
-	d.metrics = append(d.metrics, rec)
+	d.metrics = append(d.metrics, &rec)
+	fmt.Println("Metrics length:", len(d.metrics))
 	d.metricsLock.Unlock()
 	return nil
 }
@@ -475,4 +474,22 @@ func printBuildLog(response types.ImageBuildResponse) error {
 
 	fmt.Println("Docker image built successfully.")
 	return nil
+}
+
+func removeNonASCIIBytes(input []byte) []byte {
+	filtered := make([]byte, 0, len(input))
+	for _, b := range input {
+		if b >= 0x20 && b <= 0x7E {
+			filtered = append(filtered, b)
+		}
+	}
+	return filtered
+}
+
+func toStrSlice(input []interface{}) []string {
+	output := make([]string, len(input))
+	for i, v := range input {
+		output[i] = v.(string)
+	}
+	return output
 }

@@ -41,7 +41,7 @@ type LatencyRecord struct {
 	Failed           []string `json:"failed"`
 }
 
-func (record *LatencyRecord) toSlice() []string {
+func (record *LatencyRecord) ToSlice() []string {
 	failedStr := "[]"
 	if len(record.Failed) > 0 {
 		failedStr = fmt.Sprintf("[%s]", strings.Join(record.Failed, ","))
@@ -49,25 +49,26 @@ func (record *LatencyRecord) toSlice() []string {
 	return []string{
 		record.Name,
 		strconv.Itoa(record.SplitGen),
-		fmt.Sprintf("%.3f", record.Req),
-		fmt.Sprintf("%.3f", record.Received),
-		fmt.Sprintf("%.3f", record.StartCreate),
-		fmt.Sprintf("%.3f", record.EndCreate),
-		fmt.Sprintf("%.3f", record.StartPullHandler),
-		fmt.Sprintf("%.3f", record.EndPullHandler),
-		fmt.Sprintf("%.3f", record.Unpause),
-		fmt.Sprintf("%.3f", record.StartImport),
-		fmt.Sprintf("%.3f", record.EndImport),
-		fmt.Sprintf("%.3f", record.StartExecute),
-		fmt.Sprintf("%.3f", record.EndExecute),
+		strconv.FormatFloat(record.Req, 'f', 3, 64),
+		strconv.FormatFloat(record.Received, 'f', 3, 64),
+		strconv.FormatFloat(record.StartCreate, 'f', 3, 64),
+		strconv.FormatFloat(record.EndCreate, 'f', 3, 64),
+		strconv.FormatFloat(record.StartPullHandler, 'f', 3, 64),
+		strconv.FormatFloat(record.EndPullHandler, 'f', 3, 64),
+		strconv.FormatFloat(record.Unpause, 'f', 3, 64),
+		strconv.FormatFloat(record.StartImport, 'f', 3, 64),
+		strconv.FormatFloat(record.EndImport, 'f', 3, 64),
+		strconv.FormatFloat(record.StartExecute, 'f', 3, 64),
+		strconv.FormatFloat(record.EndExecute, 'f', 3, 64),
 		strconv.Itoa(record.ZygoteMiss),
 		record.SbID,
 		failedStr,
 	}
 }
 
-func (record *LatencyRecord) getHeaders() []string {
-	return []string{"name", "split_gen", "req", "received", "start_create", "end_create", "start_pullHandler", "end_pullHandler",
+func (record *LatencyRecord) GetHeaders() []string {
+	return []string{"name", "split_gen",
+		"req", "received", "start_create", "end_create", "start_pullHandler", "end_pullHandler",
 		"unpause", "start_import", "end_import", "start_execute", "end_execute",
 		"zygote_miss", "sb_id", "failed"}
 }
@@ -99,39 +100,6 @@ func (record *LatencyRecord) parseJSON(jsonData []byte) error {
 	return nil
 }
 
-func flushToFile(records []LatencyRecord, filePath string) error {
-	// Check if the file exists
-	_, err := os.Stat(filePath)
-	fileExists := !os.IsNotExist(err)
-
-	// Open the file for appending, creating it if it does not exist
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	// Write headers if the file did not exist
-	if !fileExists {
-		headers := (&LatencyRecord{}).getHeaders() // Assuming records slice is not empty
-		_, err := file.WriteString(strings.Join(headers, ",") + "\n")
-		if err != nil {
-			return err
-		}
-	}
-
-	// Write each record to the file
-	for _, record := range records {
-		data := record.toSlice()
-		_, err := file.WriteString(strings.Join(data, ",") + "\n")
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 type OpenLambda struct {
 	platform_adapter.BasePlatformAdapter
 	PID          int64
@@ -140,12 +108,15 @@ type OpenLambda struct {
 
 	olDir          string
 	runUrl         string
-	collectLatency bool
-	latencyRecords []LatencyRecord
+	saveMetrics    bool
+	latencyRecords []platform_adapter.Record
 	LatenciesMutex *sync.Mutex
 	currentDir     string
 
-	lockMonitor *platform_adapter.LockStatMonitor
+	lockMonitor             *platform_adapter.LockStatMonitor
+	lockMonitorErrChan      chan error
+	ContainerMonitor        *ContainerMonitor
+	containerMonitorErrChan chan error
 
 	startConfig map[string]interface{}
 	killConfig  map[string]interface{}
@@ -192,14 +163,24 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 		o.warmupMemory, _ = util.GetTotalMem(o.Config["cg_dir"].(string), "CG")
 		o.warmupTime = extractWarmupTime(output)
 	}
-	// todo: change the lockstat dir and intervals
-	if profileLock, ok := o.startConfig["profile_lock"].(bool); ok && profileLock {
-		monitor := platform_adapter.NewLockStatMonitor(1.0, o.currentDir)
+
+	if lockStatConf, exists := o.Config["profile_lock"]; exists {
+		lockStatConf := lockStatConf.(map[string]interface{})
+		monitor := platform_adapter.NewLockStatMonitor(
+			lockStatConf["interval"].(float64),
+			lockStatConf["output_path"].(string))
 		o.lockMonitor = monitor
-		err := monitor.StartMonitor()
-		if err != nil {
-			return err
-		}
+		monitor.StartMonitor(o.lockMonitorErrChan)
+	}
+
+	if containerMonitorConf, exists := o.Config["monitor_container"]; exists {
+		containerMonitorConf := containerMonitorConf.(map[string]interface{})
+		monitor := NewContainerMonitor(
+			int(containerMonitorConf["port"].(float64)),
+			containerMonitorConf["output_path"].(string))
+		o.ContainerMonitor = monitor
+		monitor.StartContainerMonitor(o.containerMonitorErrChan)
+
 	}
 
 	re := regexp.MustCompile(`PID: (\d+)`)
@@ -228,6 +209,9 @@ func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
 	if o.lockMonitor != nil {
 		o.lockMonitor.StopMonitor()
 	}
+	if o.ContainerMonitor != nil {
+		o.ContainerMonitor.StopContainerMonitor()
+	}
 
 	// 2. set stats & save metrics
 	if warmup, ok := o.startConfig["features.warmup"].(bool); ok && warmup {
@@ -235,11 +219,11 @@ func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
 		o.Stats["warmup_memory"] = o.warmupMemory
 	}
 	if saveMetrics, ok := o.killConfig["save_metrics"].(bool); ok && saveMetrics {
-		metricsFilePath := o.currentDir + "/latency.csv"
+		metricsFilePath := o.killConfig["csv_path"].(string)
 		if csvPath := o.killConfig["csv_name"]; csvPath != nil {
 			metricsFilePath = csvPath.(string)
 		}
-		err := flushToFile(o.latencyRecords, metricsFilePath)
+		err := platform_adapter.FlushToFile(o.latencyRecords, metricsFilePath)
 		if err != nil {
 			return err
 		}
@@ -381,7 +365,7 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 		return err
 	}
 
-	if o.collectLatency {
+	if o.saveMetrics {
 		var record LatencyRecord
 		err = record.parseJSON(body)
 		if err != nil {
@@ -390,7 +374,7 @@ func (o *OpenLambda) InvokeFunc(funcName string, timeout int, options map[string
 		}
 		record.Received = tRecv
 		o.LatenciesMutex.Lock()
-		o.latencyRecords = append(o.latencyRecords, record)
+		o.latencyRecords = append(o.latencyRecords, &record)
 		o.LatenciesMutex.Unlock()
 	}
 	return nil
@@ -403,6 +387,7 @@ func (o *OpenLambda) LoadConfig(config interface{}) error {
 	o.olDir = getOrDefault(o.Config, "ol_dir", "/root/open-lambda").(string)
 	o.runUrl = getOrDefault(o.Config, "run_url", "http://localhost:5000/run/").(string)
 	o.currentDir = getOrDefault(o.Config, "current_dir", ".").(string)
+	o.saveMetrics = getOrDefault(o.killConfig, "save_metrics", false).(bool)
 	return nil
 }
 
@@ -418,6 +403,9 @@ func NewOpenLambda() (*OpenLambda, error) {
 		BasePlatformAdapter: platform_adapter.BasePlatformAdapter{
 			Stats: make(map[string]interface{}),
 		},
+		LatenciesMutex:          &sync.Mutex{},
+		lockMonitorErrChan:      make(chan error),
+		containerMonitorErrChan: make(chan error),
 	}, nil
 }
 

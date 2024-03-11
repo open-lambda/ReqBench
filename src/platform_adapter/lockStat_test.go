@@ -21,7 +21,7 @@ func TestLockStatMonitor(t *testing.T) {
 	monitor := NewLockStatMonitor(intervals, tempDir)
 
 	go func() {
-		err := monitor.StartMonitor()
+		err := monitor._startMonitor()
 		if err != nil {
 			t.Fatalf("StartMonitor error: %v", err)
 		}

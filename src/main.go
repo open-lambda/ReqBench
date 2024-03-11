@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"rb/util"
 	"strconv"
 )
 
-//this will be the main scripts for ReqBench
-//I'll move things from send_req.go here
+// start OL from CMD
 func main() {
 	if len(os.Args) < 7 {
 		panic("Not enough arguments")
 	}
 	PlatformType := os.Args[1]
 
-	wl, err := readWorkload(os.Args[2])
+	wl, err := util.ReadWorkload(os.Args[2])
 	if err != nil {
 		panic(err)
 	}

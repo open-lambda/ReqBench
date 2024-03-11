@@ -2,10 +2,12 @@ package util
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"rb/workload"
 	"strconv"
 	"strings"
 	"time"
@@ -90,4 +92,39 @@ func Union(map1, map2 map[string]interface{}) map[string]interface{} {
 
 func GetCurrTime() float64 {
 	return float64(time.Now().UnixNano()) / float64(time.Millisecond)
+}
+
+func GenerateUniqueFilename(directory, base, ext string) string {
+	counter := 0
+	filename := base
+	fullPath := filepath.Join(directory, filename+ext)
+
+	for {
+		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+			break
+		}
+		counter++
+		filename = fmt.Sprintf("%s%d", base, counter)
+		fullPath = filepath.Join(directory, filename+ext)
+	}
+
+	fmt.Printf("Generated unique filename: %s\n", fullPath)
+	return fullPath
+}
+
+func ReadWorkload(path string) (wl workload.Workload, err error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return wl, err
+	}
+	defer file.Close()
+	bytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		return wl, err
+	}
+	err = json.Unmarshal(bytes, &wl)
+	if err != nil {
+		return wl, err
+	}
+	return wl, nil
 }

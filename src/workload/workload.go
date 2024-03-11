@@ -237,23 +237,6 @@ func (wl *Workload) SaveToJson(path string) error {
 	return nil
 }
 
-func ReadWorkloadFromJson(path string) (*Workload, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var workload Workload
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&workload)
-	if err != nil {
-		return nil, err
-	}
-
-	return &workload, nil
-}
-
 func contains(slice []string, val string) bool {
 	for _, item := range slice {
 		if item == val {

@@ -38,7 +38,18 @@ func (ls *LockStatMonitor) clearLockStat() error {
 	return nil
 }
 
-func (ls *LockStatMonitor) StartMonitor() error {
+func (ls *LockStatMonitor) StartMonitor(errCh chan error) {
+	var err error
+	go func() {
+		err = ls._startMonitor()
+		if err != nil {
+			err = fmt.Errorf("error monitoring lock: %s", err)
+			errCh <- err
+		}
+	}()
+}
+
+func (ls *LockStatMonitor) _startMonitor() error {
 	err := ls.clearLockStat()
 	if err != nil {
 		fmt.Printf("StartMonitor failed, Error clearLockStat: %s\n", err)

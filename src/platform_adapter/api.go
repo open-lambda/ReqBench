@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"rb/workload"
+	"strings"
 )
 
 type PlatformAdapter interface {
@@ -49,4 +50,46 @@ func (c *BasePlatformAdapter) LoadConfig(config interface{}) error {
 
 func (c *BasePlatformAdapter) GetStats() map[string]interface{} {
 	return c.Stats
+}
+
+type Record interface {
+	GetHeaders() []string
+	ToSlice() []string
+}
+
+func FlushToFile(records []Record, filePath string) error {
+	if len(records) == 0 {
+		return nil
+	}
+
+	// Check if the file exists
+	_, err := os.Stat(filePath)
+	fileExists := !os.IsNotExist(err)
+
+	// Open the file for appending, creating it if it does not exist
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Write headers if the file did not exist
+	if !fileExists {
+		headers := records[0].GetHeaders() // Assuming records slice is not empty
+		_, err := file.WriteString(strings.Join(headers, ",") + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	// Write each record to the file
+	for _, record := range records {
+		data := record.ToSlice()
+		_, err := file.WriteString(strings.Join(data, ",") + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

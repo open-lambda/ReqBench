@@ -1,11 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"os"
 	"rb/platform_adapter"
 	"rb/platform_adapter/docker"
 	"rb/platform_adapter/openlambda"
@@ -57,7 +54,7 @@ func task(platform platform_adapter.PlatformAdapter, timeout int, reqQ chan work
 			done := make(chan error, 1)
 			go func() {
 				options := make(map[string]interface{})
-				options["invokeId"] = getId(req.Name)
+				options["invoke_id"] = getId(req.Name)
 				options["req"] = util.GetCurrTime()
 				err := platform.InvokeFunc(req.Name, timeout, options)
 				done <- err
@@ -96,20 +93,13 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 	successes := 0
 	progressSuccess := 0
 	progressSnapshot := 0.0
+	elapsed := 0.0
 	start := time.Now()
-	for {
-		elapsed := time.Since(start).Seconds()
+	for calls != nil && len(calls) > 0 {
+		// if time is up while totalTime is set,
+		// or all tasks are done while totalTime is not set, break
 		if (totalTime > 0 && elapsed > float64(totalTime)) ||
 			((successes+fails+waiting) == len(calls) && totalTime <= 0) {
-			for waiting > 0 {
-				err := <-errQ
-				if err != nil {
-					fails += 1
-				} else {
-					successes += 1
-				}
-				waiting -= 1
-			}
 			break
 		}
 
@@ -128,7 +118,28 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 			waiting -= 1
 		}
 
+		elapsed = time.Since(start).Seconds()
 		// show throughput stats about every 1 seconds
+		if elapsed > progressSnapshot+1 {
+			log.Printf("throughput: %.1f/second\n", float64(progressSuccess)/(elapsed-progressSnapshot))
+			progressSnapshot = elapsed
+			progressSuccess = 0
+		}
+	}
+	// if there are still tasks running, wait for them to finish
+	for waiting > 0 {
+		err := <-errQ
+		if err != nil {
+			fails += 1
+			fmt.Printf("%s\n", err.Error())
+		} else {
+			progressSuccess += 1
+			successes += 1
+		}
+		waiting -= 1
+
+		elapsed = time.Since(start).Seconds()
+		// show throughput stats
 		if elapsed > progressSnapshot+1 {
 			log.Printf("throughput: %.1f/second\n", float64(progressSuccess)/(elapsed-progressSnapshot))
 			progressSnapshot = elapsed
@@ -146,23 +157,6 @@ func run(calls []workload.Call, tasks int, platform platform_adapter.PlatformAda
 		"ops/s":   throughput,
 		"seconds": seconds,
 	}, nil
-}
-
-func readWorkload(path string) (wl workload.Workload, err error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return wl, err
-	}
-	defer file.Close()
-	bytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		return wl, err
-	}
-	err = json.Unmarshal(bytes, &wl)
-	if err != nil {
-		return wl, err
-	}
-	return wl, nil
 }
 
 func newPlatformAdapter(platformType string) platform_adapter.PlatformAdapter {
