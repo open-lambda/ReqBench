@@ -108,7 +108,6 @@ func GenerateUniqueFilename(directory, base, ext string) string {
 		fullPath = filepath.Join(directory, filename+ext)
 	}
 
-	fmt.Printf("Generated unique filename: %s\n", fullPath)
 	return fullPath
 }
 

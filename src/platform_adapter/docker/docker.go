@@ -35,7 +35,7 @@ if __name__ == "__main__":
     with open("/app/requirements.txt", "r") as file:
         reqs = file.read().splitlines()
         for req in reqs:
-            req = req.strip() 
+            req = req.split(";")[0].strip()
             if req != "" and not req.strip().startswith("#"):
                 sys.path.insert(0, f"/packages/{req}")
     req = json.loads(sys.argv[1])
