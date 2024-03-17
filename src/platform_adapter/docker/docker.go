@@ -123,7 +123,7 @@ func (record *LatencyRecord) ToSlice() []string {
 }
 
 func (record *LatencyRecord) GetHeaders() []string {
-	return []string{"Id", "Mem", "Req", "Create", "Start", "StartImport", "EndImport", "EndExec", "Received", "Failed"}
+	return []string{"invoke_id", "Mem", "Req", "Create", "Start", "StartImport", "EndImport", "EndExec", "Received", "Failed"}
 }
 
 type DockerPlatform struct {

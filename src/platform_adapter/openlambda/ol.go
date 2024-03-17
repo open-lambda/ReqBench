@@ -23,7 +23,7 @@ import (
 )
 
 type LatencyRecord struct {
-	Name             string   `json:"name"`
+	Id               string   `json:"invoke_id"`
 	SplitGen         int      `json:"split_gen"`
 	Req              float64  `json:"req"`
 	Received         float64  `json:"received"`
@@ -47,7 +47,7 @@ func (record *LatencyRecord) ToSlice() []string {
 		failedStr = fmt.Sprintf("[%s]", strings.Join(record.Failed, ","))
 	}
 	return []string{
-		record.Name,
+		record.Id,
 		strconv.Itoa(record.SplitGen),
 		strconv.FormatFloat(record.Req, 'f', 3, 64),
 		strconv.FormatFloat(record.Received, 'f', 3, 64),
@@ -67,14 +67,13 @@ func (record *LatencyRecord) ToSlice() []string {
 }
 
 func (record *LatencyRecord) GetHeaders() []string {
-	return []string{"name", "split_gen",
+	return []string{"invoke_id", "split_gen",
 		"req", "received", "start_create", "end_create", "start_pullHandler", "end_pullHandler",
 		"unpause", "start_import", "end_import", "start_execute", "end_execute",
 		"zygote_miss", "sb_id", "failed"}
 }
 
 func (record *LatencyRecord) parseJSON(jsonData []byte) error {
-	//println(string(jsonData))
 	err := json.Unmarshal(jsonData, &record)
 	if err != nil {
 		return err
