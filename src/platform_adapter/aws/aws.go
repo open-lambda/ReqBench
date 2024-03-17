@@ -1,39 +1,40 @@
 package aws
 
 import (
+	"context"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/middleware"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
+	log_types "github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
+	"github.com/aws/aws-sdk-go-v2/service/ecr"
+	"github.com/aws/aws-sdk-go-v2/service/lambda"
+	lambda_types "github.com/aws/aws-sdk-go-v2/service/lambda/types"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
+	docker_types "github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/registry"
+	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/archive"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"encoding/json"
-	"fmt"
-	"context"
+	"rb/platform_adapter"
+	"rb/util"
+	"rb/workload"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
-	"time"
-	"sort"
 	"sync"
-	"encoding/base64"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/aws/middleware"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/lambda"
-	lambda_types "github.com/aws/aws-sdk-go-v2/service/lambda/types"
-	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
-	log_types "github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
-	"github.com/aws/aws-sdk-go-v2/service/ecr"
-	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"rb/platform_adapter"
-	"rb/workload"
-	"github.com/docker/docker/client"
-	docker_types "github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/registry"
-	"github.com/docker/docker/pkg/archive"
+	"time"
 )
 
 const (
-	AWS_HANDLER=`import time, importlib, os, sys
+	AWS_HANDLER = `import time, importlib, os, sys
 os.environ['OPENBLAS_NUM_THREADS'] = '2'
 for req in %s:
     sys.path.insert(0, f'/packages/{req}')
@@ -85,28 +86,28 @@ func writeFile(path string, content string) error {
 
 type AWSPlatform struct {
 	platform_adapter.BasePlatformAdapter
-	Workload_path	string
-	lambdaClient	*lambda.Client
-	logClient		*cloudwatchlogs.Client
-	//logClient		
-	functions		[]string
-	imageName		string
-	region			string
-	executionArn	string
-	tmpPath			string
-	metricLock		sync.Mutex
-	metrics			[]LatencyRecord
+	Workload_path string
+	lambdaClient  *lambda.Client
+	logClient     *cloudwatchlogs.Client
+	//logClient
+	functions    []string
+	imageName    string
+	region       string
+	executionArn string
+	tmpPath      string
+	metricLock   sync.Mutex
+	metrics      []LatencyRecord
 }
 
 type LatencyRecord struct {
-	RequestId		string		`json:"request_id"`
-	FuncName		string		`json:"function_name"`
-	Duration		float64		`json:"duration(ms)"`
-	BilledDuration	float64		`json:"billed_duration(ms)"`
-	MemorySize		float64		`json:"memory_size(mb)"`
-	MaxMemoryUsed	float64		`json:"max_memory_used(mb)"`
-	InitDuration	float64		`json:"init_duration(ms)"`
-	ImportDuration	float64		`json:"import_duration(ms)"`
+	RequestId      string  `json:"request_id"`
+	FuncName       string  `json:"function_name"`
+	Duration       float64 `json:"duration(ms)"`
+	BilledDuration float64 `json:"billed_duration(ms)"`
+	MemorySize     float64 `json:"memory_size(mb)"`
+	MaxMemoryUsed  float64 `json:"max_memory_used(mb)"`
+	InitDuration   float64 `json:"init_duration(ms)"`
+	ImportDuration float64 `json:"import_duration(ms)"`
 }
 
 func (record *LatencyRecord) getHeaders() []string {
@@ -166,7 +167,7 @@ func (a *AWSPlatform) listFunctions(maxItems int) ([]string, error) {
 	paginator := lambda.NewListFunctionsPaginator(a.lambdaClient, &lambda.ListFunctionsInput{
 		MaxItems: aws.Int32(int32(maxItems)),
 	})
-	 
+
 	for paginator.HasMorePages() && len(functions) < maxItems {
 		pageOutput, err := paginator.NextPage(context.TODO())
 		if err != nil {
@@ -176,7 +177,7 @@ func (a *AWSPlatform) listFunctions(maxItems int) ([]string, error) {
 			break
 		}
 
-		for _, f := range pageOutput.Functions{
+		for _, f := range pageOutput.Functions {
 			functions = append(functions, *f.FunctionName)
 		}
 	}
@@ -185,22 +186,22 @@ func (a *AWSPlatform) listFunctions(maxItems int) ([]string, error) {
 }
 
 func (a *AWSPlatform) buildImage() error {
-	err := os.MkdirAll(a.tmpPath, 0755) 
+	err := os.MkdirAll(a.tmpPath, 0755)
 	if err != nil {
-        return err
-    }
+		return err
+	}
 
-	wk, err := workload.ReadWorkloadFromJson(a.Workload_path)
+	wk, err := util.ReadWorkload(a.Workload_path)
 	if err != nil {
-        return err
-    }
-	
+		return err
+	}
+
 	//generate list of all packages used for the bench
 	// Extract keys into a slice
-    keys := make([]string, 0, len(wk.PkgWithVersion))
-    for key := range wk.PkgWithVersion {
-        keys = append(keys, key)
-    }
+	keys := make([]string, 0, len(wk.PkgWithVersion))
+	for key := range wk.PkgWithVersion {
+		keys = append(keys, key)
+	}
 	sort.Strings(keys)
 
 	pkg_list := ""
@@ -215,52 +216,52 @@ func (a *AWSPlatform) buildImage() error {
 	for _, f := range wk.Funcs {
 		regex := regexp.MustCompile(`([a-zA-Z0-9_-]+\s*==\s*[0-9.]+)`)
 		matches := regex.FindAllString(f.Meta.RequirementsTxt, -1)
-		
+
 		deps := "["
 		for _, m := range matches {
 			deps = fmt.Sprintf("%s%q,", deps, m)
 		}
-		deps = deps[:len(deps)-1]+"]"
+		deps = deps[:len(deps)-1] + "]"
 
 		imports := "["
 		for _, m := range f.Meta.ImportMods {
 			imports = fmt.Sprintf("%s%q,", imports, m)
 		}
-		imports = imports[:len(imports)-1]+"]"
+		imports = imports[:len(imports)-1] + "]"
 		handler_code := fmt.Sprintf(AWS_HANDLER, deps, imports)
 
 		writeFile(fmt.Sprintf(a.tmpPath+"/%s.py", f.Name), handler_code)
 	}
 
 	//copy install_all.py to .tmp
-    cmd := exec.Command("cp", "-n", "/root/ReqBench/src/platform_adapter/docker/install_all.py", a.tmpPath+"/install_all.py")
+	cmd := exec.Command("cp", "-n", "/root/ReqBench/src/platform_adapter/docker/install_all.py", a.tmpPath+"/install_all.py")
 
-    err = cmd.Run()
-    if err != nil {
+	err = cmd.Run()
+	if err != nil {
 		fmt.Println("here")
-        return err
-    }
+		return err
+	}
 
 	//write Dockerfile
 	writeFile(a.tmpPath+"/Dockerfile", DOCKERFILE)
 
 	//authenticate docker to ecr
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(a.region))
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 	ecr_client := ecr.NewFromConfig(cfg)
 
 	auth_response, err := ecr_client.GetAuthorizationToken(context.TODO(), nil)
 	if err != nil {
-        return err
-    }
-	
+		return err
+	}
+
 	token := *auth_response.AuthorizationData[0].AuthorizationToken
 	decodedBytes, err := base64.StdEncoding.DecodeString(token)
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
 	parts := strings.Split(string(decodedBytes), ":")
 	username, password := parts[0], parts[1]
@@ -269,7 +270,7 @@ func (a *AWSPlatform) buildImage() error {
 	identity_response, err := sts_client.GetCallerIdentity(context.TODO(), nil)
 	account_id := *identity_response.Account
 	server_url := fmt.Sprintf("%s.dkr.ecr.%s.amazonaws.com", account_id, a.region)
-	
+
 	//create ecr repo
 	repo_name, repo_url := "reqbench", ""
 	repo_response, err := ecr_client.CreateRepository(context.TODO(), &ecr.CreateRepositoryInput{
@@ -297,17 +298,17 @@ func (a *AWSPlatform) buildImage() error {
 
 	ctx, err := archive.TarWithOptions(a.tmpPath, &archive.TarOptions{})
 	if err != nil {
-        return err
-    }
+		return err
+	}
 
 	a.imageName = repo_url + ":latest"
 	build_response, err := docker_client.ImageBuild(context.TODO(), ctx, docker_types.ImageBuildOptions{
-		Tags: []string{a.imageName},
+		Tags:     []string{a.imageName},
 		Platform: "linux/amd64",
 	})
 	if err != nil {
-        return err
-    }
+		return err
+	}
 	defer build_response.Body.Close()
 	io.Copy(io.Discard, build_response.Body)
 
@@ -344,17 +345,16 @@ func (a *AWSPlatform) StartWorker(options map[string]interface{}) error {
 	a.tmpPath = a.Config["tmp_path"].(string)
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(a.region))
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 	a.lambdaClient = lambda.NewFromConfig(cfg)
 	a.logClient = cloudwatchlogs.NewFromConfig(cfg)
 
-
 	err = a.buildImage()
 	if err != nil {
-        return err
-    }
+		return err
+	}
 
 	a.metrics = []LatencyRecord{}
 
@@ -385,15 +385,15 @@ func (a *AWSPlatform) DeployFuncs(funcs []workload.Function) error {
 			Code: &lambda_types.FunctionCode{
 				ImageUri: &a.imageName,
 			},
-			Role: &a.executionArn,
+			Role:        &a.executionArn,
 			PackageType: lambda_types.PackageTypeImage,
 			ImageConfig: &lambda_types.ImageConfig{
-				Command: []string{f.Name+".handler"},
+				Command: []string{f.Name + ".handler"},
 			},
 			MemorySize: &memSize,
 		})
 		if err != nil {
-			if strings.Contains(err.Error(), "ResourceConflictException") { 
+			if strings.Contains(err.Error(), "ResourceConflictException") {
 				//force cold start
 				a.lambdaClient.UpdateFunctionConfiguration(context.TODO(), &lambda.UpdateFunctionConfigurationInput{
 					FunctionName: &f.Name,
@@ -413,8 +413,8 @@ func (a *AWSPlatform) InvokeFunc(funcName string, timeout int, options map[strin
 		FunctionName: &funcName,
 	})
 	if err != nil {
-        return err
-    }
+		return err
+	}
 
 	import_duration, _ := strconv.ParseFloat(string(response.Payload), 64)
 	request_id, _ := middleware.GetRequestIDMetadata(response.ResultMetadata)
@@ -424,18 +424,18 @@ func (a *AWSPlatform) InvokeFunc(funcName string, timeout int, options map[strin
 	descending := true
 	var limit int32 = 1
 	log_response, err := a.logClient.DescribeLogStreams(context.TODO(), &cloudwatchlogs.DescribeLogStreamsInput{
-		Descending: &descending,
-		Limit: &limit,
-		OrderBy: log_types.OrderByLastEventTime,
+		Descending:   &descending,
+		Limit:        &limit,
+		OrderBy:      log_types.OrderByLastEventTime,
 		LogGroupName: &log_group_name,
 	})
-	
+
 	log_message := ""
-	for i:=0; i<10; i++ {
+	for i := 0; i < 10; i++ {
 		filter_pattern := fmt.Sprintf("\"REPORT RequestId: %s\"", request_id)
 		log_response2, err := a.logClient.FilterLogEvents(context.TODO(), &cloudwatchlogs.FilterLogEventsInput{
-			FilterPattern: &filter_pattern,
-			LogGroupName: &log_group_name,
+			FilterPattern:  &filter_pattern,
+			LogGroupName:   &log_group_name,
 			LogStreamNames: []string{*log_response.LogStreams[0].LogStreamName},
 		})
 
@@ -450,9 +450,9 @@ func (a *AWSPlatform) InvokeFunc(funcName string, timeout int, options map[strin
 		if len(log_response2.Events) > 0 {
 			break
 		}
-		time.Sleep(3 * time.Second) 
+		time.Sleep(3 * time.Second)
 	}
-	
+
 	metrics := make(map[string]float64)
 	patterns := map[string]*regexp.Regexp{
 		"Duration":       regexp.MustCompile(`Duration: ([\d.]+) ms`),
@@ -476,13 +476,13 @@ func (a *AWSPlatform) InvokeFunc(funcName string, timeout int, options map[strin
 	}
 
 	record := LatencyRecord{
-		RequestId: request_id,
-		FuncName: funcName,
-		Duration: metrics["Duration"],
+		RequestId:      request_id,
+		FuncName:       funcName,
+		Duration:       metrics["Duration"],
 		BilledDuration: metrics["BilledDuration"],
-		MemorySize: metrics["MemorySize"],
-		MaxMemoryUsed: metrics["MaxMemoryUsed"],
-		InitDuration: metrics["InitDuration"],
+		MemorySize:     metrics["MemorySize"],
+		MaxMemoryUsed:  metrics["MaxMemoryUsed"],
+		InitDuration:   metrics["InitDuration"],
 		ImportDuration: import_duration,
 	}
 	fmt.Println(record)
