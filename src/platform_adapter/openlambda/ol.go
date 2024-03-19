@@ -151,9 +151,9 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 	}
 	cmd := exec.Command("sudo", cmdArgs...)
 	cmd.Dir = o.olDir
-	out, err := cmd.Output()
+	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("failed to start worker: %v", err)
+		return fmt.Errorf("OL start error %v: %s", err, out)
 	}
 
 	output := string(out)
