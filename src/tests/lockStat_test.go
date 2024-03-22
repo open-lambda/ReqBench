@@ -1,9 +1,10 @@
-package platform_adapter
+package tests
 
 import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"rb/platform_adapter"
 	"strings"
 	"testing"
 	"time"
@@ -18,7 +19,7 @@ func TestLockStatMonitor(t *testing.T) {
 		return
 	}
 
-	monitor := NewLockStatMonitor(intervals, tempDir)
+	monitor := platform_adapter.NewLockStatMonitor(intervals, tempDir)
 
 	go func() {
 		err := monitor._startMonitor()

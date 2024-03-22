@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"rb/request"
 	"rb/util"
 	"strconv"
 )
@@ -45,7 +46,7 @@ func main() {
 		panic(err)
 	}
 
-	opts := RunOptions{
+	opts := request.RunOptions{
 		PlatformType: PlatformType,
 		Workload:     &wl,
 		Config:       config,
@@ -56,7 +57,7 @@ func main() {
 		KillOptions:  nil,
 	}
 
-	stats, err := AutoRun(opts)
+	stats, err := request.AutoRun(opts)
 	if err != nil {
 		panic(err)
 	}

@@ -123,7 +123,11 @@ type OpenLambda struct {
 
 func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 	if options == nil {
-		options = o.Config["start_options"].(map[string]interface{})
+		startOptions, ok := o.Config["start_options"].(map[string]interface{})
+		if !ok {
+			startOptions = make(map[string]interface{})
+		}
+		options = startOptions
 	}
 	o.startConfig = options
 
@@ -199,7 +203,11 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 
 func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
 	if options == nil {
-		options = o.Config["kill_options"].(map[string]interface{})
+		killOptions, ok := o.Config["kill_options"].(map[string]interface{})
+		if !ok {
+			killOptions = make(map[string]interface{})
+		}
+		options = killOptions
 	}
 	o.killConfig = options
 

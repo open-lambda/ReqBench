@@ -1,12 +1,12 @@
-package main
+package request
 
 import (
 	"fmt"
 	"log"
 	"rb/platform_adapter"
+	"rb/platform_adapter/aws"
 	"rb/platform_adapter/docker"
 	"rb/platform_adapter/openlambda"
-	"rb/platform_adapter/aws"
 	"rb/util"
 	"rb/workload"
 	"strconv"
@@ -199,7 +199,7 @@ func AutoRun(opts RunOptions) (map[string]interface{}, error) {
 		if err := deployFuncs(opts.Workload.Funcs, platform); err != nil {
 			log.Fatalf("failed to deploy functions: %v", err)
 		}
-	
+
 		err = platform.StartWorker(opts.StartOptions)
 		if err != nil {
 			log.Fatalf("failed to start worker: %v", err)
