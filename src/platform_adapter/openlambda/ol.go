@@ -112,8 +112,11 @@ type OpenLambda struct {
 	LatenciesMutex *sync.Mutex
 	currentDir     string
 
-	lockMonitor             *platform_adapter.LockStatMonitor
-	lockMonitorErrChan      chan error
+	lockMonitor        *platform_adapter.LockStatMonitor
+	lockMonitorErrChan chan error
+	nsMonitor          *platform_adapter.BPFTracer
+
+	// deprecated, please use nsMonitor
 	ContainerMonitor        *ContainerMonitor
 	containerMonitorErrChan chan error
 
@@ -176,6 +179,20 @@ func (o *OpenLambda) StartWorker(options map[string]interface{}) error {
 		monitor.StartMonitor(o.lockMonitorErrChan)
 	}
 
+	if nsMonitorConf, exists := o.Config["monitor_ns"]; exists {
+		nsMonitorConf := nsMonitorConf.(map[string]interface{})
+		configs, err := platform_adapter.ConfigFromMap(nsMonitorConf)
+		if err == nil {
+			tracer := platform_adapter.NewBPFTracer(configs)
+			err := tracer.StartTracing()
+			if err != nil {
+				fmt.Println("Error starting BPF tracer: ", err)
+			} else {
+				o.nsMonitor = tracer
+			}
+		}
+	}
+
 	if containerMonitorConf, exists := o.Config["monitor_container"]; exists {
 		containerMonitorConf := containerMonitorConf.(map[string]interface{})
 		monitor := NewContainerMonitor(
@@ -212,9 +229,12 @@ func (o *OpenLambda) KillWorker(options map[string]interface{}) error {
 	o.killConfig = options
 
 	// kill worker
-	// 1. stop monitor(if any)
+	// 1. stop monitors (if any)
 	if o.lockMonitor != nil {
 		o.lockMonitor.StopMonitor()
+	}
+	if o.nsMonitor != nil {
+		o.nsMonitor.StopTracing()
 	}
 	if o.ContainerMonitor != nil {
 		o.ContainerMonitor.StopContainerMonitor()

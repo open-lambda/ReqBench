@@ -7,12 +7,25 @@ import (
 	"testing"
 )
 
+//{platform_adapter.PutIPCScript, "./putIPC.csv"},
+//{platform_adapter.IpcScript, "./ipc.csv"},
+//{platform_adapter.PidScript, "./pid.csv"},
+//{platform_adapter.UtsScript, "./uts.csv"},
+//{platform_adapter.NewNsScript, "./newns.csv"},
+//{platform_adapter.MqCreateScript, "./mqcreate.csv"},
+
 func TestBPFNsTracer(t *testing.T) {
+	// trace config
+	breakIPCConfig := platform_adapter.TracerConfig{
+		Script: platform_adapter.NewNsScript,
+		Output: "./newns.csv",
+	}
+
 	tracer := platform_adapter.NewBPFTracer(
-		"./ipc.csv",
-		"./pid.csv",
-		"./uts.csv",
-		"./ns.csv")
+		[]platform_adapter.TracerConfig{
+			breakIPCConfig,
+		},
+	)
 	err := tracer.StartTracing()
 	if err != nil {
 		t.Errorf("Error: %v", err)
@@ -39,7 +52,7 @@ func TestBPFNsTracer(t *testing.T) {
 
 	tasks := 5
 	timeout := 30
-	totalTime := 0
+	totalTime := 120
 	opts := request.RunOptions{
 		PlatformType: "openlambda",
 		Workload:     &wl,
