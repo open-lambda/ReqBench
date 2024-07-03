@@ -39,8 +39,8 @@ run
 python3 collect_pkg.py <requirements.csv> -l <packages>
 ```
 `<requirements.csv>` is the requirements.csv you want to learn about, 
-usually it should be the output of `compile.go`.
-`<packages>` of most commonly used packages will be installed in docker,
+it is be the output of `compile.go`.
+`#<packages>` of most commonly used packages will be installed in docker,
 and then the info will be stored in `ReqBench/files/install_import.json`, including dependencies, install time, compressed size, on-disk size, 
 top-level modules, and the time/memory cost of importing each top-level module.
 
