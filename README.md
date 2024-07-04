@@ -39,8 +39,8 @@ run
 python3 collect_pkg.py <requirements.csv> -l <packages>
 ```
 `<requirements.csv>` is the requirements.csv you want to learn about, 
-usually it should be the output of `compile.go`.
-`<packages>` of most commonly used packages will be installed in docker,
+it is be the output of `compile.go`.
+`#<packages>` of most commonly used packages will be installed in docker,
 and then the info will be stored in `ReqBench/files/install_import.json`, including dependencies, install time, compressed size, on-disk size, 
 top-level modules, and the time/memory cost of importing each top-level module.
 
@@ -56,7 +56,7 @@ The frequency of each function is determined by a zipf distribution ($s=1.5$ by 
 `packages.json` is another output that contains the package name, version, top-level modules info (name, and the time/memory cost of importing it).
 
 ## Call handlers
-Implement the interface defined in '/ReqBench/platform_adapter/interface.py', we have provide 3 sample implementations 
-in '/ReqBench/platform_adapter/aws', '/ReqBench/platform_adapter/Docker', and '/ReqBench/platform_adapter/openlambda'.
+Implement the interface defined in '/ReqBench/platform_adapter/interface.py', we have provide 3 sample implementations:
+[aws, Docker, OpenLambda](https://github.com/open-lambda/ReqBench/tree/go-refactor/src/platform_adapter).
 
-We have also provided sample testers, they are '/ReqBench/test_docker_platform.py', and '/ReqBench/test_aws.py'.
+We have also provided sample testers, they are [Platforms_test.go](https://github.com/open-lambda/ReqBench/blob/go-refactor/src/tests/Platforms_test.go), [lockStat_test.go](https://github.com/open-lambda/ReqBench/blob/go-refactor/src/tests/lockStat_test.go), [nsbpf_test.go](https://github.com/open-lambda/ReqBench/blob/go-refactor/src/tests/nsbpf_test.go)

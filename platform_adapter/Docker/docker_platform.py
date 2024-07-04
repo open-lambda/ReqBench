@@ -12,7 +12,7 @@ import subprocess
 import requests
 import re
 import shutil
-from util import cache_pkgs_dir, tmp_dir
+from config import cache_pkgs_dir, tmp_dir
 from collections import OrderedDict
 
 run_handler_code = """
