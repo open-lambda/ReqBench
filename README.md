@@ -56,7 +56,7 @@ The frequency of each function is determined by a zipf distribution ($s=1.5$ by 
 `packages.json` is another output that contains the package name, version, top-level modules info (name, and the time/memory cost of importing it).
 
 ## Call handlers
-Implement the interface defined in [api.go](https://github.com/open-lambda/ReqBench/blob/main/src/platform_adapter/api.go), we have provide 3 sample implementations:
+Interfaces are defined in [api.go](https://github.com/open-lambda/ReqBench/blob/main/src/platform_adapter/api.go), we have provide 3 sample implementations:
 [aws, Docker, OpenLambda](https://github.com/open-lambda/ReqBench/tree/main/src/platform_adapter).
 
 We have also provided sample testers, they are [Platforms_test.go](https://github.com/open-lambda/ReqBench/blob/go-refactor/src/tests/Platforms_test.go), [lockStat_test.go](https://github.com/open-lambda/ReqBench/blob/go-refactor/src/tests/lockStat_test.go), [nsbpf_test.go](https://github.com/open-lambda/ReqBench/blob/go-refactor/src/tests/nsbpf_test.go)
